@@ -16,14 +16,14 @@ export const DashboardSidebar = () => {
   const [activeItem, setActiveItem] = useState("Dashboard");
 
   return (
-    <aside className="w-64 border-r border-border bg-card flex flex-col card-shadow">
+    <aside className="w-64 border-r bg-sidebar text-sidebar-foreground flex flex-col card-shadow" style={{ borderColor: "hsl(var(--sidebar-border))" }}>
       {/* Logo */}
-      <div className="flex h-16 items-center px-6 border-b border-border">
+      <div className="flex h-16 items-center px-6" style={{ borderBottom: "1px solid hsl(var(--sidebar-border))" }}>
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-primary">
+            <Sparkles className="h-5 w-5 text-sidebar-primary-foreground" />
           </div>
-          <span className="text-xl font-semibold text-foreground">Savio</span>
+          <span className="text-xl font-semibold text-sidebar-foreground">Savio</span>
         </div>
       </div>
 
@@ -40,8 +40,8 @@ export const DashboardSidebar = () => {
               className={cn(
                 "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               )}
             >
               <Icon className="h-5 w-5" />
@@ -52,14 +52,14 @@ export const DashboardSidebar = () => {
       </nav>
 
       {/* User Profile Section */}
-      <div className="border-t border-border p-4">
-        <div className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted cursor-pointer transition-colors">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-medium">
+      <div className="p-4" style={{ borderTop: "1px solid hsl(var(--sidebar-border))" }}>
+        <div className="flex items-center gap-3 rounded-lg p-2 hover:bg-sidebar-accent cursor-pointer transition-colors">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-primary/30 text-sidebar-primary-foreground text-sm font-medium">
             JD
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-medium text-foreground">John Doe</span>
-            <span className="text-xs text-muted-foreground">john@example.com</span>
+            <span className="text-sm font-medium text-sidebar-foreground">John Doe</span>
+            <span className="text-xs text-sidebar-foreground/60">john@example.com</span>
           </div>
         </div>
       </div>
