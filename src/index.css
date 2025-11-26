@@ -17,7 +17,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 200 15% 20%;
 
-    --primary: 180 65% 42%;
+    --primary: 168 44% 42%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 165 60% 55%;
@@ -41,27 +41,27 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
     
-    --chart-1: 180 65% 42%;
-    --chart-2: 165 60% 55%;
-    --chart-3: 195 70% 50%;
-    --chart-4: 150 55% 48%;
-    --chart-5: 45 95% 60%;
+    --chart-1: 168 44% 42%;
+    --chart-2: 40 35% 67%;
+    --chart-3: 168 35% 55%;
+    --chart-4: 45 40% 72%;
+    --chart-5: 168 30% 65%;
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 175 28% 22%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-foreground: 0 0% 95%;
 
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 168 45% 50%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 100%;
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent: 175 25% 28%;
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-accent-foreground: 0 0% 95%;
 
-    --sidebar-border: 220 13% 91%;
+    --sidebar-border: 175 20% 25%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 168 44% 42%;
   }
 
   .dark {
@@ -74,7 +74,7 @@ All colors MUST be HSL.
     --popover: 200 18% 14%;
     --popover-foreground: 210 20% 98%;
 
-    --primary: 180 65% 42%;
+    --primary: 168 44% 42%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 165 60% 55%;
@@ -96,19 +96,19 @@ All colors MUST be HSL.
     --input: 200 15% 20%;
     --ring: 180 65% 42%;
     
-    --chart-1: 180 65% 42%;
-    --chart-2: 165 60% 55%;
-    --chart-3: 195 70% 50%;
-    --chart-4: 150 55% 48%;
-    --chart-5: 45 95% 60%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --chart-1: 168 44% 50%;
+    --chart-2: 40 35% 75%;
+    --chart-3: 168 35% 60%;
+    --chart-4: 45 40% 78%;
+    --chart-5: 168 30% 70%;
+    --sidebar-background: 175 28% 25%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 168 45% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 175 25% 32%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 175 20% 28%;
+    --sidebar-ring: 168 44% 50%;
   }
 }
 
