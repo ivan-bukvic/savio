@@ -1,4 +1,4 @@
-import { LayoutDashboard, DollarSign, CreditCard, Target, Wallet, Sparkles, Settings, Leaf } from "lucide-react";
+import { LayoutDashboard, DollarSign, CreditCard, Target, Wallet, Sparkles, Settings, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -21,7 +21,7 @@ export const DashboardSidebar = () => {
       <div className="flex h-16 items-center px-6 border-b border-border">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Leaf className="h-5 w-5 text-primary-foreground" />
+            <TrendingUp className="h-5 w-5 text-primary-foreground" />
           </div>
           <span className="text-xl font-semibold text-foreground">Savio</span>
         </div>

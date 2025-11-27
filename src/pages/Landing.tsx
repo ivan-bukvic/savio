@@ -7,7 +7,6 @@ import {
   Sparkles, 
   BarChart3,
   ArrowRight,
-  Leaf,
   Target,
   LineChart
 } from "lucide-react";
@@ -65,7 +64,7 @@ const Landing = () => {
       >
         <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Leaf className="h-6 w-6 text-primary" />
+            <TrendingUp className="h-6 w-6 text-primary" />
             <span className="text-xl font-semibold text-foreground">Savio</span>
           </div>
           <div className="flex items-center gap-4">
@@ -295,7 +294,7 @@ const Landing = () => {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Leaf className="h-6 w-6 text-primary" />
+                <TrendingUp className="h-6 w-6 text-primary" />
                 <span className="text-lg font-semibold text-foreground">Savio</span>
               </div>
               <p className="text-sm text-muted-foreground">
