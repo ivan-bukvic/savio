@@ -12,6 +12,7 @@ import {
   LineChart
 } from "lucide-react";
 import heroImage from "@/assets/hero-3d-fluid.jpg";
+import landingBg from "@/assets/landing-bg-curves.jpg";
 
 const Landing = () => {
   const features = [
@@ -42,7 +43,20 @@ const Landing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      {/* Subtle 3D curved background */}
+      <div 
+        className="fixed inset-0 z-0 opacity-30"
+        style={{
+          backgroundImage: `url(${landingBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+      
+      {/* Content wrapper */}
+      <div className="relative z-10">{/* ... keep existing code */}
       {/* Header */}
       <motion.header 
         initial={{ opacity: 0, y: -20 }}
@@ -325,6 +339,7 @@ const Landing = () => {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 };
