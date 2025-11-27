@@ -96,8 +96,21 @@ const Landing = () => {
 
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                y: [0, -20, 0]
+              }}
+              transition={{ 
+                opacity: { duration: 0.6, delay: 0.2 },
+                scale: { duration: 0.6, delay: 0.2 },
+                y: {
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.8
+                }
+              }}
               className="relative"
             >
               <div className="relative rounded-3xl overflow-hidden card-shadow-hover">
