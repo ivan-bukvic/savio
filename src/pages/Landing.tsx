@@ -69,10 +69,10 @@ const Landing = () => {
             <span className="text-xl font-semibold text-foreground">FinanceFlow</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/app">
+            <Link to="/auth">
               <Button variant="ghost" size="sm">Sign In</Button>
             </Link>
-            <Link to="/app">
+            <Link to="/auth">
               <Button size="sm">Get Started</Button>
             </Link>
           </div>
@@ -96,7 +96,7 @@ const Landing = () => {
                 Take control of your finances with intelligent tracking, AI-powered insights, and beautiful visualization tools.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/app">
+                <Link to="/auth">
                   <Button size="lg" className="text-base px-8 group">
                     Get Started
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -279,7 +279,7 @@ const Landing = () => {
             <p className="text-xl text-muted-foreground mb-10 leading-relaxed">
               Join thousands of users who have taken control of their financial future. Start your journey today with clarity, control, and confidence.
             </p>
-            <Link to="/app">
+            <Link to="/auth">
               <Button size="lg" className="text-lg px-12 py-6 h-auto group">
                 Start Your Journey
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
