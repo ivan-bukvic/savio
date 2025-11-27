@@ -11,7 +11,7 @@ import {
   Target,
   LineChart
 } from "lucide-react";
-import heroImage from "@/assets/hero-abstract.jpg";
+import heroImage from "@/assets/hero-3d-fluid.jpg";
 
 const Landing = () => {
   const features = [
