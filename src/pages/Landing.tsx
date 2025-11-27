@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/accordion";
 import heroImage from "@/assets/hero-3d-fluid.jpg";
 import landingBg from "@/assets/landing-bg-curves.jpg";
+import dashboardPreview from "@/assets/dashboard-preview.jpg";
 
 const Landing = () => {
   const features = [
@@ -302,6 +303,42 @@ const Landing = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Track Your Finances Easily Section */}
+      <section className="py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              Track Your Finances Easily
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Savio's beautiful dashboard gives you all the essential information for understanding and tracking your finances - all in one place.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative"
+          >
+            <div className="relative rounded-3xl overflow-hidden card-shadow-hover border border-border/40">
+              <img 
+                src={dashboardPreview} 
+                alt="Savio Dashboard Preview" 
+                className="w-full h-auto"
+              />
+            </div>
+          </motion.div>
         </div>
       </section>
 
