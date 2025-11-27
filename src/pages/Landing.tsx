@@ -7,7 +7,7 @@ import {
   Sparkles, 
   BarChart3,
   ArrowRight,
-  PiggyBank,
+  Leaf,
   Target,
   LineChart
 } from "lucide-react";
@@ -65,8 +65,8 @@ const Landing = () => {
       >
         <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <PiggyBank className="h-6 w-6 text-primary" />
-            <span className="text-xl font-semibold text-foreground">FinanceFlow</span>
+            <Leaf className="h-6 w-6 text-primary" />
+            <span className="text-xl font-semibold text-foreground">Savio</span>
           </div>
           <div className="flex items-center gap-4">
             <Link to="/auth">
@@ -187,7 +187,7 @@ const Landing = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              Why Choose FinanceFlow?
+              Why Choose Savio?
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed mb-12">
               We believe managing your finances should be simple, secure, and empowering. Our platform combines cutting-edge technology with intuitive design to give you complete clarity and control over your financial life.
@@ -295,8 +295,8 @@ const Landing = () => {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <PiggyBank className="h-6 w-6 text-primary" />
-                <span className="text-lg font-semibold text-foreground">FinanceFlow</span>
+                <Leaf className="h-6 w-6 text-primary" />
+                <span className="text-lg font-semibold text-foreground">Savio</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Empowering financial clarity for everyone.
@@ -329,7 +329,7 @@ const Landing = () => {
           </div>
           <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © 2024 FinanceFlow. All rights reserved.
+              © 2024 Savio. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Terms</a>
