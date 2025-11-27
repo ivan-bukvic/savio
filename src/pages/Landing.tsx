@@ -8,8 +8,17 @@ import {
   BarChart3,
   ArrowRight,
   Target,
-  LineChart
+  LineChart,
+  Link2,
+  Eye,
+  CheckCircle2
 } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import heroImage from "@/assets/hero-3d-fluid.jpg";
 import landingBg from "@/assets/landing-bg-curves.jpg";
 
@@ -211,9 +220,160 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Preview Section */}
+      {/* How Savio Works Section */}
       <section className="py-20 px-6 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              How Savio Works
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Savio guides you step-by-step through understanding, organizing, and improving your financial life.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                icon: Link2,
+                step: "Step 1",
+                title: "Connect Your Accounts",
+                description: "Savio organizes your income, expenses, goals, and debts in one place.",
+                bgColor: "bg-primary/10",
+                iconColor: "text-primary",
+                textColor: "text-primary"
+              },
+              {
+                icon: Eye,
+                step: "Step 2",
+                title: "Visualize Your Finances",
+                description: "Clean charts and dashboards help you understand where your money goes.",
+                bgColor: "bg-secondary/10",
+                iconColor: "text-secondary",
+                textColor: "text-secondary"
+              },
+              {
+                icon: Sparkles,
+                step: "Step 3",
+                title: "Get AI-Powered Insights",
+                description: "Savio identifies patterns and suggests improvements tailored to you.",
+                bgColor: "bg-accent/10",
+                iconColor: "text-accent",
+                textColor: "text-accent"
+              },
+              {
+                icon: CheckCircle2,
+                step: "Step 4",
+                title: "Track Your Progress",
+                description: "See your financial health improve week after week with real-time updates.",
+                bgColor: "bg-success/10",
+                iconColor: "text-success",
+                textColor: "text-success"
+              }
+            ].map((item, index) => (
+              <motion.div
+                key={item.step}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="relative"
+              >
+                <div className="bg-card border border-border rounded-2xl p-6 h-full card-shadow hover:card-shadow-hover transition-all duration-300">
+                  <div className={`${item.bgColor} w-14 h-14 rounded-xl flex items-center justify-center mb-4`}>
+                    <item.icon className={`h-7 w-7 ${item.iconColor}`} />
+                  </div>
+                  <div className={`text-xs font-semibold ${item.textColor} mb-2 uppercase tracking-wider`}>
+                    {item.step}
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              What Our Users Are Saying
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Real stories from people transforming their financial lives with Savio.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Sarah Mitchell",
+                role: "Small Business Owner",
+                testimonial: "Savio helped me finally understand my expenses and start saving for the first time. I can't imagine managing my finances without it.",
+                initial: "SM"
+              },
+              {
+                name: "James Chen",
+                role: "Software Engineer",
+                testimonial: "The AI insights are spot on — it feels like having a personal financial coach. My savings have doubled in just six months.",
+                initial: "JC"
+              },
+              {
+                name: "Maria Rodriguez",
+                role: "Teacher",
+                testimonial: "My debt payoff plan has never been clearer. This app is a game changer. I finally feel in control of my financial future.",
+                initial: "MR"
+              }
+            ].map((testimonial, index) => (
+              <motion.div
+                key={testimonial.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <div className="bg-card border border-border rounded-2xl p-8 h-full card-shadow hover:card-shadow-hover transition-all duration-300">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="text-primary font-semibold">{testimonial.initial}</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-foreground">{testimonial.name}</div>
+                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                    </div>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed italic">
+                    "{testimonial.testimonial}"
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 px-6 bg-muted/30">
+        <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -222,43 +382,92 @@ const Landing = () => {
             className="text-center mb-12"
           >
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              Your Financial Dashboard
+              Frequently Asked Questions
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              A comprehensive view of your finances, designed to keep you informed and in control.
+            <p className="text-xl text-muted-foreground">
+              Everything you need to know about Savio
             </p>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-card rounded-3xl p-8 card-shadow-hover border border-border"
           >
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Target className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Goals Tracking</h3>
-                <p className="text-muted-foreground">Set and achieve your financial goals with visual progress tracking.</p>
-              </div>
-              <div className="text-center">
-                <div className="bg-secondary/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <LineChart className="h-8 w-8 text-secondary" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Real-time Analytics</h3>
-                <p className="text-muted-foreground">Monitor your spending patterns and income streams in real-time.</p>
-              </div>
-              <div className="text-center">
-                <div className="bg-accent/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Sparkles className="h-8 w-8 text-accent" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Smart Insights</h3>
-                <p className="text-muted-foreground">AI-powered recommendations tailored to your financial situation.</p>
-              </div>
-            </div>
+            <Accordion type="single" collapsible className="w-full space-y-4">
+              <AccordionItem value="item-1" className="bg-card border border-border rounded-xl px-6 card-shadow">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-foreground">What is Savio?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Savio is a comprehensive financial management platform that helps you track expenses, manage income, set savings goals, and get AI-powered insights to improve your financial health. It's designed to give you complete clarity and control over your money.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-2" className="bg-card border border-border rounded-xl px-6 card-shadow">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-foreground">How does Savio analyze my finances?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Savio uses advanced AI algorithms to analyze your spending patterns, income streams, and financial habits. It identifies trends, detects anomalies, and provides personalized recommendations based on your unique financial situation and goals.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-3" className="bg-card border border-border rounded-xl px-6 card-shadow">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-foreground">Is my financial data secure?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Absolutely. We use bank-level encryption to protect your data, and all information is stored securely in compliance with industry standards. Your privacy and security are our top priorities, and we never share your personal financial information with third parties.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-4" className="bg-card border border-border rounded-xl px-6 card-shadow">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-foreground">Does Savio connect to my bank?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Currently, Savio allows you to manually input your financial data. We're working on secure bank integrations for future releases, which will enable automatic transaction imports while maintaining the highest security standards.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-5" className="bg-card border border-border rounded-xl px-6 card-shadow">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-foreground">Can I use Savio for budgeting and saving goals?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Yes! Savio includes powerful budgeting tools and savings goal tracking. You can set multiple financial goals, track your progress in real-time, and receive personalized tips to help you reach your targets faster.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-6" className="bg-card border border-border rounded-xl px-6 card-shadow">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-foreground">Is there a free version?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Yes, Savio offers a free tier with core features including expense tracking, basic analytics, and savings goals. Premium features like advanced AI insights, unlimited categories, and priority support are available with our paid plans.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-7" className="bg-card border border-border rounded-xl px-6 card-shadow">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-foreground">Can I access Savio on mobile devices?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Savio is fully responsive and works seamlessly on all devices including smartphones, tablets, and desktops. Access your financial dashboard anywhere, anytime, with a consistent experience across all platforms.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-8" className="bg-card border border-border rounded-xl px-6 card-shadow">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-foreground">How do I get started?</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Getting started is easy! Simply create an account, add your income and expenses, set your financial goals, and let Savio's AI analyze your finances. You'll start receiving personalized insights within minutes.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </motion.div>
         </div>
       </section>
