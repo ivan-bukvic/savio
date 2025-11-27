@@ -22,6 +22,10 @@ import {
 import heroImage from "@/assets/hero-3d-fluid.jpg";
 import landingBg from "@/assets/landing-bg-curves.jpg";
 import dashboardPreview from "@/assets/dashboard-preview.jpg";
+import testimonialSarah from "@/assets/testimonial-sarah.jpg";
+import testimonialJames from "@/assets/testimonial-james.jpg";
+import testimonialMaria from "@/assets/testimonial-maria.jpg";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const Landing = () => {
   const features = [
@@ -366,19 +370,22 @@ const Landing = () => {
                 name: "Sarah Mitchell",
                 role: "Small Business Owner",
                 testimonial: "Savio helped me finally understand my expenses and start saving for the first time. I can't imagine managing my finances without it.",
-                initial: "SM"
+                initial: "SM",
+                image: testimonialSarah
               },
               {
                 name: "James Chen",
                 role: "Software Engineer",
                 testimonial: "The AI insights are spot on — it feels like having a personal financial coach. My savings have doubled in just six months.",
-                initial: "JC"
+                initial: "JC",
+                image: testimonialJames
               },
               {
                 name: "Maria Rodriguez",
                 role: "Teacher",
                 testimonial: "My debt payoff plan has never been clearer. This app is a game changer. I finally feel in control of my financial future.",
-                initial: "MR"
+                initial: "MR",
+                image: testimonialMaria
               }
             ].map((testimonial, index) => (
               <motion.div
@@ -390,9 +397,12 @@ const Landing = () => {
               >
                 <div className="bg-card border border-border rounded-2xl p-8 h-full card-shadow hover:card-shadow-hover transition-all duration-300">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-primary font-semibold">{testimonial.initial}</span>
-                    </div>
+                    <Avatar className="w-14 h-14 ring-2 ring-primary/20">
+                      <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                        {testimonial.initial}
+                      </AvatarFallback>
+                    </Avatar>
                     <div>
                       <div className="font-semibold text-foreground">{testimonial.name}</div>
                       <div className="text-sm text-muted-foreground">{testimonial.role}</div>
