@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { PiggyBank, Loader2 } from "lucide-react";
+import { Leaf, Loader2 } from "lucide-react";
 import landingBg from "@/assets/landing-bg-curves.jpg";
 import { z } from "zod";
 
@@ -173,8 +173,8 @@ const Auth = () => {
         >
           {/* Logo */}
           <div className="flex items-center justify-center gap-2 mb-8">
-            <PiggyBank className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold text-foreground">FinanceFlow</span>
+            <Leaf className="h-8 w-8 text-primary" />
+            <span className="text-2xl font-semibold text-foreground">Savio</span>
           </div>
 
           {/* Card */}
