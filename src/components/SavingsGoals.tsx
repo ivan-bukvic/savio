@@ -1,15 +1,47 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Target } from "lucide-react";
+import { Target, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-const goals = [
-  { name: "Emergency Fund", target: 10000, current: 7500, color: "hsl(var(--chart-1))" },
-  { name: "Vacation", target: 3000, current: 1800, color: "hsl(var(--chart-2))" },
-  { name: "New Car", target: 15000, current: 5000, color: "hsl(var(--chart-3))" },
-  { name: "Home Down Payment", target: 50000, current: 12000, color: "hsl(var(--chart-4))" },
-];
+interface SavingsGoal {
+  goal_name: string;
+  target_amount: number;
+  current_progress: number;
+}
 
 export const SavingsGoals = () => {
+  const [goals, setGoals] = useState<SavingsGoal[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: goalsData } = await supabase
+        .from('savings_goals')
+        .select('goal_name, target_amount, current_progress')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: true });
+
+      setGoals(goalsData || []);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Card className="card-shadow hover:card-shadow-hover transition-all duration-200">
+        <CardContent className="flex items-center justify-center h-[300px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="card-shadow hover:card-shadow-hover transition-all duration-200">
       <CardHeader>
@@ -19,24 +51,28 @@ export const SavingsGoals = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {goals.map((goal) => {
-          const percentage = (goal.current / goal.target) * 100;
-          
-          return (
-            <div key={goal.name} className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-foreground">{goal.name}</span>
-                <span className="text-sm text-muted-foreground">
-                  ${goal.current.toLocaleString()} / ${goal.target.toLocaleString()}
-                </span>
+        {goals.length === 0 ? (
+          <p className="text-center text-muted-foreground py-8">No savings goals yet. Create one to start tracking!</p>
+        ) : (
+          goals.map((goal) => {
+            const percentage = (Number(goal.current_progress) / Number(goal.target_amount)) * 100;
+            
+            return (
+              <div key={goal.goal_name} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-foreground">{goal.goal_name}</span>
+                  <span className="text-sm text-muted-foreground">
+                    ${Number(goal.current_progress).toLocaleString()} / ${Number(goal.target_amount).toLocaleString()}
+                  </span>
+                </div>
+                <div className="space-y-1">
+                  <Progress value={percentage} className="h-2" />
+                  <span className="text-xs text-muted-foreground">{percentage.toFixed(0)}% Complete</span>
+                </div>
               </div>
-              <div className="space-y-1">
-                <Progress value={percentage} className="h-2" />
-                <span className="text-xs text-muted-foreground">{percentage.toFixed(0)}% Complete</span>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </CardContent>
     </Card>
   );

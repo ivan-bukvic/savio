@@ -1,22 +1,83 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
-const data = [
-  { month: "Jan", income: 5200, expenses: 3800 },
-  { month: "Feb", income: 5400, expenses: 4100 },
-  { month: "Mar", income: 5100, expenses: 3900 },
-  { month: "Apr", income: 5600, expenses: 4300 },
-  { month: "May", income: 5800, expenses: 4200 },
-  { month: "Jun", income: 6000, expenses: 4500 },
-  { month: "Jul", income: 5900, expenses: 4400 },
-  { month: "Aug", income: 6200, expenses: 4600 },
-  { month: "Sep", income: 6100, expenses: 4400 },
-  { month: "Oct", income: 6300, expenses: 4700 },
-  { month: "Nov", income: 6500, expenses: 4800 },
-  { month: "Dec", income: 6800, expenses: 5000 },
-];
+interface MonthlyData {
+  month: string;
+  income: number;
+  expenses: number;
+}
 
 export const IncomeVsExpensesChart = () => {
+  const [data, setData] = useState<MonthlyData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const currentYear = new Date().getFullYear();
+      
+      // Fetch income
+      const { data: incomeData } = await supabase
+        .from('income')
+        .select('amount, date')
+        .eq('user_id', user.id)
+        .gte('date', `${currentYear}-01-01`)
+        .lte('date', `${currentYear}-12-31`);
+
+      // Fetch expenses
+      const { data: expensesData } = await supabase
+        .from('expenses')
+        .select('amount, date')
+        .eq('user_id', user.id)
+        .gte('date', `${currentYear}-01-01`)
+        .lte('date', `${currentYear}-12-31`);
+
+      // Aggregate by month
+      const monthlyData: { [key: string]: { income: number; expenses: number } } = {};
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      
+      months.forEach((month, index) => {
+        monthlyData[month] = { income: 0, expenses: 0 };
+      });
+
+      incomeData?.forEach((item) => {
+        const month = months[new Date(item.date).getMonth()];
+        monthlyData[month].income += Number(item.amount);
+      });
+
+      expensesData?.forEach((item) => {
+        const month = months[new Date(item.date).getMonth()];
+        monthlyData[month].expenses += Number(item.amount);
+      });
+
+      const chartData = months.map((month) => ({
+        month,
+        income: monthlyData[month].income,
+        expenses: monthlyData[month].expenses,
+      }));
+
+      setData(chartData);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Card className="card-shadow hover:card-shadow-hover transition-all duration-200">
+        <CardContent className="flex items-center justify-center h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="card-shadow hover:card-shadow-hover transition-all duration-200">
       <CardHeader>
