@@ -1,16 +1,69 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
-const data = [
-  { name: "Housing", value: 1200, color: "hsl(var(--chart-1))" },
-  { name: "Food", value: 600, color: "hsl(var(--chart-2))" },
-  { name: "Transportation", value: 400, color: "hsl(var(--chart-3))" },
-  { name: "Entertainment", value: 300, color: "hsl(var(--chart-4))" },
-  { name: "Utilities", value: 250, color: "hsl(var(--chart-5))" },
-  { name: "Others", value: 350, color: "hsl(var(--muted-foreground))" },
-];
+interface CategoryData {
+  name: string;
+  value: number;
+  color: string;
+}
+
+const categoryColors: { [key: string]: string } = {
+  "Housing": "hsl(var(--chart-1))",
+  "Food": "hsl(var(--chart-2))",
+  "Transportation": "hsl(var(--chart-3))",
+  "Entertainment": "hsl(var(--chart-4))",
+  "Utilities": "hsl(var(--chart-5))",
+  "Others": "hsl(var(--muted-foreground))",
+};
 
 export const ExpenseBreakdownChart = () => {
+  const [data, setData] = useState<CategoryData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: expensesData } = await supabase
+        .from('expenses')
+        .select('amount, category')
+        .eq('user_id', user.id);
+
+      // Aggregate by category
+      const categoryTotals: { [key: string]: number } = {};
+      
+      expensesData?.forEach((expense) => {
+        const category = expense.category || 'Others';
+        categoryTotals[category] = (categoryTotals[category] || 0) + Number(expense.amount);
+      });
+
+      const chartData = Object.entries(categoryTotals).map(([name, value]) => ({
+        name,
+        value,
+        color: categoryColors[name] || categoryColors["Others"],
+      }));
+
+      setData(chartData);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Card className="card-shadow hover:card-shadow-hover transition-all duration-200">
+        <CardContent className="flex items-center justify-center h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="card-shadow hover:card-shadow-hover transition-all duration-200">
       <CardHeader>
