@@ -87,9 +87,17 @@ export const ExpenseBreakdownChart = () => {
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: "hsl(var(--popover))",
-                border: "1px solid hsl(var(--border))",
-                color: "hsl(var(--popover-foreground))",
+                backgroundColor: "rgba(0, 0, 0, 0.9)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                borderRadius: "0.5rem",
+                color: "#FFFFFF",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
+              }}
+              labelStyle={{
+                color: "#FFFFFF",
+              }}
+              itemStyle={{
+                color: "#FFFFFF",
               }}
               cursor={false}
             />
