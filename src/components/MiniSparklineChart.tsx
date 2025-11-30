@@ -21,10 +21,10 @@ export const MiniSparklineChart = ({
         <defs>
           <linearGradient id={`gradient-${color}`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={color} stopOpacity={0.4} />
-            <stop offset="95%" stopColor={color} stopOpacity={0.05} />
+            <stop offset="100%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <Area type="monotone" dataKey="value" stroke={color} strokeWidth={2} fill={`url(#gradient-${color})`} isAnimationActive={false} />
+        <Area type="monotone" dataKey="value" stroke={color} strokeWidth={3} fill={`url(#gradient-${color})`} isAnimationActive={false} fillOpacity={1} />
       </AreaChart>
     </ResponsiveContainer>;
 };
