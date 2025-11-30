@@ -300,7 +300,6 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               </div>
             </div>
             <MiniSparklineChart data={sparklineData} color="hsl(var(--primary))" />
-            <div className="h-1 bg-primary mt-4 rounded-full" />
           </CardContent>
         </Card>
 
@@ -316,7 +315,6 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               </div>
             </div>
             <MiniSparklineChart data={sparklineData} color="hsl(173, 70%, 50%)" />
-            <div className="h-1 mt-4 rounded-full" style={{ backgroundColor: 'hsl(173, 70%, 50%)' }} />
           </CardContent>
         </Card>
 
@@ -334,7 +332,6 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               </div>
             </div>
             <MiniSparklineChart data={sparklineData} color="hsl(220, 80%, 55%)" />
-            <div className="h-1 mt-4 rounded-full" style={{ backgroundColor: 'hsl(220, 80%, 55%)' }} />
           </CardContent>
         </Card>
 
@@ -350,7 +347,6 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               </div>
             </div>
             <MiniSparklineChart data={sparklineData} color="hsl(25, 95%, 55%)" />
-            <div className="h-1 mt-4 rounded-full" style={{ backgroundColor: 'hsl(25, 95%, 55%)' }} />
           </CardContent>
         </Card>
       </div>
