@@ -255,13 +255,13 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Income Over Time */}
-        <Card className="card-shadow">
+        <Card className="card-shadow overflow-hidden">
           <CardHeader>
             <CardTitle>Income Over Time</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pb-6">
             <ChartContainer
               config={{
                 amount: {
@@ -269,13 +269,13 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
                   color: "hsl(var(--chart-1))",
                 },
               }}
-              className="h-[300px]"
+              className="h-[300px] max-w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData}>
+                <BarChart data={monthlyChartData} barSize={20}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-                  <YAxis stroke="hsl(var(--muted-foreground))" />
+                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "rgba(0, 0, 0, 0.9)",
@@ -296,14 +296,14 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
         </Card>
 
         {/* Income Source Breakdown */}
-        <Card className="card-shadow">
+        <Card className="card-shadow overflow-hidden">
           <CardHeader>
             <CardTitle>Income by Source</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pb-8">
             <ChartContainer
               config={{}}
-              className="h-[300px]"
+              className="h-[300px] max-w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -311,10 +311,13 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
                     data={sourceChartData}
                     cx="50%"
                     cy="50%"
-                    labelLine={false}
-                    outerRadius={100}
+                    innerRadius={70}
+                    outerRadius={110}
                     fill="#8884d8"
                     dataKey="value"
+                    paddingAngle={2}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    labelLine={{ stroke: "hsl(var(--muted-foreground))", strokeWidth: 1 }}
                   >
                     {sourceChartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -332,7 +335,16 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
                     itemStyle={{ color: "#FFFFFF" }}
                     cursor={false}
                   />
-                  <Legend />
+                  <Legend 
+                    wrapperStyle={{ 
+                      paddingTop: "20px",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "8px",
+                      justifyContent: "center"
+                    }}
+                    iconType="circle"
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </ChartContainer>
