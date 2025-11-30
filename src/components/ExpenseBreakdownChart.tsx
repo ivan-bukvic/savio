@@ -87,10 +87,11 @@ export const ExpenseBreakdownChart = () => {
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: "hsl(var(--card))",
+                backgroundColor: "hsl(var(--popover))",
                 border: "1px solid hsl(var(--border))",
-                borderRadius: "0.5rem",
+                color: "hsl(var(--popover-foreground))",
               }}
+              cursor={false}
             />
             <Legend />
           </PieChart>
