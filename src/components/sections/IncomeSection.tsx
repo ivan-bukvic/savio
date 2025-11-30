@@ -36,11 +36,11 @@ interface Income {
 }
 
 const COLORS = [
-  'hsl(173, 58%, 39%)', // Teal
-  'hsl(142, 76%, 36%)', // Green
-  'hsl(221, 83%, 53%)', // Blue
-  'hsl(25, 95%, 53%)',  // Orange
-  'hsl(48, 96%, 53%)',  // Yellow
+  'hsl(142, 76%, 45%)', // Green
+  'hsl(173, 70%, 50%)', // Teal
+  'hsl(220, 80%, 55%)', // Blue
+  'hsl(25, 95%, 55%)',  // Orange
+  'hsl(0, 85%, 60%)',   // Red
 ];
 
 interface IncomeSectionProps {
@@ -306,72 +306,69 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
           <CardHeader>
             <CardTitle>Income by Source</CardTitle>
           </CardHeader>
-          <CardContent className="pb-4">
+          <CardContent className="pb-8 pt-4">
             <ChartContainer
               config={{}}
-              className="h-[450px] max-w-full"
+              className="h-[350px] max-w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 30, right: 100, bottom: 60, left: 100 }}>
+                <PieChart>
                   <Pie
                     data={sourceChartData}
                     cx="50%"
-                    cy="40%"
-                    innerRadius={60}
-                    outerRadius={85}
+                    cy="50%"
+                    innerRadius={70}
+                    outerRadius={120}
                     fill="#8884d8"
                     dataKey="value"
-                    paddingAngle={3}
-                    label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
-                      const RADIAN = Math.PI / 180;
-                      const radius = outerRadius + 45;
-                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                      
-                      return (
-                        <text
-                          x={x}
-                          y={y}
-                          fill="hsl(var(--foreground))"
-                          textAnchor={x > cx ? 'start' : 'end'}
-                          dominantBaseline="central"
-                          fontSize={12}
-                        >
-                          {`${name} ${(percent * 100).toFixed(0)}%`}
-                        </text>
-                      );
+                    paddingAngle={2}
+                    label={({ percent }) => {
+                      if (percent < 0.05) return null; // Don't show label if slice is too small
+                      return `${(percent * 100).toFixed(0)}%`;
                     }}
+                    labelLine={false}
                   >
                     {sourceChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={COLORS[index % COLORS.length]}
+                        stroke="hsl(var(--background))"
+                        strokeWidth={2}
+                      />
                     ))}
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "rgba(0, 0, 0, 0.9)",
+                      backgroundColor: "rgba(0, 0, 0, 0.95)",
                       border: "1px solid rgba(255, 255, 255, 0.2)",
                       borderRadius: "0.5rem",
                       color: "#FFFFFF",
-                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
+                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.5)",
                     }}
-                    labelStyle={{ color: "#FFFFFF" }}
+                    labelStyle={{ color: "#FFFFFF", fontWeight: "bold" }}
                     itemStyle={{ color: "#FFFFFF" }}
                     cursor={false}
-                  />
-                  <Legend 
-                    wrapperStyle={{ 
-                      paddingTop: "30px",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "12px",
-                      justifyContent: "center",
-                      marginTop: "20px"
-                    }}
-                    iconType="circle"
+                    formatter={(value: number) => `$${value.toLocaleString()}`}
                   />
                 </PieChart>
               </ResponsiveContainer>
             </ChartContainer>
+            
+            {/* Legend at bottom */}
+            <div className="mt-6 space-y-2">
+              {sourceChartData.map((entry, index) => (
+                <div key={entry.name} className="flex items-center gap-3">
+                  <div 
+                    className="w-3 h-3 rounded-full flex-shrink-0" 
+                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                  />
+                  <span className="text-sm text-foreground">{entry.name}</span>
+                  <span className="text-sm text-muted-foreground ml-auto">
+                    ${entry.value.toLocaleString()}
+                  </span>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
