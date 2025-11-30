@@ -309,22 +309,22 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
           <CardContent className="pb-4">
             <ChartContainer
               config={{}}
-              className="h-[400px] max-w-full"
+              className="h-[450px] max-w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 20, right: 20, bottom: 60, left: 20 }}>
+                <PieChart margin={{ top: 30, right: 100, bottom: 60, left: 100 }}>
                   <Pie
                     data={sourceChartData}
                     cx="50%"
                     cy="40%"
                     innerRadius={60}
-                    outerRadius={90}
+                    outerRadius={85}
                     fill="#8884d8"
                     dataKey="value"
                     paddingAngle={3}
                     label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
                       const RADIAN = Math.PI / 180;
-                      const radius = outerRadius + 30;
+                      const radius = outerRadius + 45;
                       const x = cx + radius * Math.cos(-midAngle * RADIAN);
                       const y = cy + radius * Math.sin(-midAngle * RADIAN);
                       
