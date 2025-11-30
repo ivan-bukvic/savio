@@ -18,10 +18,6 @@ const menuItems = [{
   label: "Goals",
   active: false
 }, {
-  icon: Wallet,
-  label: "Debts",
-  active: false
-}, {
   icon: Sparkles,
   label: "AI Insights",
   active: false
