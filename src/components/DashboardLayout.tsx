@@ -14,11 +14,15 @@ import { DashboardSidebar } from "./DashboardSidebar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
+
 interface DashboardLayoutProps {
   children: React.ReactNode;
+  activeSection: ActiveSection;
+  onSectionChange: (section: ActiveSection) => void;
 }
 
-export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+export const DashboardLayout = ({ children, activeSection, onSectionChange }: DashboardLayoutProps) => {
   const [isDark, setIsDark] = useState(false);
   const navigate = useNavigate();
 
@@ -39,7 +43,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
-      <DashboardSidebar />
+      <DashboardSidebar activeSection={activeSection} onSectionChange={onSectionChange} />
       
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}

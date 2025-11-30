@@ -1,33 +1,23 @@
-import { LayoutDashboard, DollarSign, CreditCard, Target, Wallet, Sparkles, Settings, TrendingUp } from "lucide-react";
+import { LayoutDashboard, DollarSign, CreditCard, Target, Sparkles, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { NavLink } from "./NavLink";
-const menuItems = [{
-  icon: LayoutDashboard,
-  label: "Dashboard",
-  path: "/app"
-}, {
-  icon: DollarSign,
-  label: "Income",
-  path: "/app/income"
-}, {
-  icon: CreditCard,
-  label: "Expenses",
-  path: "/app/expenses"
-}, {
-  icon: Target,
-  label: "Goals",
-  path: "/app/goals"
-}, {
-  icon: Sparkles,
-  label: "AI Insights",
-  path: "/app/ai-insights"
-}, {
-  icon: Settings,
-  label: "Settings",
-  path: "/app/settings"
-}];
-export const DashboardSidebar = () => {
+
+type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
+
+interface DashboardSidebarProps {
+  activeSection: ActiveSection;
+  onSectionChange: (section: ActiveSection) => void;
+}
+
+const menuItems: { icon: any; label: string; section: ActiveSection }[] = [
+  { icon: LayoutDashboard, label: "Dashboard", section: "dashboard" },
+  { icon: DollarSign, label: "Income", section: "income" },
+  { icon: CreditCard, label: "Expenses", section: "expenses" },
+  { icon: Target, label: "Goals", section: "goals" },
+  { icon: Sparkles, label: "AI Insights", section: "insights" },
+  { icon: Settings, label: "Settings", section: "settings" },
+];
+
+export const DashboardSidebar = ({ activeSection, onSectionChange }: DashboardSidebarProps) => {
   return <aside className="w-64 border-r border-border bg-card flex flex-col card-shadow">
       {/* Logo */}
       <div className="flex h-16 items-center px-6 border-b border-border">
@@ -40,17 +30,24 @@ export const DashboardSidebar = () => {
       {/* Navigation */}
       <nav className="flex-1 space-y-1 p-4">
         {menuItems.map(item => {
-        const Icon = item.icon;
-        return <NavLink 
-              key={item.label} 
-              to={item.path}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 text-muted-foreground hover:bg-muted hover:text-foreground"
-              activeClassName="bg-primary/10 text-primary"
+          const Icon = item.icon;
+          const isActive = activeSection === item.section;
+          return (
+            <button
+              key={item.label}
+              onClick={() => onSectionChange(item.section)}
+              className={cn(
+                "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                isActive
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
             >
               <Icon className="h-5 w-5" />
               <span>{item.label}</span>
-            </NavLink>;
-      })}
+            </button>
+          );
+        })}
       </nav>
 
       {/* User Profile Section */}
