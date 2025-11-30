@@ -5,6 +5,7 @@ import { Session } from "@supabase/supabase-js";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { DashboardSection } from "@/components/sections/DashboardSection";
 import { IncomeSection } from "@/components/sections/IncomeSection";
+import { ExpensesSection } from "@/components/sections/ExpensesSection";
 import { Loader2 } from "lucide-react";
 
 type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
@@ -57,7 +58,7 @@ const Index = () => {
       case "income":
         return <IncomeSection userId={session!.user.id} />;
       case "expenses":
-        return <div className="text-muted-foreground">Expenses section coming soon...</div>;
+        return <ExpensesSection userId={session!.user.id} />;
       case "goals":
         return <div className="text-muted-foreground">Goals section coming soon...</div>;
       case "insights":
