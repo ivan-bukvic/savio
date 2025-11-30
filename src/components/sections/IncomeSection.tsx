@@ -267,7 +267,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
           <CardHeader>
             <CardTitle>Income Over Time</CardTitle>
           </CardHeader>
-          <CardContent className="pb-6">
+          <CardContent className="pb-6 pt-6 flex items-center">
             <ChartContainer
               config={{
                 amount: {
@@ -322,9 +322,29 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
                     fill="#8884d8"
                     dataKey="value"
                     paddingAngle={2}
-                    label={({ percent }) => {
-                      if (percent < 0.05) return null; // Don't show label if slice is too small
-                      return `${(percent * 100).toFixed(0)}%`;
+                    label={({ percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
+                      const RADIAN = Math.PI / 180;
+                      const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                      const percentage = (percent * 100).toFixed(0);
+                      
+                      // Adjust font size based on percentage (smaller slices get smaller text)
+                      const fontSize = percent < 0.05 ? '10px' : percent < 0.15 ? '12px' : '14px';
+                      
+                      return (
+                        <text 
+                          x={x} 
+                          y={y} 
+                          fill="white" 
+                          textAnchor="middle" 
+                          dominantBaseline="central"
+                          fontSize={fontSize}
+                          fontWeight="600"
+                        >
+                          {percentage}%
+                        </text>
+                      );
                     }}
                     labelLine={false}
                   >
