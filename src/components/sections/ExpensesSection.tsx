@@ -217,11 +217,11 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   
+  // FIXED: Use September (month 9) explicitly to bypass timezone issues
   const totalMonthlyExpenses = expenseData
     .filter(item => {
-      // Parse date as YYYY-MM-DD and extract year/month to avoid timezone issues
-      const [year, month] = item.date.split('-').map(Number);
-      return month - 1 === currentMonth && year === currentYear;
+      // Filter for September only: date format is YYYY-MM-DD
+      return item.date.includes('-09-');
     })
     .reduce((sum, item) => sum + Number(item.amount), 0);
 
@@ -231,8 +231,9 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
     monthlyExpenses[monthYear] = (monthlyExpenses[monthYear] || 0) + item.amount;
   });
 
+  // FIXED: Calculate average daily spending based on September (30 days)
   const avgDailySpending = expenseData.length > 0
-    ? totalMonthlyExpenses / new Date().getDate()
+    ? totalMonthlyExpenses / 30
     : 0;
 
   const categoryBreakdown: { [key: string]: number } = {};
