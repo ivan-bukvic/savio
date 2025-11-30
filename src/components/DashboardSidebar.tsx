@@ -1,33 +1,33 @@
 import { LayoutDashboard, DollarSign, CreditCard, Target, Wallet, Sparkles, Settings, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { NavLink } from "./NavLink";
 const menuItems = [{
   icon: LayoutDashboard,
   label: "Dashboard",
-  active: true
+  path: "/app"
 }, {
   icon: DollarSign,
   label: "Income",
-  active: false
+  path: "/app/income"
 }, {
   icon: CreditCard,
   label: "Expenses",
-  active: false
+  path: "/app/expenses"
 }, {
   icon: Target,
   label: "Goals",
-  active: false
+  path: "/app/goals"
 }, {
   icon: Sparkles,
   label: "AI Insights",
-  active: false
+  path: "/app/ai-insights"
 }, {
   icon: Settings,
   label: "Settings",
-  active: false
+  path: "/app/settings"
 }];
 export const DashboardSidebar = () => {
-  const [activeItem, setActiveItem] = useState("Dashboard");
   return <aside className="w-64 border-r border-border bg-card flex flex-col card-shadow">
       {/* Logo */}
       <div className="flex h-16 items-center px-6 border-b border-border">
@@ -41,11 +41,15 @@ export const DashboardSidebar = () => {
       <nav className="flex-1 space-y-1 p-4">
         {menuItems.map(item => {
         const Icon = item.icon;
-        const isActive = activeItem === item.label;
-        return <button key={item.label} onClick={() => setActiveItem(item.label)} className={cn("flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200", isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground")}>
+        return <NavLink 
+              key={item.label} 
+              to={item.path}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 text-muted-foreground hover:bg-muted hover:text-foreground"
+              activeClassName="bg-primary/10 text-primary"
+            >
               <Icon className="h-5 w-5" />
               <span>{item.label}</span>
-            </button>;
+            </NavLink>;
       })}
       </nav>
 
