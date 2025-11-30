@@ -336,7 +336,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
                         <text 
                           x={x} 
                           y={y} 
-                          fill="white" 
+                          fill="hsl(var(--foreground))" 
                           textAnchor="middle" 
                           dominantBaseline="central"
                           fontSize={fontSize}
