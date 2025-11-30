@@ -92,12 +92,13 @@ export const DebtOverview = () => {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "hsl(var(--card))",
+                backgroundColor: "hsl(var(--popover))",
                 border: "1px solid hsl(var(--border))",
-                borderRadius: "0.5rem",
+                color: "hsl(var(--popover-foreground))",
               }}
+              cursor={false}
             />
-              <Bar dataKey="amount" fill="hsl(var(--chart-1))" radius={[0, 8, 8, 0]} />
+              <Bar dataKey="amount" fill="hsl(var(--chart-1))" activeBar={false} />
             </BarChart>
           </ResponsiveContainer>
           </>
