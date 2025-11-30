@@ -35,7 +35,13 @@ interface Income {
   user_id: string;
 }
 
-const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
+const COLORS = [
+  'hsl(173, 58%, 39%)', // Teal
+  'hsl(142, 76%, 36%)', // Green
+  'hsl(221, 83%, 53%)', // Blue
+  'hsl(25, 95%, 53%)',  // Orange
+  'hsl(48, 96%, 53%)',  // Yellow
+];
 
 interface IncomeSectionProps {
   userId: string;
@@ -192,7 +198,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
       const itemDate = new Date(item.date);
       return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
     })
-    .reduce((sum, item) => sum + item.amount, 0);
+    .reduce((sum, item) => sum + Number(item.amount), 0);
 
   const monthlyIncomes: { [key: string]: number } = {};
   incomeData.forEach(item => {
@@ -300,24 +306,41 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
           <CardHeader>
             <CardTitle>Income by Source</CardTitle>
           </CardHeader>
-          <CardContent className="pb-8">
+          <CardContent className="pb-4">
             <ChartContainer
               config={{}}
-              className="h-[300px] max-w-full"
+              className="h-[400px] max-w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 20, right: 20, bottom: 60, left: 20 }}>
                   <Pie
                     data={sourceChartData}
                     cx="50%"
-                    cy="50%"
-                    innerRadius={70}
-                    outerRadius={110}
+                    cy="40%"
+                    innerRadius={60}
+                    outerRadius={90}
                     fill="#8884d8"
                     dataKey="value"
-                    paddingAngle={2}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    labelLine={{ stroke: "hsl(var(--muted-foreground))", strokeWidth: 1 }}
+                    paddingAngle={3}
+                    label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+                      const RADIAN = Math.PI / 180;
+                      const radius = outerRadius + 30;
+                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                      
+                      return (
+                        <text
+                          x={x}
+                          y={y}
+                          fill="hsl(var(--foreground))"
+                          textAnchor={x > cx ? 'start' : 'end'}
+                          dominantBaseline="central"
+                          fontSize={12}
+                        >
+                          {`${name} ${(percent * 100).toFixed(0)}%`}
+                        </text>
+                      );
+                    }}
                   >
                     {sourceChartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -337,11 +360,12 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
                   />
                   <Legend 
                     wrapperStyle={{ 
-                      paddingTop: "20px",
+                      paddingTop: "30px",
                       display: "flex",
                       flexWrap: "wrap",
-                      gap: "8px",
-                      justifyContent: "center"
+                      gap: "12px",
+                      justifyContent: "center",
+                      marginTop: "20px"
                     }}
                     iconType="circle"
                   />
