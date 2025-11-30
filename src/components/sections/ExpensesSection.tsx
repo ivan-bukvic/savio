@@ -219,8 +219,9 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
   
   const totalMonthlyExpenses = expenseData
     .filter(item => {
-      const itemDate = new Date(item.date);
-      return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
+      // Parse date as YYYY-MM-DD and extract year/month to avoid timezone issues
+      const [year, month] = item.date.split('-').map(Number);
+      return month - 1 === currentMonth && year === currentYear;
     })
     .reduce((sum, item) => sum + Number(item.amount), 0);
 
@@ -288,7 +289,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden">
           <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                 <CreditCard className="h-5 w-5 text-primary" />
               </div>
@@ -304,7 +305,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden">
           <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                 <Package className="h-5 w-5 text-primary" />
               </div>
@@ -320,7 +321,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden">
           <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                 <TrendingDown className="h-5 w-5 text-primary" />
               </div>
@@ -338,7 +339,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden">
           <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                 <Receipt className="h-5 w-5 text-primary" />
               </div>
