@@ -288,7 +288,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
       {/* Summary Statistics with Gradient Mini-Graphs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden">
+        <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-b-0">
           <CardContent className="p-6 pb-0">
             <div className="flex items-center gap-3 mb-3 min-h-[88px]">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
@@ -299,11 +299,12 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 <h3 className="text-2xl font-bold text-foreground mt-1">${totalMonthlyExpenses.toLocaleString()}</h3>
               </div>
             </div>
+            <div className="h-1 bg-primary mt-4 rounded-full" />
             <MiniSparklineChart data={sparklineData} color="hsl(var(--primary))" />
           </CardContent>
         </Card>
 
-        <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden">
+        <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-b-0">
           <CardContent className="p-6 pb-0">
             <div className="flex items-center gap-3 mb-3 min-h-[88px]">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
@@ -314,11 +315,12 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 <h3 className="text-2xl font-bold text-foreground mt-1">{highestCategory?.[0] || "N/A"}</h3>
               </div>
             </div>
+            <div className="h-1 mt-4 rounded-full" style={{ backgroundColor: 'hsl(173, 70%, 50%)' }} />
             <MiniSparklineChart data={sparklineData} color="hsl(173, 70%, 50%)" />
           </CardContent>
         </Card>
 
-        <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden">
+        <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-b-0">
           <CardContent className="p-6 pb-0">
             <div className="flex items-center gap-3 mb-3 min-h-[88px]">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
@@ -331,11 +333,12 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 </h3>
               </div>
             </div>
+            <div className="h-1 mt-4 rounded-full" style={{ backgroundColor: 'hsl(220, 80%, 55%)' }} />
             <MiniSparklineChart data={sparklineData} color="hsl(220, 80%, 55%)" />
           </CardContent>
         </Card>
 
-        <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden">
+        <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-b-0">
           <CardContent className="p-6 pb-0">
             <div className="flex items-center gap-3 mb-3 min-h-[88px]">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
@@ -346,6 +349,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 <h3 className="text-2xl font-bold text-foreground mt-1">{expenseData.length}</h3>
               </div>
             </div>
+            <div className="h-1 mt-4 rounded-full" style={{ backgroundColor: 'hsl(25, 95%, 55%)' }} />
             <MiniSparklineChart data={sparklineData} color="hsl(25, 95%, 55%)" />
           </CardContent>
         </Card>
