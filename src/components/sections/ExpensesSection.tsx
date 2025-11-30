@@ -299,7 +299,6 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 <h3 className="text-2xl font-bold text-foreground mt-1">${totalMonthlyExpenses.toLocaleString()}</h3>
               </div>
             </div>
-            <div className="h-1 bg-primary mt-4 rounded-full" />
             <MiniSparklineChart data={sparklineData} color="hsl(var(--primary))" />
           </CardContent>
         </Card>
@@ -315,7 +314,6 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 <h3 className="text-2xl font-bold text-foreground mt-1">{highestCategory?.[0] || "N/A"}</h3>
               </div>
             </div>
-            <div className="h-1 mt-4 rounded-full" style={{ backgroundColor: 'hsl(173, 70%, 50%)' }} />
             <MiniSparklineChart data={sparklineData} color="hsl(173, 70%, 50%)" />
           </CardContent>
         </Card>
@@ -333,7 +331,6 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 </h3>
               </div>
             </div>
-            <div className="h-1 mt-4 rounded-full" style={{ backgroundColor: 'hsl(220, 80%, 55%)' }} />
             <MiniSparklineChart data={sparklineData} color="hsl(220, 80%, 55%)" />
           </CardContent>
         </Card>
@@ -349,7 +346,6 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 <h3 className="text-2xl font-bold text-foreground mt-1">{expenseData.length}</h3>
               </div>
             </div>
-            <div className="h-1 mt-4 rounded-full" style={{ backgroundColor: 'hsl(25, 95%, 55%)' }} />
             <MiniSparklineChart data={sparklineData} color="hsl(25, 95%, 55%)" />
           </CardContent>
         </Card>
@@ -373,7 +369,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               className="h-[300px] max-w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData} barSize={20}>
+                <BarChart data={monthlyChartData} barSize={32}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                   <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
