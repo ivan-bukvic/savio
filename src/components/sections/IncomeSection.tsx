@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Session } from "@supabase/supabase-js";
-import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Plus, DollarSign, TrendingUp, Wallet, Edit, Trash2 } from "lucide-react";
+import { Plus, DollarSign, TrendingUp, Wallet, Edit, Trash2 } from "lucide-react";
 import { StatCard } from "@/components/StatCard";
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
 import {
   Dialog,
@@ -40,11 +37,12 @@ interface Income {
 
 const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
-const Income = () => {
-  const navigate = useNavigate();
+interface IncomeSectionProps {
+  userId: string;
+}
+
+export const IncomeSection = ({ userId }: IncomeSectionProps) => {
   const { toast } = useToast();
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
   const [incomeData, setIncomeData] = useState<Income[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -53,37 +51,14 @@ const Income = () => {
   const [formData, setFormData] = useState({ source: "", amount: "", date: "" });
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        if (!session) {
-          navigate("/auth");
-        }
-      }
-    );
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-      if (!session) {
-        navigate("/auth");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  useEffect(() => {
-    if (session) {
-      fetchIncomeData();
-    }
-  }, [session]);
+    fetchIncomeData();
+  }, [userId]);
 
   const fetchIncomeData = async () => {
     const { data, error } = await supabase
       .from("income")
       .select("*")
-      .eq("user_id", session?.user?.id)
+      .eq("user_id", userId)
       .order("date", { ascending: false });
 
     if (error) {
@@ -111,7 +86,7 @@ const Income = () => {
       source: formData.source,
       amount: parseFloat(formData.amount),
       date: formData.date,
-      user_id: session?.user?.id,
+      user_id: userId,
     });
 
     if (error) {
@@ -247,191 +222,177 @@ const Income = () => {
     value,
   }));
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!session) {
-    return null;
-  }
-
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Income</h1>
-            <p className="text-muted-foreground mt-1">Manage and track your income sources</p>
-          </div>
-          <Button onClick={() => setIsAddDialogOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Income
-          </Button>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Income</h1>
+          <p className="text-muted-foreground mt-1">Manage and track your income sources</p>
         </div>
+        <Button onClick={() => setIsAddDialogOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Income
+        </Button>
+      </div>
 
-        {/* Summary Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatCard
-            title="Total Monthly Income"
-            value={`$${totalMonthlyIncome.toLocaleString()}`}
-            icon={DollarSign}
-          />
-          <StatCard
-            title="Average Monthly Income"
-            value={`$${avgMonthlyIncome.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
-            icon={TrendingUp}
-          />
-          <StatCard
-            title="Income Sources"
-            value={uniqueSources.toString()}
-            icon={Wallet}
-          />
-        </div>
+      {/* Summary Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StatCard
+          title="Total Monthly Income"
+          value={`$${totalMonthlyIncome.toLocaleString()}`}
+          icon={DollarSign}
+        />
+        <StatCard
+          title="Average Monthly Income"
+          value={`$${avgMonthlyIncome.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
+          icon={TrendingUp}
+        />
+        <StatCard
+          title="Income Sources"
+          value={uniqueSources.toString()}
+          icon={Wallet}
+        />
+      </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Income Over Time */}
-          <Card className="card-shadow">
-            <CardHeader>
-              <CardTitle>Income Over Time</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer
-                config={{
-                  amount: {
-                    label: "Amount",
-                    color: "hsl(var(--chart-1))",
-                  },
-                }}
-                className="h-[300px]"
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={monthlyChartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                    <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-                    <YAxis stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "rgba(0, 0, 0, 0.9)",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
-                        borderRadius: "0.5rem",
-                        color: "#FFFFFF",
-                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
-                      }}
-                      labelStyle={{ color: "#FFFFFF" }}
-                      itemStyle={{ color: "#FFFFFF" }}
-                      cursor={false}
-                    />
-                    <Bar dataKey="amount" fill="hsl(var(--chart-1))" radius={0} activeBar={false} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
-          </Card>
-
-          {/* Income Source Breakdown */}
-          <Card className="card-shadow">
-            <CardHeader>
-              <CardTitle>Income by Source</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer
-                config={{}}
-                className="h-[300px]"
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={sourceChartData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      outerRadius={100}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {sourceChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "rgba(0, 0, 0, 0.9)",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
-                        borderRadius: "0.5rem",
-                        color: "#FFFFFF",
-                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
-                      }}
-                      labelStyle={{ color: "#FFFFFF" }}
-                      itemStyle={{ color: "#FFFFFF" }}
-                      cursor={false}
-                    />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Income Table */}
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Income Over Time */}
         <Card className="card-shadow">
           <CardHeader>
-            <CardTitle>All Income Entries</CardTitle>
+            <CardTitle>Income Over Time</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Source</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {incomeData.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center text-muted-foreground">
-                      No income entries found. Add your first income entry to get started.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  incomeData.map((income) => (
-                    <TableRow key={income.id} className="hover:bg-muted/50">
-                      <TableCell className="font-medium">{income.source}</TableCell>
-                      <TableCell>${income.amount.toLocaleString()}</TableCell>
-                      <TableCell>{format(new Date(income.date), "MMM dd, yyyy")}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => openEditDialog(income)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => openDeleteDialog(income)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+            <ChartContainer
+              config={{
+                amount: {
+                  label: "Amount",
+                  color: "hsl(var(--chart-1))",
+                },
+              }}
+              className="h-[300px]"
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={monthlyChartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
+                  <YAxis stroke="hsl(var(--muted-foreground))" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "rgba(0, 0, 0, 0.9)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      borderRadius: "0.5rem",
+                      color: "#FFFFFF",
+                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
+                    }}
+                    labelStyle={{ color: "#FFFFFF" }}
+                    itemStyle={{ color: "#FFFFFF" }}
+                    cursor={false}
+                  />
+                  <Bar dataKey="amount" fill="hsl(var(--chart-1))" radius={0} activeBar={false} />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+
+        {/* Income Source Breakdown */}
+        <Card className="card-shadow">
+          <CardHeader>
+            <CardTitle>Income by Source</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer
+              config={{}}
+              className="h-[300px]"
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={sourceChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={100}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {sourceChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "rgba(0, 0, 0, 0.9)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      borderRadius: "0.5rem",
+                      color: "#FFFFFF",
+                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
+                    }}
+                    labelStyle={{ color: "#FFFFFF" }}
+                    itemStyle={{ color: "#FFFFFF" }}
+                    cursor={false}
+                  />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
       </div>
+
+      {/* Income Table */}
+      <Card className="card-shadow">
+        <CardHeader>
+          <CardTitle>All Income Entries</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Source</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {incomeData.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center text-muted-foreground">
+                    No income entries found. Add your first income entry to get started.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                incomeData.map((income) => (
+                  <TableRow key={income.id} className="hover:bg-muted/50">
+                    <TableCell className="font-medium">{income.source}</TableCell>
+                    <TableCell>${income.amount.toLocaleString()}</TableCell>
+                    <TableCell>{format(new Date(income.date), "MMM dd, yyyy")}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openEditDialog(income)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openDeleteDialog(income)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
       {/* Add Income Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
@@ -544,8 +505,6 @@ const Income = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </DashboardLayout>
+    </div>
   );
 };
-
-export default Income;

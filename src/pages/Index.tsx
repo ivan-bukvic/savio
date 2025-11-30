@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { IncomeVsExpensesChart } from "@/components/IncomeVsExpensesChart";
-import { ExpenseBreakdownChart } from "@/components/ExpenseBreakdownChart";
-import { SavingsGoals } from "@/components/SavingsGoals";
-import { DebtOverview } from "@/components/DebtOverview";
-import { AIAnalysisSection } from "@/components/AIAnalysisSection";
+import { DashboardSection } from "@/components/sections/DashboardSection";
+import { IncomeSection } from "@/components/sections/IncomeSection";
 import { Loader2 } from "lucide-react";
+
+type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
 
 const Index = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState<ActiveSection>("dashboard");
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -50,29 +50,28 @@ const Index = () => {
     return null;
   }
 
+  const renderSection = () => {
+    switch (activeSection) {
+      case "dashboard":
+        return <DashboardSection />;
+      case "income":
+        return <IncomeSection userId={session!.user.id} />;
+      case "expenses":
+        return <div className="text-muted-foreground">Expenses section coming soon...</div>;
+      case "goals":
+        return <div className="text-muted-foreground">Goals section coming soon...</div>;
+      case "insights":
+        return <div className="text-muted-foreground">Insights section coming soon...</div>;
+      case "settings":
+        return <div className="text-muted-foreground">Settings section coming soon...</div>;
+      default:
+        return <DashboardSection />;
+    }
+  };
+
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Welcome back! Here's your financial overview</p>
-        </div>
-
-        {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <IncomeVsExpensesChart />
-          <ExpenseBreakdownChart />
-        </div>
-
-        {/* Goals and Debt Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SavingsGoals />
-          <DebtOverview />
-        </div>
-
-        {/* AI Analysis Section */}
-        <AIAnalysisSection />
-      </div>
+    <DashboardLayout activeSection={activeSection} onSectionChange={setActiveSection}>
+      {renderSection()}
     </DashboardLayout>
   );
 };
