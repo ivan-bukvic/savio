@@ -262,6 +262,9 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
     { month: "Apr", total: 1500 },
     { month: "May", total: 1800 },
     { month: "Jun", total: 2200 },
+    { month: "Jul", total: 2500 },
+    { month: "Aug", total: 2750 },
+    { month: "Sep", total: 3150 },
   ];
 
   // Bar chart data - goal funding distribution
