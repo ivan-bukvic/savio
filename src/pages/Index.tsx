@@ -6,6 +6,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { DashboardSection } from "@/components/sections/DashboardSection";
 import { IncomeSection } from "@/components/sections/IncomeSection";
 import { ExpensesSection } from "@/components/sections/ExpensesSection";
+import { GoalsSection } from "@/components/sections/GoalsSection";
 import { Loader2 } from "lucide-react";
 
 type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
@@ -60,7 +61,7 @@ const Index = () => {
       case "expenses":
         return <ExpensesSection userId={session!.user.id} />;
       case "goals":
-        return <div className="text-muted-foreground">Goals section coming soon...</div>;
+        return <GoalsSection userId={session!.user.id} />;
       case "insights":
         return <div className="text-muted-foreground">Insights section coming soon...</div>;
       case "settings":
