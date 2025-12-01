@@ -256,15 +256,15 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
 
   // Area chart data - simulate monthly progress
   const monthlyProgressData = [
-    { month: "Jan", total: 500 },
-    { month: "Feb", total: 800 },
-    { month: "Mar", total: 1200 },
-    { month: "Apr", total: 1500 },
-    { month: "May", total: 1800 },
-    { month: "Jun", total: 2200 },
-    { month: "Jul", total: 2500 },
-    { month: "Aug", total: 2750 },
-    { month: "Sep", total: 3150 },
+    { month: "Jan", total: 420 },
+    { month: "Feb", total: 680 },
+    { month: "Mar", total: 650 },
+    { month: "Apr", total: 920 },
+    { month: "May", total: 1150 },
+    { month: "Jun", total: 1140 },
+    { month: "Jul", total: 1480 },
+    { month: "Aug", total: 1420 },
+    { month: "Sep", total: 1780 },
   ];
 
   // Bar chart data - goal funding distribution
