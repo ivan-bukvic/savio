@@ -98,7 +98,7 @@ export const DebtOverview = () => {
               }}
               cursor={false}
             />
-              <Bar dataKey="amount" fill="hsl(var(--chart-1))" activeBar={false} />
+              <Bar dataKey="amount" fill="hsl(var(--chart-1))" activeBar={false} barSize={20} />
             </BarChart>
           </ResponsiveContainer>
           </>
