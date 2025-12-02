@@ -162,16 +162,16 @@ const Landing = () => {
               className="text-center lg:text-left"
             >
               <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight">
-                Take Control of Your Money —{" "}
+                Take Control of Your Money –{" "}
                 <span className="text-primary">Effortlessly.</span>
               </h1>
               <p className="text-lg sm:text-xl text-muted-foreground mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Build savings, reduce stress, and finally gain a clear path to financial freedom — all in one simple dashboard.
+                Build savings, reduce stress, and finally gain a clear path to financial freedom – all in one simple dashboard.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link to="/auth">
                   <Button size="lg" className="text-base px-8 py-6 h-auto group w-full sm:w-auto">
-                    Get Started — It's Free
+                    Get Started – It's Free
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
