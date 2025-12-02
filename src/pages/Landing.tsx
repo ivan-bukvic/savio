@@ -5,7 +5,7 @@ import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart,
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import heroImage from "@/assets/hero-3d-fluid.jpg";
 import landingBg from "@/assets/landing-bg-curves.jpg";
-import dashboardPreview from "@/assets/dashboard-preview.jpg";
+import dashboardPreview from "@/assets/dashboard-screenshot.png";
 import testimonialSarah from "@/assets/testimonial-sarah.jpg";
 import testimonialJames from "@/assets/testimonial-james.jpg";
 import testimonialMaria from "@/assets/testimonial-maria.jpg";
@@ -332,10 +332,17 @@ const Landing = () => {
           }} transition={{
             duration: 0.6,
             delay: 0.2
-          }} className="relative">
-            <div className="relative rounded-3xl overflow-hidden card-shadow-hover border border-border/40">
-              <img src={dashboardPreview} alt="Savio Dashboard Preview" className="w-full h-auto" />
+          }} className="relative group">
+            <div className="relative rounded-xl overflow-hidden border border-border/40 shadow-2xl shadow-primary/10 group-hover:shadow-primary/20 transition-all duration-500 group-hover:scale-[1.02]">
+              <img 
+                src={dashboardPreview} 
+                alt="Savio Dashboard Preview showing income vs expenses chart, expense breakdown, savings goals, and debt overview" 
+                className="w-full h-auto" 
+              />
             </div>
+            <p className="text-center text-muted-foreground text-sm mt-6">
+              A preview of your personalized Savio Dashboard
+            </p>
           </motion.div>
         </div>
       </section>
