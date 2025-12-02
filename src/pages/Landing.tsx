@@ -12,6 +12,7 @@ import testimonialJessica from "@/assets/testimonial-jessica.jpg";
 import testimonialDaniel from "@/assets/testimonial-daniel.jpg";
 import testimonialAlicia from "@/assets/testimonial-alicia.jpg";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import heroBgCurves from "@/assets/landing-bg-curves.jpg";
 
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -137,9 +138,17 @@ const Landing = () => {
       </motion.header>
 
       {/* Hero Section - Full Screen */}
-      <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
-        {/* Subtle gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+      <section 
+        className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden"
+        style={{
+          backgroundImage: `url(${heroBgCurves})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Overlay for readability in both light and dark modes */}
+        <div className="absolute inset-0 bg-background/80 dark:bg-background/70" />
         <div className="absolute top-1/4 -right-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
         
