@@ -80,9 +80,32 @@ export const ExpenseBreakdownChart = () => {
               outerRadius={100}
               paddingAngle={2}
               dataKey="value"
+              label={({ percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
+                const RADIAN = Math.PI / 180;
+                const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+                const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                const percentage = (percent * 100).toFixed(0);
+                const fontSize = percent < 0.05 ? '10px' : percent < 0.15 ? '12px' : '14px';
+                
+                return (
+                  <text 
+                    x={x} 
+                    y={y} 
+                    fill="hsl(var(--foreground))" 
+                    textAnchor="middle" 
+                    dominantBaseline="central"
+                    fontSize={fontSize}
+                    fontWeight="600"
+                  >
+                    {percentage}%
+                  </text>
+                );
+              }}
+              labelLine={false}
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
+                <Cell key={`cell-${index}`} fill={entry.color} stroke="hsl(var(--background))" strokeWidth={2} />
               ))}
             </Pie>
             <Tooltip
