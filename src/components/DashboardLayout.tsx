@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Moon, Sun, User, LogOut } from "lucide-react";
+import { Moon, Sun, User, LogOut, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DashboardSidebar } from "./DashboardSidebar";
 import { GlobalSearch } from "./GlobalSearch";
 import { supabase } from "@/integrations/supabase/client";
+import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
 
 type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
@@ -27,6 +29,7 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange, isPr
   const [isDark, setIsDark] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { isPro: isProUser } = useSubscription(userId);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -47,6 +50,11 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange, isPr
       toast.success("Signed out successfully");
       navigate("/auth");
     }
+  };
+
+  const handleBilling = () => {
+    // Navigate to settings section for billing/upgrade
+    onSectionChange("settings");
   };
 
   const handleNavigateToSection = (section: string) => {
@@ -78,17 +86,45 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange, isPr
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar className="h-9 w-9 cursor-pointer">
-                  <AvatarFallback className="bg-primary text-primary-foreground">
+                <Avatar className={`h-9 w-9 cursor-pointer transition-all hover:ring-2 hover:ring-primary/50 ${isProUser ? 'ring-2 ring-amber-400/50' : ''}`}>
+                  <AvatarFallback className={`${isProUser ? 'bg-gradient-to-br from-amber-400 to-amber-600' : 'bg-primary'} text-primary-foreground`}>
                     <User className="h-4 w-4" />
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign Out
-                </DropdownMenuItem>
+              <DropdownMenuContent 
+                align="end" 
+                className="w-48 mt-2 bg-card border border-border rounded-lg shadow-lg overflow-hidden"
+              >
+                <div className="h-1 bg-gradient-to-r from-primary to-primary/60" />
+                <div className="py-1">
+                  <DropdownMenuItem 
+                    onClick={handleBilling}
+                    className={`mx-1 my-0.5 rounded-md cursor-pointer transition-colors ${
+                      isProUser 
+                        ? 'hover:bg-amber-500/10 focus:bg-amber-500/10' 
+                        : 'hover:bg-accent focus:bg-accent'
+                    }`}
+                  >
+                    <CreditCard className={`mr-2 h-4 w-4 ${isProUser ? 'text-amber-500' : ''}`} />
+                    <span className={isProUser ? 'text-amber-600 dark:text-amber-400 font-medium' : ''}>
+                      Billing
+                    </span>
+                    {isProUser && (
+                      <span className="ml-auto text-xs bg-gradient-to-r from-amber-400 to-amber-600 text-white px-1.5 py-0.5 rounded-full">
+                        Pro
+                      </span>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="my-1 bg-border/50" />
+                  <DropdownMenuItem 
+                    onClick={handleLogout}
+                    className="mx-1 my-0.5 rounded-md cursor-pointer hover:bg-destructive/10 focus:bg-destructive/10 text-destructive"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
