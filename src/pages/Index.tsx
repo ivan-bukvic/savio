@@ -7,7 +7,11 @@ import { DashboardSection } from "@/components/sections/DashboardSection";
 import { IncomeSection } from "@/components/sections/IncomeSection";
 import { ExpensesSection } from "@/components/sections/ExpensesSection";
 import { GoalsSection } from "@/components/sections/GoalsSection";
+import { AIInsightsSection } from "@/components/sections/AIInsightsSection";
+import { LockedFeatureScreen } from "@/components/LockedFeatureScreen";
+import { useSubscription } from "@/hooks/useSubscription";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
 
@@ -16,9 +20,13 @@ const Index = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<ActiveSection>("dashboard");
+  const { toast } = useToast();
+
+  const { isPro, loading: subscriptionLoading } = useSubscription(
+    session?.user?.id || null
+  );
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
@@ -28,7 +36,6 @@ const Index = () => {
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
@@ -40,7 +47,14 @@ const Index = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  if (loading) {
+  const handleUpgrade = () => {
+    toast({
+      title: "Upgrade to Pro",
+      description: "Pro subscription management coming soon. Contact support to upgrade.",
+    });
+  };
+
+  if (loading || subscriptionLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -55,24 +69,49 @@ const Index = () => {
   const renderSection = () => {
     switch (activeSection) {
       case "dashboard":
-        return <DashboardSection />;
+        return (
+          <DashboardSection
+            isPro={isPro}
+            onNavigateToInsights={() => setActiveSection("insights")}
+            onUpgrade={handleUpgrade}
+          />
+        );
       case "income":
-        return <IncomeSection userId={session!.user.id} />;
+        return <IncomeSection userId={session.user.id} />;
       case "expenses":
-        return <ExpensesSection userId={session!.user.id} />;
+        return <ExpensesSection userId={session.user.id} />;
       case "goals":
-        return <GoalsSection userId={session!.user.id} />;
+        return <GoalsSection userId={session.user.id} />;
       case "insights":
-        return <div className="text-muted-foreground">Insights section coming soon...</div>;
+        if (!isPro) {
+          return (
+            <LockedFeatureScreen
+              title="AI Insights — Pro Feature"
+              description="Upgrade to Pro to access personalized financial insights powered by Savio Intelligence."
+              onUpgrade={handleUpgrade}
+            />
+          );
+        }
+        return <AIInsightsSection userId={session.user.id} />;
       case "settings":
         return <div className="text-muted-foreground">Settings section coming soon...</div>;
       default:
-        return <DashboardSection />;
+        return (
+          <DashboardSection
+            isPro={isPro}
+            onNavigateToInsights={() => setActiveSection("insights")}
+            onUpgrade={handleUpgrade}
+          />
+        );
     }
   };
 
   return (
-    <DashboardLayout activeSection={activeSection} onSectionChange={setActiveSection}>
+    <DashboardLayout
+      activeSection={activeSection}
+      onSectionChange={setActiveSection}
+      isPro={isPro}
+    >
       {renderSection()}
     </DashboardLayout>
   );
