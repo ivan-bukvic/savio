@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2 } from "lucide-react";
+import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import heroImage from "@/assets/hero-3d-fluid.jpg";
-import landingBg from "@/assets/landing-bg-curves.jpg";
+import { useState } from "react";
 import dashboardPreview from "@/assets/dashboard-screenshot.png";
 import testimonialSarah from "@/assets/testimonial-sarah.jpg";
 import testimonialJames from "@/assets/testimonial-james.jpg";
@@ -13,7 +12,10 @@ import testimonialJessica from "@/assets/testimonial-jessica.jpg";
 import testimonialDaniel from "@/assets/testimonial-daniel.jpg";
 import testimonialAlicia from "@/assets/testimonial-alicia.jpg";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+
 const Landing = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const features = [{
     icon: TrendingUp,
     title: "Smart Tracking",
@@ -35,94 +37,314 @@ const Landing = () => {
     description: "Beautiful charts and graphs make understanding your finances simple and intuitive.",
     link: "#"
   }];
-  return <div className="min-h-screen bg-background relative">
-      {/* Subtle 3D curved background */}
-      <div className="fixed inset-0 z-0 opacity-30" style={{
-      backgroundImage: `url(${landingBg})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }} />
-      
-      {/* Content wrapper */}
-      <div className="relative z-10">{/* ... keep existing code */}
-      {/* Header */}
-      <motion.header initial={{
-        opacity: 0,
-        y: -20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
+
+  const navLinks = [
+    { label: "Features", href: "#features" },
+    { label: "Why Savio", href: "#why-savio" },
+    { label: "How It Works", href: "#how-it-works" },
+    { label: "Testimonials", href: "#testimonials" },
+    { label: "FAQ", href: "#faq" },
+  ];
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setMobileMenuOpen(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-background relative">
+      {/* Header Navigation */}
+      <motion.header 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-xl border-b border-border/40"
+      >
         <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
           <div className="flex items-center gap-2">
-            
-            <span className="text-xl font-semibold text-foreground">Savio</span>
+            <span className="text-xl font-bold text-foreground">Savio</span>
           </div>
-          <div className="flex items-center gap-4">
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={(e) => scrollToSection(e, link.href)}
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Desktop CTA */}
+          <div className="hidden lg:flex items-center gap-4">
             <Link to="/auth">
-              <Button variant="ghost" size="sm">Sign In</Button>
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                Login
+              </Button>
             </Link>
             <Link to="/auth">
               <Button size="sm">Get Started</Button>
             </Link>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="lg:hidden p-2 text-foreground"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </nav>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border"
+          >
+            <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={(e) => scrollToSection(e, link.href)}
+                  className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <div className="flex flex-col gap-2 pt-4 border-t border-border">
+                <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-center">Login</Button>
+                </Link>
+                <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full">Get Started</Button>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </motion.header>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div initial={{
-              opacity: 0,
-              x: -30
-            }} animate={{
-              opacity: 1,
-              x: 0
-            }} transition={{
-              duration: 0.6
-            }}>
-              <h1 className="text-5xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
-                Master Your
-                <span className="block text-primary">Financial Future</span>
+      {/* Hero Section - Full Screen */}
+      <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
+        {/* Subtle gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+        <div className="absolute top-1/4 -right-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left - Copy */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+              className="text-center lg:text-left"
+            >
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight">
+                Take Control of Your Money —{" "}
+                <span className="text-primary">Effortlessly.</span>
               </h1>
-              <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                Take control of your finances with intelligent tracking, AI-powered insights, and beautiful visualization tools.
+              <p className="text-lg sm:text-xl text-muted-foreground mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Build savings, reduce stress, and finally gain a clear path to financial freedom — all in one simple dashboard.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link to="/auth">
-                  <Button size="lg" className="text-base px-8 group">
-                    Get Started
+                  <Button size="lg" className="text-base px-8 py-6 h-auto group w-full sm:w-auto">
+                    Get Started — It's Free
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline" className="text-base px-8">
-                  Explore More
-                </Button>
+              </div>
+              
+              {/* Trust indicators */}
+              <div className="mt-12 flex items-center gap-6 justify-center lg:justify-start text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
+                  <span>Free to start</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-primary" />
+                  <span>Bank-level security</span>
+                </div>
               </div>
             </motion.div>
 
-            <motion.div initial={{
-              opacity: 0,
-              scale: 0.95
-            }} animate={{
-              opacity: 1,
-              scale: 1
-            }} transition={{
-              duration: 0.6,
-              delay: 0.2
-            }} className="relative">
-              <div className="relative rounded-3xl overflow-hidden card-shadow-hover">
-                <img src={heroImage} alt="Financial Dashboard" className="w-full h-auto" />
+            {/* Right - Outcome Visual */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="relative">
+                {/* Main visual container */}
+                <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl p-8 shadow-2xl shadow-primary/10">
+                  {/* Progress ring */}
+                  <div className="flex items-center justify-center mb-6">
+                    <div className="relative">
+                      <svg className="w-40 h-40 transform -rotate-90">
+                        <circle
+                          cx="80"
+                          cy="80"
+                          r="70"
+                          stroke="currentColor"
+                          strokeWidth="8"
+                          fill="none"
+                          className="text-muted/30"
+                        />
+                        <motion.circle
+                          cx="80"
+                          cy="80"
+                          r="70"
+                          stroke="url(#progressGradient)"
+                          strokeWidth="8"
+                          fill="none"
+                          strokeLinecap="round"
+                          initial={{ strokeDasharray: "0 440" }}
+                          animate={{ strokeDasharray: "330 440" }}
+                          transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+                        />
+                        <defs>
+                          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="hsl(var(--primary))" />
+                            <stop offset="100%" stopColor="hsl(var(--secondary))" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <motion.span
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 1 }}
+                          className="text-3xl font-bold text-foreground"
+                        >
+                          75%
+                        </motion.span>
+                        <span className="text-sm text-muted-foreground">Savings Goal</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stats row */}
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.8 }}
+                      className="text-center p-3 bg-muted/50 rounded-xl"
+                    >
+                      <div className="text-lg font-bold text-primary">$2,450</div>
+                      <div className="text-xs text-muted-foreground">Saved</div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.9 }}
+                      className="text-center p-3 bg-muted/50 rounded-xl"
+                    >
+                      <div className="text-lg font-bold text-secondary">+18%</div>
+                      <div className="text-xs text-muted-foreground">This Month</div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1 }}
+                      className="text-center p-3 bg-muted/50 rounded-xl"
+                    >
+                      <div className="text-lg font-bold text-accent">12</div>
+                      <div className="text-xs text-muted-foreground">Days Ahead</div>
+                    </motion.div>
+                  </div>
+
+                  {/* Mini chart */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.2 }}
+                    className="h-16 flex items-end justify-between gap-1 px-2"
+                  >
+                    {[40, 55, 45, 60, 50, 70, 65, 80, 75, 90, 85, 95].map((height, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ height: 0 }}
+                        animate={{ height: `${height}%` }}
+                        transition={{ delay: 1.3 + i * 0.05, duration: 0.3 }}
+                        className="flex-1 bg-gradient-to-t from-primary to-secondary rounded-t"
+                      />
+                    ))}
+                  </motion.div>
+                </div>
+
+                {/* Floating elements */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.5 }}
+                  className="absolute -left-4 top-1/4 bg-card border border-border rounded-xl p-3 shadow-lg hidden lg:block"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-success/20 rounded-full flex items-center justify-center">
+                      <TrendingUp className="h-4 w-4 text-success" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground">Monthly</div>
+                      <div className="text-sm font-semibold text-foreground">+$340</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.7 }}
+                  className="absolute -right-4 bottom-1/4 bg-card border border-border rounded-xl p-3 shadow-lg hidden lg:block"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                      <Target className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground">Goal</div>
+                      <div className="text-sm font-semibold text-foreground">On Track</div>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+            className="w-6 h-10 border-2 border-muted-foreground/30 rounded-full flex justify-center pt-2"
+          >
+            <div className="w-1.5 h-1.5 bg-muted-foreground/50 rounded-full" />
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-6 bg-muted/30">
+      <section id="features" className="py-20 px-6 bg-muted/30">
         <div className="container mx-auto max-w-7xl">
           <motion.div initial={{
             opacity: 0,
@@ -177,7 +399,7 @@ const Landing = () => {
       </section>
 
       {/* Value Section */}
-      <section className="py-20 px-6">
+      <section id="why-savio" className="py-20 px-6">
         <div className="container mx-auto max-w-4xl text-center">
           <motion.div initial={{
             opacity: 0,
@@ -196,17 +418,17 @@ const Landing = () => {
             <p className="text-xl text-muted-foreground leading-relaxed mb-12">
               We believe managing your finances should be simple, secure, and empowering. Our platform combines cutting-edge technology with intuitive design to give you complete clarity and control over your financial life.
             </p>
-            <div className="flex justify-center gap-12 mb-12">
+            <div className="flex flex-wrap justify-center gap-8 sm:gap-12 mb-12">
               <div className="text-center">
                 <div className="text-4xl font-bold text-primary mb-2">3,200+</div>
                 <div className="text-muted-foreground">Active Users</div>
               </div>
-              <div className="h-16 w-px bg-border" />
+              <div className="hidden sm:block h-16 w-px bg-border" />
               <div className="text-center">
                 <div className="text-4xl font-bold text-primary mb-2">$4.3M+</div>
                 <div className="text-muted-foreground">Tracked</div>
               </div>
-              <div className="h-16 w-px bg-border" />
+              <div className="hidden sm:block h-16 w-px bg-border" />
               <div className="text-center">
                 <div className="text-4xl font-bold text-primary mb-2">4.7/5</div>
                 <div className="text-muted-foreground">User Rating</div>
@@ -217,7 +439,7 @@ const Landing = () => {
       </section>
 
       {/* How Savio Works Section */}
-      <section className="py-20 px-6 bg-muted/30">
+      <section id="how-it-works" className="py-20 px-6 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <motion.div initial={{
             opacity: 0,
@@ -351,7 +573,7 @@ const Landing = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 px-6">
+      <section id="testimonials" className="py-20 px-6">
         <div className="container mx-auto max-w-6xl">
           <motion.div initial={{
             opacity: 0,
@@ -444,7 +666,7 @@ const Landing = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-6 bg-muted/30">
+      <section id="faq" className="py-20 px-6 bg-muted/30">
         <div className="container mx-auto max-w-4xl">
           <motion.div initial={{
             opacity: 0,
@@ -598,7 +820,7 @@ const Landing = () => {
             <div>
               <h4 className="font-semibold text-foreground mb-4">Product</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Features</a></li>
+                <li><a href="#features" onClick={(e) => scrollToSection(e, "#features")} className="text-muted-foreground hover:text-foreground transition-colors">Features</a></li>
                 <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</a></li>
                 <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Security</a></li>
               </ul>
@@ -632,7 +854,8 @@ const Landing = () => {
           </div>
         </div>
       </footer>
-      </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Landing;
