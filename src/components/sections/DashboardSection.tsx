@@ -2,9 +2,19 @@ import { IncomeVsExpensesChart } from "@/components/IncomeVsExpensesChart";
 import { ExpenseBreakdownChart } from "@/components/ExpenseBreakdownChart";
 import { SavingsGoals } from "@/components/SavingsGoals";
 import { DebtOverview } from "@/components/DebtOverview";
-import { AIAnalysisSection } from "@/components/AIAnalysisSection";
+import { ProDashboardAICard } from "@/components/ProDashboardAICard";
 
-export const DashboardSection = () => {
+interface DashboardSectionProps {
+  isPro?: boolean;
+  onNavigateToInsights?: () => void;
+  onUpgrade?: () => void;
+}
+
+export const DashboardSection = ({
+  isPro = false,
+  onNavigateToInsights = () => {},
+  onUpgrade = () => {},
+}: DashboardSectionProps) => {
   return (
     <div className="space-y-6">
       <div>
@@ -24,8 +34,12 @@ export const DashboardSection = () => {
         <DebtOverview />
       </div>
 
-      {/* AI Analysis Section */}
-      <AIAnalysisSection />
+      {/* AI Analysis Section - Pro Gated */}
+      <ProDashboardAICard
+        isPro={isPro}
+        onNavigateToInsights={onNavigateToInsights}
+        onUpgrade={onUpgrade}
+      />
     </div>
   );
 };

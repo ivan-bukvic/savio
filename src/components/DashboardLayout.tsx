@@ -20,9 +20,10 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
   activeSection: ActiveSection;
   onSectionChange: (section: ActiveSection) => void;
+  isPro?: boolean;
 }
 
-export const DashboardLayout = ({ children, activeSection, onSectionChange }: DashboardLayoutProps) => {
+export const DashboardLayout = ({ children, activeSection, onSectionChange, isPro = false }: DashboardLayoutProps) => {
   const [isDark, setIsDark] = useState(false);
   const navigate = useNavigate();
 
@@ -43,7 +44,7 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange }: Da
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
-      <DashboardSidebar activeSection={activeSection} onSectionChange={onSectionChange} />
+      <DashboardSidebar activeSection={activeSection} onSectionChange={onSectionChange} isPro={isPro} />
       
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
