@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { LayoutDashboard, DollarSign, CreditCard, Target, Sparkles, Settings, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
 
@@ -19,6 +21,43 @@ const menuItems: { icon: any; label: string; section: ActiveSection; proOnly?: b
 ];
 
 export const DashboardSidebar = ({ activeSection, onSectionChange, isPro = false }: DashboardSidebarProps) => {
+  const [userName, setUserName] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserEmail(user.email || "");
+        
+        // Fetch profile for full name
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name")
+          .eq("user_id", user.id)
+          .maybeSingle();
+        
+        if (profile?.full_name) {
+          setUserName(profile.full_name);
+        } else {
+          // Fallback to email prefix
+          setUserName(user.email?.split("@")[0] || "User");
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const getInitials = (name: string) => {
+    if (!name) return "U";
+    const parts = name.trim().split(" ");
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  };
+
   return (
     <aside className="w-64 border-r border-border bg-card flex flex-col card-shadow">
       {/* Logo */}
@@ -76,16 +115,19 @@ export const DashboardSidebar = ({ activeSection, onSectionChange, isPro = false
       {/* User Profile Section */}
       <div className="border-t border-border p-4">
         <div className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted cursor-pointer transition-colors">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-medium">
-            JD
+          <div className={cn(
+            "flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium",
+            isPro ? "bg-gradient-to-br from-amber-400 to-amber-600 text-white" : "bg-primary/10 text-primary"
+          )}>
+            {getInitials(userName)}
           </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-foreground">John Doe</span>
-            <span className="text-xs text-muted-foreground">
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm font-medium text-foreground truncate">{userName || "Loading..."}</span>
+            <span className="text-xs text-muted-foreground truncate">
               {isPro ? (
                 <span className="text-gold">Pro Member</span>
               ) : (
-                "john@example.com"
+                userEmail
               )}
             </span>
           </div>
