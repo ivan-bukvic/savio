@@ -589,7 +589,6 @@ const Landing = () => {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="h-6 w-6 text-primary" />
                 <span className="text-lg font-semibold text-foreground">Savio</span>
               </div>
               <p className="text-sm text-muted-foreground">
