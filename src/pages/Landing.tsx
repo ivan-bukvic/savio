@@ -9,6 +9,9 @@ import dashboardPreview from "@/assets/dashboard-screenshot.png";
 import testimonialSarah from "@/assets/testimonial-sarah.jpg";
 import testimonialJames from "@/assets/testimonial-james.jpg";
 import testimonialMaria from "@/assets/testimonial-maria.jpg";
+import testimonialJessica from "@/assets/testimonial-jessica.jpg";
+import testimonialDaniel from "@/assets/testimonial-daniel.jpg";
+import testimonialAlicia from "@/assets/testimonial-alicia.jpg";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 const Landing = () => {
   const features = [{
@@ -195,18 +198,18 @@ const Landing = () => {
             </p>
             <div className="flex justify-center gap-12 mb-12">
               <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">100K+</div>
+                <div className="text-4xl font-bold text-primary mb-2">3,200+</div>
                 <div className="text-muted-foreground">Active Users</div>
               </div>
               <div className="h-16 w-px bg-border" />
               <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">$2B+</div>
+                <div className="text-4xl font-bold text-primary mb-2">$4.3M+</div>
                 <div className="text-muted-foreground">Tracked</div>
               </div>
               <div className="h-16 w-px bg-border" />
               <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">4.9/5</div>
-                <div className="text-muted-foreground">Rating</div>
+                <div className="text-4xl font-bold text-primary mb-2">4.7/5</div>
+                <div className="text-muted-foreground">User Rating</div>
               </div>
             </div>
           </motion.div>
@@ -388,6 +391,24 @@ const Landing = () => {
               testimonial: "My debt payoff plan has never been clearer. This app is a game changer. I finally feel in control of my financial future.",
               initial: "MR",
               image: testimonialMaria
+            }, {
+              name: "Jessica M.",
+              role: "Freelancer",
+              testimonial: "Savio helps me stay on top of my income from multiple clients without the stress. The dashboard feels clean, empowering, and finally makes my finances simple.",
+              initial: "JM",
+              image: testimonialJessica
+            }, {
+              name: "Daniel R.",
+              role: "Startup Founder",
+              testimonial: "The savings goals and AI insights completely changed how I plan my cash flow. It feels like having a personal financial advisor available 24/7.",
+              initial: "DR",
+              image: testimonialDaniel
+            }, {
+              name: "Alicia K.",
+              role: "Remote Worker",
+              testimonial: "I love how everything is easy to track. My expenses, goals, and monthly summaries all live in one place. Savio just fits into my routine effortlessly.",
+              initial: "AK",
+              image: testimonialAlicia
             }].map((testimonial, index) => <motion.div key={testimonial.name} initial={{
               opacity: 0,
               y: 30
