@@ -8,6 +8,7 @@ import { IncomeSection } from "@/components/sections/IncomeSection";
 import { ExpensesSection } from "@/components/sections/ExpensesSection";
 import { GoalsSection } from "@/components/sections/GoalsSection";
 import { AIInsightsSection } from "@/components/sections/AIInsightsSection";
+import { SettingsSection } from "@/components/sections/SettingsSection";
 import { LockedFeatureScreen } from "@/components/LockedFeatureScreen";
 import { useSubscription } from "@/hooks/useSubscription";
 import { Loader2 } from "lucide-react";
@@ -94,7 +95,14 @@ const Index = () => {
         }
         return <AIInsightsSection userId={session.user.id} />;
       case "settings":
-        return <div className="text-muted-foreground">Settings section coming soon...</div>;
+        return (
+          <SettingsSection
+            userId={session.user.id}
+            userEmail={session.user.email || ""}
+            isPro={isPro}
+            onUpgrade={handleUpgrade}
+          />
+        );
       default:
         return (
           <DashboardSection
