@@ -81,31 +81,38 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange, isPr
   };
 
   const handleBilling = async () => {
-    if (isProUser) {
-      // For Pro users, navigate to settings for now (could integrate Stripe portal later)
-      onSectionChange("settings");
-      return;
-    }
-
     setIsBillingLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        toast.error("Please log in to upgrade");
+        toast.error("Please log in first");
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { origin: window.location.origin },
-      });
+      if (isProUser) {
+        // Pro users go to Stripe Customer Portal
+        const { data, error } = await supabase.functions.invoke("create-portal-session", {
+          body: { origin: window.location.origin },
+        });
 
-      if (error) throw error;
-      if (data?.url) {
-        window.location.href = data.url;
+        if (error) throw error;
+        if (data?.url) {
+          window.location.href = data.url;
+        }
+      } else {
+        // Free users go to checkout
+        const { data, error } = await supabase.functions.invoke("create-checkout", {
+          body: { origin: window.location.origin },
+        });
+
+        if (error) throw error;
+        if (data?.url) {
+          window.location.href = data.url;
+        }
       }
     } catch (error: any) {
-      console.error("Checkout error:", error);
-      toast.error("Failed to start checkout. Please try again.");
+      console.error("Billing error:", error);
+      toast.error(isProUser ? "Failed to open billing portal." : "Failed to start checkout.");
     } finally {
       setIsBillingLoading(false);
     }
