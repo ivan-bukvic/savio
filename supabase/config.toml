@@ -8,3 +8,6 @@ verify_jwt = true
 
 [functions.create-portal-session]
 verify_jwt = true
+
+[functions.seed-income-data]
+verify_jwt = true

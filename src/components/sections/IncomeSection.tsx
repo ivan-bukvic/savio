@@ -57,8 +57,42 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
   const [formData, setFormData] = useState({ source: "", amount: "", date: "" });
 
   useEffect(() => {
-    fetchIncomeData();
+    const initializeData = async () => {
+      await fetchIncomeData();
+    };
+    initializeData();
   }, [userId]);
+
+  // Auto-seed December 2025 data if current month has no entries
+  useEffect(() => {
+    const seedIfEmpty = async () => {
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      
+      const currentMonthData = incomeData.filter(item => {
+        const itemDate = new Date(item.date);
+        return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
+      });
+
+      if (incomeData.length > 0 && currentMonthData.length === 0) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            const { error } = await supabase.functions.invoke("seed-income-data");
+            if (!error) {
+              fetchIncomeData();
+            }
+          }
+        } catch (e) {
+          console.log("Auto-seed skipped");
+        }
+      }
+    };
+    
+    if (incomeData.length > 0) {
+      seedIfEmpty();
+    }
+  }, [incomeData.length]);
 
   const fetchIncomeData = async () => {
     const { data, error } = await supabase
