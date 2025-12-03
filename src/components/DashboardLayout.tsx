@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Moon, Sun, User, LogOut, CreditCard } from "lucide-react";
+import { Moon, Sun, User, LogOut, CreditCard, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,6 +28,7 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange, isPr
   const [isDark, setIsDark] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState<string>("");
+  const [isBillingLoading, setIsBillingLoading] = useState(false);
   const navigate = useNavigate();
   const { isPro: isProUser } = useSubscription(userId);
 
@@ -79,9 +80,35 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange, isPr
     }
   };
 
-  const handleBilling = () => {
-    // Navigate to settings section for billing/upgrade
-    onSectionChange("settings");
+  const handleBilling = async () => {
+    if (isProUser) {
+      // For Pro users, navigate to settings for now (could integrate Stripe portal later)
+      onSectionChange("settings");
+      return;
+    }
+
+    setIsBillingLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please log in to upgrade");
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { origin: window.location.origin },
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error: any) {
+      console.error("Checkout error:", error);
+      toast.error("Failed to start checkout. Please try again.");
+    } finally {
+      setIsBillingLoading(false);
+    }
   };
 
   const handleNavigateToSection = (section: string) => {
@@ -139,15 +166,20 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange, isPr
                 <div className="py-1">
                   <DropdownMenuItem 
                     onClick={handleBilling}
+                    disabled={isBillingLoading}
                     className={`mx-1 my-0.5 rounded-md cursor-pointer transition-colors ${
                       isProUser 
                         ? 'hover:bg-amber-500/10 focus:bg-amber-500/10' 
                         : 'hover:bg-accent focus:bg-accent'
-                    }`}
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
-                    <CreditCard className={`mr-2 h-4 w-4 ${isProUser ? 'text-amber-500' : ''}`} />
+                    {isBillingLoading ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <CreditCard className={`mr-2 h-4 w-4 ${isProUser ? 'text-amber-500' : ''}`} />
+                    )}
                     <span className={isProUser ? 'text-amber-600 dark:text-amber-400 font-medium' : ''}>
-                      Billing
+                      {isBillingLoading ? "Loading..." : isProUser ? "Manage Billing" : "Upgrade to Pro"}
                     </span>
                     {isProUser && (
                       <span className="ml-auto text-xs bg-gradient-to-r from-amber-400 to-amber-600 text-white px-1.5 py-0.5 rounded-full">
