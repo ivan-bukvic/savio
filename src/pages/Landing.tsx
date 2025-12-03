@@ -514,7 +514,7 @@ const Landing = () => {
               duration: 0.5,
               delay: index * 0.1
             }} className="relative">
-                <div className="bg-card border border-border rounded-2xl p-6 h-full card-shadow hover:card-shadow-hover transition-all duration-300">
+                <div className="bg-card border border-border rounded-2xl p-6 h-full card-shadow hover:card-shadow-hover transition-all duration-300 hover:-translate-y-1">
                   <div className={`${item.bgColor} w-14 h-14 rounded-xl flex items-center justify-center mb-4`}>
                     <item.icon className={`h-7 w-7 ${item.iconColor}`} />
                   </div>
