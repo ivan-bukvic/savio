@@ -32,6 +32,22 @@ serve(async (req) => {
     const userId = user.id;
     console.log(`Seeding demo data for user: ${userId}`);
 
+    // Always ensure demo user has a profile with Pro access
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .upsert({
+        user_id: userId,
+        full_name: 'Demo User',
+        subscription_tier: 'pro',
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id' });
+
+    if (profileError) {
+      console.error('Profile upsert error:', profileError);
+    } else {
+      console.log('Demo user profile ensured');
+    }
+
     // Check if user already has data
     const { data: existingIncome } = await supabase
       .from('income')
@@ -42,7 +58,7 @@ serve(async (req) => {
     if (existingIncome && existingIncome.length > 0) {
       console.log('Demo data already exists');
       return new Response(
-        JSON.stringify({ message: 'Demo data already exists', seeded: false }),
+        JSON.stringify({ message: 'Demo data already exists, profile ensured', seeded: false }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }

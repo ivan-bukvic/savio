@@ -56,18 +56,18 @@ const Index = () => {
           }
 
           if (data.session) {
-            setSession(data.session);
             setDemoMode(true);
             
-            // Seed demo data
+            // Seed demo data and ensure profile exists
             try {
               const { data: seedResult } = await supabase.functions.invoke("seed-demo-data");
-              if (seedResult?.seeded) {
-                console.log("Demo data seeded successfully");
-              }
+              console.log("Seed result:", seedResult);
             } catch (seedError) {
               console.error("Error seeding demo data:", seedError);
             }
+            
+            // Set session after seeding to ensure profile exists
+            setSession(data.session);
             
             toast({
               title: "Welcome to Savio Demo!",
