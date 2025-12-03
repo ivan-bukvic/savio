@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap } from "lucide-react";
+import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap, Play } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,6 +20,7 @@ import heroBgCurves from "@/assets/landing-bg-curves.jpg";
 
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const features = [{
     icon: TrendingUp,
@@ -210,6 +211,15 @@ const Landing = () => {
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="text-base px-8 py-4 h-auto group w-full sm:w-auto border-primary/30 hover:bg-primary/10"
+                  onClick={() => navigate("/app?demo=true")}
+                >
+                  <Play className="mr-2 h-5 w-5 text-primary" />
+                  Try Demo
+                </Button>
               </div>
               
               {/* Trust indicators */}
