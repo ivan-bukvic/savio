@@ -1,8 +1,12 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X } from "lucide-react";
+import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
+import { useState as useReactState } from "react";
+import { toast } from "sonner";
 import { useState } from "react";
 import dashboardPreview from "@/assets/dashboard-screenshot.png";
 import testimonialSarah from "@/assets/testimonial-sarah.jpg";
@@ -44,8 +48,38 @@ const Landing = () => {
     { label: "Why Savio", href: "#why-savio" },
     { label: "How It Works", href: "#how-it-works" },
     { label: "Testimonials", href: "#testimonials" },
+    { label: "Pricing", href: "#pricing" },
     { label: "FAQ", href: "#faq" },
   ];
+
+  const [isCheckoutLoading, setIsCheckoutLoading] = useReactState(false);
+
+  const handleUpgradeClick = async () => {
+    setIsCheckoutLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        // Redirect to auth if not logged in
+        window.location.href = "/auth";
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { origin: window.location.origin },
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to start checkout. Please try again.");
+    } finally {
+      setIsCheckoutLoading(false);
+    }
+  };
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -674,6 +708,185 @@ const Landing = () => {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <section id="pricing" className="py-20 px-6 bg-muted/30">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              Choose the Plan That Fits Your Financial Journey
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              A clear comparison of what's included in Savio's Free and Pro plans.
+            </p>
+          </motion.div>
+
+          {/* Pricing Cards */}
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
+            {/* Free Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="group bg-card border border-border rounded-2xl p-8 h-full card-shadow hover:card-shadow-hover transition-all duration-500 hover:scale-[1.02] flex flex-col">
+                <div className="mb-6">
+                  <Badge variant="secondary" className="mb-4">Free Forever</Badge>
+                  <div className="flex items-baseline gap-1 mb-2">
+                    <span className="text-4xl font-bold text-foreground">$0</span>
+                    <span className="text-muted-foreground">/ month</span>
+                  </div>
+                  <p className="text-muted-foreground">Perfect for getting started</p>
+                </div>
+                
+                <div className="border-t border-border pt-6 mb-8 flex-grow">
+                  <ul className="space-y-4">
+                    {[
+                      "Track income",
+                      "Track expenses",
+                      "Set savings goals",
+                      "Basic dashboard overview",
+                      "Light mode + dark mode",
+                      "Manual data entry",
+                      "Expense categories",
+                      "Financial summaries",
+                      "Monthly charts for income & spending"
+                    ].map((feature, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-foreground">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <Link to="/auth" className="mt-auto">
+                  <Button variant="outline" size="lg" className="w-full group">
+                    Start for Free
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Pro Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <div className="group relative bg-card border-2 border-gold rounded-2xl p-8 h-full card-shadow hover:card-shadow-hover transition-all duration-500 hover:scale-[1.02] flex flex-col overflow-hidden">
+                {/* Gold gradient accent */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-accent to-gold" />
+                
+                <div className="mb-6">
+                  <Badge className="mb-4 bg-gold text-gold-foreground hover:bg-gold/90">
+                    <Crown className="h-3 w-3 mr-1" />
+                    Most Popular
+                  </Badge>
+                  <div className="flex items-baseline gap-1 mb-2">
+                    <span className="text-4xl font-bold text-foreground">$10</span>
+                    <span className="text-muted-foreground">/ month</span>
+                  </div>
+                  <p className="text-muted-foreground">For serious financial growth</p>
+                </div>
+                
+                <div className="border-t border-border pt-6 mb-8 flex-grow">
+                  <ul className="space-y-4">
+                    {[
+                      { text: "Everything in Free", highlight: true },
+                      { text: "AI Insights (personalized financial analysis)", highlight: false },
+                      { text: "AI spending recommendations", highlight: false },
+                      { text: "Automatic income/expense detection", highlight: false },
+                      { text: "Debt payoff forecasting", highlight: false },
+                      { text: "Pro-level graphs & analytics", highlight: false },
+                      { text: "Priority support", highlight: false },
+                      { text: "Access to upcoming premium automations", highlight: false }
+                    ].map((feature, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        {feature.highlight ? (
+                          <Zap className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+                        ) : (
+                          <Check className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+                        )}
+                        <span className={feature.highlight ? "text-foreground font-medium" : "text-foreground"}>
+                          {feature.text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <Button 
+                  size="lg" 
+                  className="w-full mt-auto bg-gold hover:bg-gold/90 text-gold-foreground group"
+                  onClick={handleUpgradeClick}
+                  disabled={isCheckoutLoading}
+                >
+                  {isCheckoutLoading ? "Loading..." : "Upgrade to Pro"}
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Comparison Table */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="max-w-2xl mx-auto"
+          >
+            <div className="bg-card border border-border rounded-2xl overflow-hidden card-shadow">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border bg-muted/50">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-foreground">Feature</th>
+                    <th className="text-center py-4 px-4 text-sm font-semibold text-foreground">Free</th>
+                    <th className="text-center py-4 px-4 text-sm font-semibold text-gold">Pro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { feature: "Income & Expense Tracking", free: true, pro: true },
+                    { feature: "Savings Goals", free: true, pro: true },
+                    { feature: "AI Insights", free: false, pro: true },
+                    { feature: "Debt Forecast", free: false, pro: true },
+                    { feature: "Priority Support", free: false, pro: true }
+                  ].map((row, index) => (
+                    <tr key={index} className={index !== 4 ? "border-b border-border" : ""}>
+                      <td className="py-4 px-6 text-sm text-foreground">{row.feature}</td>
+                      <td className="text-center py-4 px-4">
+                        {row.free ? (
+                          <Check className="h-5 w-5 text-primary mx-auto" />
+                        ) : (
+                          <X className="h-5 w-5 text-muted-foreground/50 mx-auto" />
+                        )}
+                      </td>
+                      <td className="text-center py-4 px-4">
+                        {row.pro ? (
+                          <Check className="h-5 w-5 text-gold mx-auto" />
+                        ) : (
+                          <X className="h-5 w-5 text-muted-foreground/50 mx-auto" />
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section id="faq" className="py-20 px-6 bg-muted/30">
         <div className="container mx-auto max-w-4xl">
@@ -830,7 +1043,7 @@ const Landing = () => {
               <h4 className="font-semibold text-foreground mb-4">Product</h4>
               <ul className="space-y-2">
                 <li><a href="#features" onClick={(e) => scrollToSection(e, "#features")} className="text-muted-foreground hover:text-foreground transition-colors">Features</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</a></li>
+                <li><a href="#pricing" onClick={(e) => scrollToSection(e, "#pricing")} className="text-muted-foreground hover:text-foreground transition-colors">Pricing</a></li>
                 <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Security</a></li>
               </ul>
             </div>
