@@ -96,6 +96,21 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange, isPr
         });
 
         if (error) throw error;
+        
+        // Handle case where user is "pro" in DB but has no Stripe customer
+        if (data?.error === "NO_CUSTOMER") {
+          toast.info("Setting up your billing account...");
+          // Redirect to checkout to create a proper Stripe customer
+          const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke("create-checkout", {
+            body: { origin: window.location.origin },
+          });
+          if (checkoutError) throw checkoutError;
+          if (checkoutData?.url) {
+            window.location.href = checkoutData.url;
+          }
+          return;
+        }
+        
         if (data?.url) {
           window.location.href = data.url;
         }
