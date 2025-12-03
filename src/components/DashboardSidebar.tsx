@@ -1,8 +1,9 @@
-import { LayoutDashboard, DollarSign, CreditCard, Target, Sparkles, Settings, Lock, Crown, Loader2 } from "lucide-react";
+import { LayoutDashboard, DollarSign, CreditCard, Target, Sparkles, Settings, Lock, Crown, Loader2, Eye, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
 
@@ -10,6 +11,7 @@ interface DashboardSidebarProps {
   activeSection: ActiveSection;
   onSectionChange: (section: ActiveSection) => void;
   isPro?: boolean;
+  isDemoMode?: boolean;
 }
 
 const menuItems: { icon: any; label: string; section: ActiveSection; proOnly?: boolean }[] = [
@@ -20,11 +22,17 @@ const menuItems: { icon: any; label: string; section: ActiveSection; proOnly?: b
   { icon: Sparkles, label: "AI Insights", section: "insights", proOnly: true },
 ];
 
-export const DashboardSidebar = ({ activeSection, onSectionChange, isPro = false }: DashboardSidebarProps) => {
+export const DashboardSidebar = ({ activeSection, onSectionChange, isPro = false, isDemoMode = false }: DashboardSidebarProps) => {
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleUpgradeClick = async () => {
     if (isPro) return;
+    
+    if (isDemoMode) {
+      toast.info("Upgrade is not available in demo mode. Create an account to unlock Pro features!");
+      return;
+    }
     
     setIsCheckoutLoading(true);
     try {
@@ -42,7 +50,7 @@ export const DashboardSidebar = ({ activeSection, onSectionChange, isPro = false
       if (data?.url) {
         window.location.href = data.url;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Checkout error:", error);
       toast.error("Failed to start checkout. Please try again.");
     } finally {
@@ -107,8 +115,25 @@ export const DashboardSidebar = ({ activeSection, onSectionChange, isPro = false
 
         {/* Bottom section: Upgrade + Settings */}
         <div className="space-y-1 mt-auto pt-4 border-t border-border">
-          {/* Upgrade to Pro button */}
-          {isPro ? (
+          {/* Demo Mode indicator or Upgrade button */}
+          {isDemoMode ? (
+            <>
+              <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium bg-gradient-to-r from-amber-400/10 to-orange-500/10 text-amber-500">
+                <Eye className="h-5 w-5" />
+                <span>Demo Mode</span>
+                <span className="ml-auto text-[10px] font-semibold bg-gradient-to-r from-amber-400 to-orange-500 text-white px-1.5 py-0.5 rounded">
+                  DEMO
+                </span>
+              </div>
+              <button
+                onClick={() => navigate("/auth")}
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 text-primary hover:bg-primary/10"
+              >
+                <User className="h-5 w-5" />
+                <span>Create Account</span>
+              </button>
+            </>
+          ) : isPro ? (
             <div className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium bg-gradient-to-r from-amber-500/10 to-amber-600/10 text-amber-500">
               <Crown className="h-5 w-5" />
               <span>You're Pro</span>
