@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Moon, Sun, User, LogOut, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,14 +27,42 @@ interface DashboardLayoutProps {
 export const DashboardLayout = ({ children, activeSection, onSectionChange, isPro = false }: DashboardLayoutProps) => {
   const [isDark, setIsDark] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>("");
   const navigate = useNavigate();
   const { isPro: isProUser } = useSubscription(userId);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUserId(data.user?.id || null);
-    });
+    const fetchUserData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+        
+        // Fetch profile for full name
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name")
+          .eq("user_id", user.id)
+          .maybeSingle();
+        
+        if (profile?.full_name) {
+          setUserName(profile.full_name);
+        } else {
+          setUserName(user.email?.split("@")[0] || "User");
+        }
+      }
+    };
+
+    fetchUserData();
   }, []);
+
+  const getInitials = (name: string) => {
+    if (!name) return "";
+    const parts = name.trim().split(" ");
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  };
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -86,11 +113,23 @@ export const DashboardLayout = ({ children, activeSection, onSectionChange, isPr
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar className={`h-9 w-9 cursor-pointer transition-all hover:ring-2 hover:ring-primary/50 ${isProUser ? 'ring-2 ring-amber-400/50' : ''}`}>
-                  <AvatarFallback className={`${isProUser ? 'bg-gradient-to-br from-amber-400 to-amber-600' : 'bg-primary'} text-primary-foreground`}>
-                    <User className="h-4 w-4" />
-                  </AvatarFallback>
-                </Avatar>
+                <div className="flex items-center gap-3 rounded-lg px-3 py-1.5 hover:bg-muted cursor-pointer transition-colors">
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium ${
+                    isProUser ? 'bg-gradient-to-br from-amber-400 to-amber-600 text-white' : 'bg-primary/10 text-primary'
+                  }`}>
+                    {userName ? getInitials(userName) : <User className="h-4 w-4" />}
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-sm font-medium text-foreground truncate max-w-[120px]">{userName || "Loading..."}</span>
+                    <span className="text-xs text-muted-foreground truncate">
+                      {isProUser ? (
+                        <span className="text-amber-500">Pro Member</span>
+                      ) : (
+                        "Free Plan"
+                      )}
+                    </span>
+                  </div>
+                </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent 
                 align="end" 
