@@ -91,7 +91,18 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div 
+      className="min-h-screen bg-background relative"
+      style={{
+        backgroundImage: `url(${heroBgCurves})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Global overlay for readability */}
+      <div className="fixed inset-0 bg-background/80 dark:bg-background/70 pointer-events-none z-[1]" />
       {/* Header Navigation */}
       <motion.header 
         initial={{ opacity: 0, y: -20 }}
@@ -172,17 +183,7 @@ const Landing = () => {
       </motion.header>
 
       {/* Hero Section - Full Screen */}
-      <section 
-        className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden"
-        style={{
-          backgroundImage: `url(${heroBgCurves})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay for readability in both light and dark modes */}
-        <div className="absolute inset-0 bg-background/80 dark:bg-background/70" />
+      <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden z-10">
         <div className="absolute top-1/4 -right-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
         
@@ -387,7 +388,7 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-6 bg-muted/30">
+      <section id="features" className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-7xl">
           <motion.div initial={{
             opacity: 0,
@@ -442,7 +443,7 @@ const Landing = () => {
       </section>
 
       {/* Value Section */}
-      <section id="why-savio" className="py-20 px-6">
+      <section id="why-savio" className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-4xl text-center">
           <motion.div initial={{
             opacity: 0,
@@ -482,7 +483,7 @@ const Landing = () => {
       </section>
 
       {/* How Savio Works Section */}
-      <section id="how-it-works" className="py-20 px-6 bg-muted/30">
+      <section id="how-it-works" className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-6xl">
           <motion.div initial={{
             opacity: 0,
@@ -568,7 +569,7 @@ const Landing = () => {
       </section>
 
       {/* Track Your Finances Easily Section */}
-      <section className="py-20 px-6">
+      <section className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-6xl">
           <motion.div initial={{
             opacity: 0,
@@ -616,7 +617,7 @@ const Landing = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-6">
+      <section id="testimonials" className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-6xl">
           <motion.div initial={{
             opacity: 0,
@@ -709,7 +710,7 @@ const Landing = () => {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-20 px-6 bg-muted/30">
+      <section id="pricing" className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -888,7 +889,7 @@ const Landing = () => {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 px-6 bg-muted/30">
+      <section id="faq" className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-4xl">
           <motion.div initial={{
             opacity: 0,
@@ -998,7 +999,7 @@ const Landing = () => {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-32 px-6">
+      <section className="py-32 px-6 relative z-10">
         <div className="container mx-auto max-w-4xl text-center">
           <motion.div initial={{
             opacity: 0,
@@ -1028,7 +1029,7 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-12 px-6">
+      <footer className="border-t border-border py-12 px-6 relative z-10">
         <div className="container mx-auto max-w-7xl">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
