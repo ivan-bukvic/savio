@@ -60,8 +60,11 @@ serve(async (req) => {
     });
 
     if (customers.data.length === 0) {
-      console.error("No Stripe customer found for:", user.email);
-      throw new Error("No billing account found. Please contact support.");
+      console.log("No Stripe customer found for:", user.email, "- redirecting to checkout");
+      return new Response(JSON.stringify({ error: "NO_CUSTOMER", message: "No billing account found" }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const customer = customers.data[0];
