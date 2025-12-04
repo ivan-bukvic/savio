@@ -17,6 +17,8 @@ import testimonialMaria from "@/assets/testimonial-maria.jpg";
 import testimonialDaniel from "@/assets/testimonial-daniel.jpg";
 import testimonialJessica from "@/assets/testimonial-jessica.jpg";
 import testimonialAlicia from "@/assets/testimonial-alicia.jpg";
+import testimonialMichael from "@/assets/testimonial-michael.jpg";
+import testimonialEmma from "@/assets/testimonial-emma.jpg";
 
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -627,12 +629,12 @@ const Landing = () => {
                 {
                   title: "Michael T.",
                   description: "Finally a finance app that doesn't overwhelm me. Simple, beautiful, and effective. Exactly what I needed for my financial journey.",
-                  icon: <Sparkles className="h-6 w-6" />,
+                  avatar: testimonialMichael,
                 },
                 {
                   title: "Emma W.",
                   description: "The visual analytics make budgeting actually enjoyable. I can see my progress at a glance and stay motivated every day.",
-                  icon: <BarChart3 className="h-6 w-6" />,
+                  avatar: testimonialEmma,
                 },
               ]}
             />
