@@ -11,6 +11,12 @@ import { toast } from "sonner";
 import { useState } from "react";
 import dashboardPreview from "@/assets/dashboard-screenshot.png";
 import heroBgCurves from "@/assets/landing-bg-curves.jpg";
+import testimonialSarah from "@/assets/testimonial-sarah.jpg";
+import testimonialJames from "@/assets/testimonial-james.jpg";
+import testimonialMaria from "@/assets/testimonial-maria.jpg";
+import testimonialDaniel from "@/assets/testimonial-daniel.jpg";
+import testimonialJessica from "@/assets/testimonial-jessica.jpg";
+import testimonialAlicia from "@/assets/testimonial-alicia.jpg";
 
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -591,32 +597,32 @@ const Landing = () => {
                 {
                   title: "Sarah Mitchell",
                   description: "Savio helped me finally understand my expenses and start saving for the first time. I can't imagine managing my finances without it.",
-                  icon: <PiggyBank className="h-6 w-6" />,
+                  avatar: testimonialSarah,
                 },
                 {
                   title: "James Chen",
                   description: "The AI insights are spot on — it feels like having a personal financial coach. My savings have doubled in just six months.",
-                  icon: <Wallet className="h-6 w-6" />,
+                  avatar: testimonialJames,
                 },
                 {
                   title: "Maria Rodriguez",
                   description: "My debt payoff plan has never been clearer. This app is a game changer. I finally feel in control of my financial future.",
-                  icon: <Target className="h-6 w-6" />,
+                  avatar: testimonialMaria,
                 },
                 {
                   title: "Daniel R.",
                   description: "The savings goals and AI insights completely changed how I plan my cash flow. It feels like having a personal financial advisor.",
-                  icon: <Award className="h-6 w-6" />,
+                  avatar: testimonialDaniel,
                 },
                 {
                   title: "Jessica M.",
                   description: "Savio helps me stay on top of my income from multiple clients without the stress. The dashboard feels clean and empowering.",
-                  icon: <Users className="h-6 w-6" />,
+                  avatar: testimonialJessica,
                 },
                 {
                   title: "Alicia K.",
                   description: "I love how everything is easy to track. My expenses, goals, and monthly summaries all live in one place effortlessly.",
-                  icon: <CheckCircle2 className="h-6 w-6" />,
+                  avatar: testimonialAlicia,
                 },
                 {
                   title: "Michael T.",
