@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap, Play } from "lucide-react";
+import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap, Play, PiggyBank, Wallet, Users, Award } from "lucide-react";
+import { FeaturesSectionWithHoverEffects } from "@/components/ui/feature-section-with-hover-effects";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,40 +10,12 @@ import { useState as useReactState } from "react";
 import { toast } from "sonner";
 import { useState } from "react";
 import dashboardPreview from "@/assets/dashboard-screenshot.png";
-import testimonialSarah from "@/assets/testimonial-sarah.jpg";
-import testimonialJames from "@/assets/testimonial-james.jpg";
-import testimonialMaria from "@/assets/testimonial-maria.jpg";
-import testimonialJessica from "@/assets/testimonial-jessica.jpg";
-import testimonialDaniel from "@/assets/testimonial-daniel.jpg";
-import testimonialAlicia from "@/assets/testimonial-alicia.jpg";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import heroBgCurves from "@/assets/landing-bg-curves.jpg";
 
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const features = [{
-    icon: TrendingUp,
-    title: "Smart Tracking",
-    description: "Automatically categorize and analyze your spending patterns with AI-powered insights.",
-    link: "#"
-  }, {
-    icon: Shield,
-    title: "Secure & Private",
-    description: "Bank-level encryption ensures your financial data remains protected and confidential.",
-    link: "#"
-  }, {
-    icon: Sparkles,
-    title: "AI-Powered Insights",
-    description: "Get personalized recommendations to optimize your finances and reach your goals faster.",
-    link: "#"
-  }, {
-    icon: BarChart3,
-    title: "Visual Analytics",
-    description: "Beautiful charts and graphs make understanding your finances simple and intuitive.",
-    link: "#"
-  }];
 
   const navLinks = [
     { label: "Features", href: "#features" },
@@ -400,17 +373,13 @@ const Landing = () => {
       {/* Features Section */}
       <section id="features" className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-7xl">
-          <motion.div initial={{
-            opacity: 0,
-            y: 30
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.6
-          }} className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true }} 
+            transition={{ duration: 0.6 }} 
+            className="text-center mb-8"
+          >
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
               Experience the Power Behind Smart Finance
             </h2>
@@ -419,36 +388,37 @@ const Landing = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => <motion.div key={feature.title} initial={{
-              opacity: 0,
-              y: 30
-            }} whileInView={{
-              opacity: 1,
-              y: 0
-            }} viewport={{
-              once: true
-            }} transition={{
-              duration: 0.5,
-              delay: index * 0.1
-            }}>
-                <div className="group bg-card border border-border rounded-2xl p-8 h-full card-shadow hover:card-shadow-hover transition-all duration-500 hover:scale-[1.02]">
-                  <div className="bg-primary/10 w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                    <feature.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    {feature.description}
-                  </p>
-                  <a href={feature.link} className="text-primary font-medium inline-flex items-center gap-2 group-hover:gap-3 transition-all">
-                    Learn More
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                </div>
-              </motion.div>)}
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <FeaturesSectionWithHoverEffects
+              features={[
+                {
+                  title: "Smart Tracking",
+                  description: "Automatically categorize and analyze your spending patterns with AI-powered insights.",
+                  icon: <TrendingUp className="h-6 w-6" />,
+                },
+                {
+                  title: "Secure & Private",
+                  description: "Bank-level encryption ensures your financial data remains protected and confidential.",
+                  icon: <Shield className="h-6 w-6" />,
+                },
+                {
+                  title: "AI-Powered Insights",
+                  description: "Get personalized recommendations to optimize your finances and reach your goals faster.",
+                  icon: <Sparkles className="h-6 w-6" />,
+                },
+                {
+                  title: "Visual Analytics",
+                  description: "Beautiful charts and graphs make understanding your finances simple and intuitive.",
+                  icon: <BarChart3 className="h-6 w-6" />,
+                },
+              ]}
+            />
+          </motion.div>
         </div>
       </section>
 
@@ -494,18 +464,14 @@ const Landing = () => {
 
       {/* How Savio Works Section */}
       <section id="how-it-works" className="py-20 px-6 relative z-10">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div initial={{
-            opacity: 0,
-            y: 30
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.6
-          }} className="text-center mb-16">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true }} 
+            transition={{ duration: 0.6 }} 
+            className="text-center mb-8"
+          >
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
               How Savio Works
             </h2>
@@ -514,67 +480,37 @@ const Landing = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[{
-              icon: Link2,
-              step: "Step 1",
-              title: "Connect Your Accounts",
-              description: "Savio organizes your income, expenses, goals, and debts in one place.",
-              bgColor: "bg-primary/10",
-              iconColor: "text-primary",
-              textColor: "text-primary"
-            }, {
-              icon: Eye,
-              step: "Step 2",
-              title: "Visualize Your Finances",
-              description: "Clean charts and dashboards help you understand where your money goes.",
-              bgColor: "bg-secondary/10",
-              iconColor: "text-secondary",
-              textColor: "text-secondary"
-            }, {
-              icon: Sparkles,
-              step: "Step 3",
-              title: "Get AI-Powered Insights",
-              description: "Savio identifies patterns and suggests improvements tailored to you.",
-              bgColor: "bg-accent/10",
-              iconColor: "text-accent",
-              textColor: "text-accent"
-            }, {
-              icon: CheckCircle2,
-              step: "Step 4",
-              title: "Track Your Progress",
-              description: "See your financial health improve week after week with real-time updates.",
-              bgColor: "bg-success/10",
-              iconColor: "text-success",
-              textColor: "text-success"
-            }].map((item, index) => <motion.div key={item.step} initial={{
-              opacity: 0,
-              y: 30
-            }} whileInView={{
-              opacity: 1,
-              y: 0
-            }} viewport={{
-              once: true
-            }} transition={{
-              duration: 0.5,
-              delay: index * 0.1
-            }} className="relative">
-                <div className="bg-card border border-border rounded-2xl p-6 h-full card-shadow hover:card-shadow-hover transition-all duration-500 hover:scale-[1.02]">
-                  <div className={`${item.bgColor} w-14 h-14 rounded-xl flex items-center justify-center mb-4`}>
-                    <item.icon className={`h-7 w-7 ${item.iconColor}`} />
-                  </div>
-                  <div className={`text-xs font-semibold ${item.textColor} mb-2 uppercase tracking-wider`}>
-                    {item.step}
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              </motion.div>)}
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <FeaturesSectionWithHoverEffects
+              features={[
+                {
+                  title: "Connect Your Accounts",
+                  description: "Savio organizes your income, expenses, goals, and debts in one place.",
+                  icon: <Link2 className="h-6 w-6" />,
+                },
+                {
+                  title: "Visualize Your Finances",
+                  description: "Clean charts and dashboards help you understand where your money goes.",
+                  icon: <Eye className="h-6 w-6" />,
+                },
+                {
+                  title: "Get AI-Powered Insights",
+                  description: "Savio identifies patterns and suggests improvements tailored to you.",
+                  icon: <Sparkles className="h-6 w-6" />,
+                },
+                {
+                  title: "Track Your Progress",
+                  description: "See your financial health improve week after week with real-time updates.",
+                  icon: <CheckCircle2 className="h-6 w-6" />,
+                },
+              ]}
+            />
+          </motion.div>
         </div>
       </section>
 
@@ -628,18 +564,14 @@ const Landing = () => {
 
       {/* Testimonials Section */}
       <section id="testimonials" className="py-20 px-6 relative z-10">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div initial={{
-            opacity: 0,
-            y: 30
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.6
-          }} className="text-center mb-16">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true }} 
+            transition={{ duration: 0.6 }} 
+            className="text-center mb-8"
+          >
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
               What Our Users Are Saying
             </h2>
@@ -648,74 +580,57 @@ const Landing = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[{
-              name: "Sarah Mitchell",
-              role: "Small Business Owner",
-              testimonial: "Savio helped me finally understand my expenses and start saving for the first time. I can't imagine managing my finances without it.",
-              initial: "SM",
-              image: testimonialSarah
-            }, {
-              name: "James Chen",
-              role: "Software Engineer",
-              testimonial: "The AI insights are spot on — it feels like having a personal financial coach. My savings have doubled in just six months.",
-              initial: "JC",
-              image: testimonialJames
-            }, {
-              name: "Maria Rodriguez",
-              role: "Teacher",
-              testimonial: "My debt payoff plan has never been clearer. This app is a game changer. I finally feel in control of my financial future.",
-              initial: "MR",
-              image: testimonialMaria
-            }, {
-              name: "Jessica M.",
-              role: "Freelancer",
-              testimonial: "Savio helps me stay on top of my income from multiple clients without the stress. The dashboard feels clean, empowering, and finally makes my finances simple.",
-              initial: "JM",
-              image: testimonialJessica
-            }, {
-              name: "Daniel R.",
-              role: "Startup Founder",
-              testimonial: "The savings goals and AI insights completely changed how I plan my cash flow. It feels like having a personal financial advisor available 24/7.",
-              initial: "DR",
-              image: testimonialDaniel
-            }, {
-              name: "Alicia K.",
-              role: "Remote Worker",
-              testimonial: "I love how everything is easy to track. My expenses, goals, and monthly summaries all live in one place. Savio just fits into my routine effortlessly.",
-              initial: "AK",
-              image: testimonialAlicia
-            }].map((testimonial, index) => <motion.div key={testimonial.name} initial={{
-              opacity: 0,
-              y: 30
-            }} whileInView={{
-              opacity: 1,
-              y: 0
-            }} viewport={{
-              once: true
-            }} transition={{
-              duration: 0.5,
-              delay: index * 0.1
-            }}>
-                <div className="bg-card border border-border rounded-2xl p-8 h-full card-shadow hover:card-shadow-hover transition-all duration-300">
-                  <div className="flex items-center gap-4 mb-6">
-                    <Avatar className="w-14 h-14 ring-2 ring-primary/20">
-                      <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                        {testimonial.initial}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="font-semibold text-foreground">{testimonial.name}</div>
-                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
-                    </div>
-                  </div>
-                  <p className="text-muted-foreground leading-relaxed italic">
-                    "{testimonial.testimonial}"
-                  </p>
-                </div>
-              </motion.div>)}
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <FeaturesSectionWithHoverEffects
+              features={[
+                {
+                  title: "Sarah Mitchell",
+                  description: "Savio helped me finally understand my expenses and start saving for the first time. I can't imagine managing my finances without it.",
+                  icon: <PiggyBank className="h-6 w-6" />,
+                },
+                {
+                  title: "James Chen",
+                  description: "The AI insights are spot on — it feels like having a personal financial coach. My savings have doubled in just six months.",
+                  icon: <Wallet className="h-6 w-6" />,
+                },
+                {
+                  title: "Maria Rodriguez",
+                  description: "My debt payoff plan has never been clearer. This app is a game changer. I finally feel in control of my financial future.",
+                  icon: <Target className="h-6 w-6" />,
+                },
+                {
+                  title: "Daniel R.",
+                  description: "The savings goals and AI insights completely changed how I plan my cash flow. It feels like having a personal financial advisor.",
+                  icon: <Award className="h-6 w-6" />,
+                },
+                {
+                  title: "Jessica M.",
+                  description: "Savio helps me stay on top of my income from multiple clients without the stress. The dashboard feels clean and empowering.",
+                  icon: <Users className="h-6 w-6" />,
+                },
+                {
+                  title: "Alicia K.",
+                  description: "I love how everything is easy to track. My expenses, goals, and monthly summaries all live in one place effortlessly.",
+                  icon: <CheckCircle2 className="h-6 w-6" />,
+                },
+                {
+                  title: "Michael T.",
+                  description: "Finally a finance app that doesn't overwhelm me. Simple, beautiful, and effective. Exactly what I needed for my financial journey.",
+                  icon: <Sparkles className="h-6 w-6" />,
+                },
+                {
+                  title: "Emma W.",
+                  description: "The visual analytics make budgeting actually enjoyable. I can see my progress at a glance and stay motivated every day.",
+                  icon: <BarChart3 className="h-6 w-6" />,
+                },
+              ]}
+            />
+          </motion.div>
         </div>
       </section>
 
