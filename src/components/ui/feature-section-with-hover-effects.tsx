@@ -4,7 +4,8 @@ import React from "react";
 export interface FeatureItem {
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
+  avatar?: string;
 }
 
 interface FeaturesSectionProps {
@@ -26,11 +27,13 @@ const Feature = ({
   title,
   description,
   icon,
+  avatar,
   index,
 }: {
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
+  avatar?: string;
   index: number;
 }) => {
   return (
@@ -48,7 +51,15 @@ const Feature = ({
         <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-muted/50 to-transparent pointer-events-none" />
       )}
       <div className="mb-4 relative z-10 px-10 text-muted-foreground">
-        {icon}
+        {avatar ? (
+          <img 
+            src={avatar} 
+            alt={title} 
+            className="w-12 h-12 rounded-full object-cover border-2 border-border shadow-md"
+          />
+        ) : (
+          icon
+        )}
       </div>
       <div className="text-lg font-bold mb-2 relative z-10 px-10">
         <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-muted-foreground/30 group-hover/feature:bg-primary transition-all duration-200 origin-center" />
