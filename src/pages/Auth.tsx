@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,9 @@ const signUpSchema = z.object({
   })
 });
 const Auth = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const location = useLocation();
+  const initialMode = location.state?.mode === "signin" ? false : true; // Default to Sign Up
+  const [isSignUp, setIsSignUp] = useState(initialMode);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",

@@ -34,8 +34,8 @@ const Landing = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        // Redirect to auth if not logged in
-        window.location.href = "/auth";
+        // Redirect to auth signup if not logged in
+        navigate("/auth", { state: { mode: "signup" } });
         return;
       }
 
@@ -105,12 +105,12 @@ const Landing = () => {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-4">
-            <Link to="/auth">
+            <Link to="/auth" state={{ mode: "signin" }}>
               <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                 Login
               </Button>
             </Link>
-            <Link to="/auth">
+            <Link to="/auth" state={{ mode: "signup" }}>
               <Button size="sm">Get Started</Button>
             </Link>
           </div>
@@ -144,10 +144,10 @@ const Landing = () => {
                 </a>
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t border-border">
-                <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                <Link to="/auth" state={{ mode: "signin" }} onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="ghost" className="w-full justify-center">Login</Button>
                 </Link>
-                <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                <Link to="/auth" state={{ mode: "signup" }} onClick={() => setMobileMenuOpen(false)}>
                   <Button className="w-full">Get Started</Button>
                 </Link>
               </div>
@@ -178,7 +178,7 @@ const Landing = () => {
                 Build savings, reduce stress, and finally gain a clear path to financial freedom – all in one simple dashboard.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link to="/auth">
+                <Link to="/auth" state={{ mode: "signup" }}>
                   <Button size="lg" className="text-base px-8 py-4 h-auto group w-full sm:w-auto">
                     Get Started – It's Free
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -692,7 +692,7 @@ const Landing = () => {
                   </ul>
                 </div>
 
-                <Link to="/auth" className="mt-auto">
+                <Link to="/auth" state={{ mode: "signup" }} className="mt-auto">
                   <Button variant="outline" size="lg" className="w-full group">
                     Start for Free
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
