@@ -269,36 +269,36 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
 
   // Bar chart data - goal funding distribution
   const goalFundingData = goalsData.map(goal => ({
-    name: goal.goal_name,
+    name: goal.goal_name.length > 10 ? goal.goal_name.substring(0, 10) + '...' : goal.goal_name,
     saved: Number(goal.current_progress),
     remaining: Number(goal.target_amount) - Number(goal.current_progress),
   }));
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 md:space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Savings Goals</h1>
-          <p className="text-muted-foreground mt-1">Track and manage your financial goals</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Savings Goals</h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-1">Track and manage your financial goals</p>
         </div>
-        <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2">
+        <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2 w-full sm:w-auto">
           <Plus className="h-4 w-4" />
           Add Goal
         </Button>
       </div>
 
       {/* KPI Cards with Mini Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0">
-          <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                <Target className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 md:p-6 pb-0">
+            <div className="flex items-center gap-3 mb-3 min-h-[70px] md:min-h-[88px]">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Target className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Active Goals</p>
-                <h3 className="text-2xl font-bold text-foreground mt-1">{activeGoals}</h3>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Active Goals</p>
+                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1">{activeGoals}</h3>
               </div>
             </div>
             <div className="overflow-hidden -mb-1">
@@ -308,14 +308,14 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
         </Card>
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0">
-          <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                <DollarSign className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 md:p-6 pb-0">
+            <div className="flex items-center gap-3 mb-3 min-h-[70px] md:min-h-[88px]">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <DollarSign className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Saved So Far</p>
-                <h3 className="text-2xl font-bold text-foreground mt-1">${totalSaved.toLocaleString()}</h3>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Saved So Far</p>
+                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1 truncate">${totalSaved.toLocaleString()}</h3>
               </div>
             </div>
             <div className="overflow-hidden -mb-1">
@@ -325,14 +325,14 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
         </Card>
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0">
-          <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                <TrendingUp className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 md:p-6 pb-0">
+            <div className="flex items-center gap-3 mb-3 min-h-[70px] md:min-h-[88px]">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Target Amount</p>
-                <h3 className="text-2xl font-bold text-foreground mt-1">${totalTarget.toLocaleString()}</h3>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Target Amount</p>
+                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1 truncate">${totalTarget.toLocaleString()}</h3>
               </div>
             </div>
             <div className="overflow-hidden -mb-1">
@@ -342,14 +342,14 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
         </Card>
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0">
-          <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                <Percent className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 md:p-6 pb-0">
+            <div className="flex items-center gap-3 mb-3 min-h-[70px] md:min-h-[88px]">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Percent className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Avg Completion Rate</p>
-                <h3 className="text-2xl font-bold text-foreground mt-1">{avgCompletion.toFixed(1)}%</h3>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-muted-foreground">Avg Completion Rate</p>
+                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1">{avgCompletion.toFixed(1)}%</h3>
               </div>
             </div>
             <div className="overflow-hidden -mb-1">
@@ -360,13 +360,13 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Overall Savings Progress Area Chart */}
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold">Overall Savings Progress Over Time</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg font-semibold">Overall Savings Progress</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-2 md:p-6 pt-0">
             <ChartContainer
               config={{
                 total: {
@@ -374,7 +374,7 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
                   color: "hsl(var(--primary))",
                 },
               }}
-              className="h-[300px]"
+              className="h-[250px] md:h-[300px] w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={monthlyProgressData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
@@ -388,16 +388,17 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
                   <XAxis 
                     dataKey="month" 
                     stroke="hsl(var(--muted-foreground))"
-                    fontSize={12}
+                    fontSize={10}
                     tickLine={false}
                     axisLine={false}
                   />
                   <YAxis 
                     stroke="hsl(var(--muted-foreground))"
-                    fontSize={12}
+                    fontSize={10}
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={(value) => `$${value}`}
+                    width={50}
                   />
                   <Tooltip
                     contentStyle={{
@@ -424,10 +425,10 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
 
         {/* Goal Funding Distribution Bar Chart */}
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold">Goal Funding Distribution</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg font-semibold">Goal Funding Distribution</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-2 md:p-6 pt-0">
             <ChartContainer
               config={{
                 saved: {
@@ -439,7 +440,7 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
                   color: "hsl(45, 93%, 58%)",
                 },
               }}
-              className="h-[300px]"
+              className="h-[250px] md:h-[300px] w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={goalFundingData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
@@ -447,16 +448,17 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
                   <XAxis 
                     dataKey="name" 
                     stroke="hsl(var(--muted-foreground))"
-                    fontSize={12}
+                    fontSize={10}
                     tickLine={false}
                     axisLine={false}
                   />
                   <YAxis 
                     stroke="hsl(var(--muted-foreground))"
-                    fontSize={12}
+                    fontSize={10}
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={(value) => `$${value}`}
+                    width={50}
                   />
                   <Tooltip
                     contentStyle={{
@@ -469,12 +471,12 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
                   />
                   <Legend 
                     wrapperStyle={{
-                      paddingTop: "20px",
-                      fontSize: "14px",
+                      paddingTop: "10px",
+                      fontSize: "12px",
                     }}
                   />
-                  <Bar dataKey="saved" fill="hsl(142, 76%, 45%)" radius={[0, 0, 0, 0]} barSize={40} />
-                  <Bar dataKey="remaining" fill="hsl(45, 93%, 58%)" radius={[0, 0, 0, 0]} barSize={40} />
+                  <Bar dataKey="saved" fill="hsl(142, 76%, 45%)" radius={[0, 0, 0, 0]} barSize={30} />
+                  <Bar dataKey="remaining" fill="hsl(45, 93%, 58%)" radius={[0, 0, 0, 0]} barSize={30} />
                 </BarChart>
               </ResponsiveContainer>
             </ChartContainer>
@@ -482,105 +484,141 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
         </Card>
       </div>
 
-      {/* Goals Table */}
-      <Card className="card-shadow hover:card-shadow-hover transition-all duration-200">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">All Goals</CardTitle>
+      {/* Goals Progress Cards - Mobile Friendly */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        {goalsData.map((goal) => {
+          const progress = (goal.current_progress / goal.target_amount) * 100;
+          return (
+            <Card key={goal.id} className="card-shadow hover:card-shadow-hover transition-all duration-200">
+              <CardContent className="p-4 md:p-6">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-foreground truncate">{goal.goal_name}</h3>
+                    {goal.due_date && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Due: {format(new Date(goal.due_date), "MMM dd, yyyy")}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-1 shrink-0 ml-2">
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog(goal)}>
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openDeleteDialog(goal)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Progress</span>
+                    <span className="font-medium">{progress.toFixed(1)}%</span>
+                  </div>
+                  <Progress value={progress} className="h-2" />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>${goal.current_progress.toLocaleString()}</span>
+                    <span>${goal.target_amount.toLocaleString()}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Goals Table - Hidden on very small screens, shown as cards above */}
+      <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 hidden md:block">
+        <CardHeader className="p-4 md:p-6">
+          <CardTitle className="text-base md:text-lg font-semibold">All Goals</CardTitle>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Goal Name</TableHead>
-                <TableHead>Target Amount</TableHead>
-                <TableHead>Current Progress</TableHead>
-                <TableHead>Due Date</TableHead>
-                <TableHead>Completion</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {goalsData.map((goal) => {
-                const percentage = (Number(goal.current_progress) / Number(goal.target_amount)) * 100;
-                return (
-                  <TableRow key={goal.id}>
-                    <TableCell className="font-medium">{goal.goal_name}</TableCell>
-                    <TableCell>${Number(goal.target_amount).toLocaleString()}</TableCell>
-                    <TableCell>${Number(goal.current_progress).toLocaleString()}</TableCell>
-                    <TableCell>
-                      {goal.due_date ? format(new Date(goal.due_date), "MMM dd, yyyy") : "No deadline"}
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-1">
-                        <Progress value={percentage} className="h-2" />
-                        <span className="text-xs text-muted-foreground">{percentage.toFixed(0)}%</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openEditDialog(goal)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openDeleteDialog(goal)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+        <CardContent className="p-0 md:p-6 md:pt-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-xs md:text-sm">Goal Name</TableHead>
+                  <TableHead className="text-xs md:text-sm">Progress</TableHead>
+                  <TableHead className="text-xs md:text-sm hidden lg:table-cell">Target</TableHead>
+                  <TableHead className="text-xs md:text-sm hidden lg:table-cell">Due Date</TableHead>
+                  <TableHead className="text-xs md:text-sm text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {goalsData.map((goal) => {
+                  const progress = (goal.current_progress / goal.target_amount) * 100;
+                  return (
+                    <TableRow key={goal.id} className="hover:bg-muted/50">
+                      <TableCell className="font-medium text-xs md:text-sm">{goal.goal_name}</TableCell>
+                      <TableCell className="text-xs md:text-sm">
+                        <div className="flex items-center gap-2">
+                          <Progress value={progress} className="w-16 h-2" />
+                          <span>{progress.toFixed(0)}%</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-xs md:text-sm hidden lg:table-cell">
+                        ${goal.target_amount.toLocaleString()}
+                      </TableCell>
+                      <TableCell className="text-xs md:text-sm hidden lg:table-cell">
+                        {goal.due_date ? format(new Date(goal.due_date), "MMM dd, yyyy") : "—"}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1 md:gap-2">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog(goal)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openDeleteDialog(goal)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
 
       {/* Add Goal Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Add New Goal</DialogTitle>
-            <DialogDescription>Create a new savings goal to track your progress</DialogDescription>
+            <DialogTitle>Add Savings Goal</DialogTitle>
+            <DialogDescription>Create a new savings goal to track.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
               <Label htmlFor="goal_name">Goal Name</Label>
               <Input
                 id="goal_name"
+                placeholder="e.g., Emergency Fund"
                 value={formData.goal_name}
                 onChange={(e) => setFormData({ ...formData, goal_name: e.target.value })}
-                placeholder="e.g., Emergency Fund"
               />
             </div>
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="target_amount">Target Amount</Label>
               <Input
                 id="target_amount"
                 type="number"
+                placeholder="e.g., 5000"
                 value={formData.target_amount}
                 onChange={(e) => setFormData({ ...formData, target_amount: e.target.value })}
-                placeholder="e.g., 3000"
               />
             </div>
-            <div>
-              <Label htmlFor="current_progress">Current Progress</Label>
+            <div className="grid gap-2">
+              <Label htmlFor="current_progress">Current Progress (optional)</Label>
               <Input
                 id="current_progress"
                 type="number"
+                placeholder="e.g., 1000"
                 value={formData.current_progress}
                 onChange={(e) => setFormData({ ...formData, current_progress: e.target.value })}
-                placeholder="e.g., 500"
               />
             </div>
-            <div>
-              <Label htmlFor="due_date">Due Date (Optional)</Label>
+            <div className="grid gap-2">
+              <Label htmlFor="due_date">Due Date (optional)</Label>
               <Input
                 id="due_date"
                 type="date"
@@ -600,42 +638,45 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
 
       {/* Edit Goal Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Edit Goal</DialogTitle>
-            <DialogDescription>Update your savings goal details</DialogDescription>
+            <DialogTitle>Edit Savings Goal</DialogTitle>
+            <DialogDescription>Update your savings goal.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="edit_goal_name">Goal Name</Label>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="edit-goal_name">Goal Name</Label>
               <Input
-                id="edit_goal_name"
+                id="edit-goal_name"
+                placeholder="e.g., Emergency Fund"
                 value={formData.goal_name}
                 onChange={(e) => setFormData({ ...formData, goal_name: e.target.value })}
               />
             </div>
-            <div>
-              <Label htmlFor="edit_target_amount">Target Amount</Label>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-target_amount">Target Amount</Label>
               <Input
-                id="edit_target_amount"
+                id="edit-target_amount"
                 type="number"
+                placeholder="e.g., 5000"
                 value={formData.target_amount}
                 onChange={(e) => setFormData({ ...formData, target_amount: e.target.value })}
               />
             </div>
-            <div>
-              <Label htmlFor="edit_current_progress">Current Progress</Label>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-current_progress">Current Progress</Label>
               <Input
-                id="edit_current_progress"
+                id="edit-current_progress"
                 type="number"
+                placeholder="e.g., 1000"
                 value={formData.current_progress}
                 onChange={(e) => setFormData({ ...formData, current_progress: e.target.value })}
               />
             </div>
-            <div>
-              <Label htmlFor="edit_due_date">Due Date (Optional)</Label>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-due_date">Due Date (optional)</Label>
               <Input
-                id="edit_due_date"
+                id="edit-due_date"
                 type="date"
                 value={formData.due_date}
                 onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
@@ -653,11 +694,11 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
 
       {/* Delete Goal Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Delete Goal</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{selectedGoal?.goal_name}"? This action cannot be undone.
+              Are you sure you want to delete this goal? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

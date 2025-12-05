@@ -263,20 +263,20 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
   }));
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Income</h1>
-          <p className="text-muted-foreground mt-1">Manage and track your income sources</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Income</h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-1">Manage and track your income sources</p>
         </div>
-        <Button onClick={() => setIsAddDialogOpen(true)}>
+        <Button onClick={() => setIsAddDialogOpen(true)} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Add Income
         </Button>
       </div>
 
       {/* Summary Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
         <StatCard
           title="Total Monthly Income"
           value={`$${totalMonthlyIncome.toLocaleString()}`}
@@ -295,13 +295,13 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
         {/* Income Over Time */}
         <Card className="card-shadow overflow-hidden">
-          <CardHeader>
-            <CardTitle>Income Over Time</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Income Over Time</CardTitle>
           </CardHeader>
-          <CardContent className="pb-6 pt-6 flex items-center">
+          <CardContent className="p-2 md:p-6 pt-0 md:pt-6">
             <ChartContainer
               config={{
                 amount: {
@@ -309,13 +309,13 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
                   color: "hsl(var(--chart-1))",
                 },
               }}
-              className="h-[300px] max-w-full"
+              className="h-[250px] md:h-[300px] w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData} barSize={32}>
+                <BarChart data={monthlyChartData} barSize={24}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={10} tick={{ fontSize: 10 }} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tick={{ fontSize: 10 }} width={50} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "rgba(0, 0, 0, 0.9)",
@@ -337,13 +337,13 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
 
         {/* Income Source Breakdown */}
         <Card className="card-shadow overflow-hidden">
-          <CardHeader>
-            <CardTitle>Income by Source</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Income by Source</CardTitle>
           </CardHeader>
-          <CardContent className="pb-8 pt-4">
+          <CardContent className="p-2 md:p-6 pt-0 md:pt-4">
             <ChartContainer
               config={{}}
-              className="h-[350px] max-w-full"
+              className="h-[250px] md:h-[300px] w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -351,35 +351,12 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
                     data={sourceChartData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={70}
-                    outerRadius={120}
+                    innerRadius={50}
+                    outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
                     paddingAngle={2}
-                    label={({ percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
-                      const RADIAN = Math.PI / 180;
-                      const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                      const percentage = (percent * 100).toFixed(0);
-                      
-                      // Adjust font size based on percentage (smaller slices get smaller text)
-                      const fontSize = percent < 0.05 ? '10px' : percent < 0.15 ? '12px' : '14px';
-                      
-                      return (
-                        <text 
-                          x={x} 
-                          y={y} 
-                          fill="hsl(var(--foreground))" 
-                          textAnchor="middle" 
-                          dominantBaseline="central"
-                          fontSize={fontSize}
-                          fontWeight="600"
-                        >
-                          {percentage}%
-                        </text>
-                      );
-                    }}
+                    label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                     labelLine={false}
                   >
                     {sourceChartData.map((entry, index) => (
@@ -409,15 +386,15 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
             </ChartContainer>
             
             {/* Legend at bottom */}
-            <div className="mt-6 space-y-2">
+            <div className="mt-4 md:mt-6 space-y-2">
               {sourceChartData.map((entry, index) => (
-                <div key={entry.name} className="flex items-center gap-3">
+                <div key={entry.name} className="flex items-center gap-2 md:gap-3">
                   <div 
                     className="w-3 h-3 rounded-full flex-shrink-0" 
                     style={{ backgroundColor: COLORS[index % COLORS.length] }}
                   />
-                  <span className="text-sm text-foreground">{entry.name}</span>
-                  <span className="text-sm text-muted-foreground ml-auto">
+                  <span className="text-xs md:text-sm text-foreground truncate">{entry.name}</span>
+                  <span className="text-xs md:text-sm text-muted-foreground ml-auto">
                     ${entry.value.toLocaleString()}
                   </span>
                 </div>
@@ -428,62 +405,66 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
       </div>
 
       {/* Income Table */}
-      <Card className="card-shadow">
-        <CardHeader>
-          <CardTitle>All Income Entries</CardTitle>
+      <Card className="card-shadow overflow-hidden">
+        <CardHeader className="p-4 md:p-6">
+          <CardTitle className="text-base md:text-lg">All Income Entries</CardTitle>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Source</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {incomeData.length === 0 ? (
+        <CardContent className="p-0 md:p-6 md:pt-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center text-muted-foreground">
-                    No income entries found. Add your first income entry to get started.
-                  </TableCell>
+                  <TableHead className="text-xs md:text-sm">Source</TableHead>
+                  <TableHead className="text-xs md:text-sm">Amount</TableHead>
+                  <TableHead className="text-xs md:text-sm hidden sm:table-cell">Date</TableHead>
+                  <TableHead className="text-xs md:text-sm text-right">Actions</TableHead>
                 </TableRow>
-              ) : (
-                incomeData.map((income) => (
-                  <TableRow key={income.id} className="hover:bg-muted/50">
-                    <TableCell className="font-medium">{income.source}</TableCell>
-                    <TableCell>${income.amount.toLocaleString()}</TableCell>
-                    <TableCell>{format(new Date(income.date), "MMM dd, yyyy")}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openEditDialog(income)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openDeleteDialog(income)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+              </TableHeader>
+              <TableBody>
+                {incomeData.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center text-muted-foreground text-sm">
+                      No income entries found. Add your first income entry to get started.
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  incomeData.map((income) => (
+                    <TableRow key={income.id} className="hover:bg-muted/50">
+                      <TableCell className="font-medium text-xs md:text-sm">{income.source}</TableCell>
+                      <TableCell className="text-xs md:text-sm">${income.amount.toLocaleString()}</TableCell>
+                      <TableCell className="text-xs md:text-sm hidden sm:table-cell">{format(new Date(income.date), "MMM dd, yyyy")}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1 md:gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => openEditDialog(income)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => openDeleteDialog(income)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
 
       {/* Add Income Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Add Income</DialogTitle>
             <DialogDescription>Add a new income entry to track your earnings.</DialogDescription>
@@ -503,7 +484,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
               <Input
                 id="amount"
                 type="number"
-                placeholder="0.00"
+                placeholder="e.g., 5000"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               />
@@ -529,10 +510,10 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
 
       {/* Edit Income Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Income</DialogTitle>
-            <DialogDescription>Update the income entry details.</DialogDescription>
+            <DialogDescription>Update this income entry.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -549,7 +530,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
               <Input
                 id="edit-amount"
                 type="number"
-                placeholder="0.00"
+                placeholder="e.g., 5000"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               />
@@ -575,7 +556,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Delete Income</DialogTitle>
             <DialogDescription>

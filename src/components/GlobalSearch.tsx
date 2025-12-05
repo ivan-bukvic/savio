@@ -171,21 +171,21 @@ export const GlobalSearch = ({ userId, onNavigateToSection }: GlobalSearchProps)
   const aiReportsStartIndex = debtsStartIndex + results.debts.length;
 
   return (
-    <div ref={containerRef} className="relative flex-1 max-w-xl">
+    <div ref={containerRef} className="relative flex-1 max-w-[200px] sm:max-w-xs md:max-w-xl">
       <div className="flex items-center gap-2">
-        <Search className="h-4 w-4 text-muted-foreground" />
+        <Search className="h-4 w-4 text-muted-foreground shrink-0" />
         <Input
           ref={inputRef}
           value={query}
           onChange={handleInputChange}
           onFocus={() => query.length >= 2 && setIsOpen(true)}
           onKeyDown={handleKeyDown}
-          placeholder="Search income, expenses, goals, debts..."
-          className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+          placeholder="Search..."
+          className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-sm placeholder:text-xs md:placeholder:text-sm"
         />
-        {loading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+        {loading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground shrink-0" />}
         {query && !loading && (
-          <button onClick={handleClear} className="p-1 hover:bg-muted rounded-full transition-colors">
+          <button onClick={handleClear} className="p-1 hover:bg-muted rounded-full transition-colors shrink-0">
             <X className="h-3.5 w-3.5 text-muted-foreground" />
           </button>
         )}
