@@ -59,16 +59,16 @@ export const DashboardSidebar = ({ activeSection, onSectionChange, isPro = false
   };
 
   return (
-    <aside className="w-64 border-r border-border bg-card flex flex-col card-shadow">
+    <aside className="w-full md:w-64 h-full border-r border-border bg-card flex flex-col card-shadow">
       {/* Logo */}
-      <div className="flex h-16 items-center px-6 border-b border-border">
+      <div className="flex h-14 md:h-16 items-center px-4 md:px-6 border-b border-border">
         <div className="flex items-center gap-2">
-          <span className="text-xl font-semibold text-foreground">Savio</span>
+          <span className="text-lg md:text-xl font-semibold text-foreground">Savio</span>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 flex flex-col p-4">
+      <nav className="flex-1 flex flex-col p-3 md:p-4">
         <div className="space-y-1 flex-1">
           {menuItems.map((item) => {
             const Icon = item.icon;

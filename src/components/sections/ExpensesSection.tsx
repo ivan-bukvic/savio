@@ -274,29 +274,29 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
   const sparklineData = generateSparklineData();
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Expenses</h1>
-          <p className="text-muted-foreground mt-1">Track and manage your expenses</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Expenses</h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-1">Track and manage your expenses</p>
         </div>
-        <Button onClick={() => setIsAddDialogOpen(true)}>
+        <Button onClick={() => setIsAddDialogOpen(true)} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Add Expense
         </Button>
       </div>
 
       {/* Summary Statistics with Gradient Mini-Graphs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0">
-          <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                <CreditCard className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 md:p-6 pb-0">
+            <div className="flex items-center gap-3 mb-3 min-h-[70px] md:min-h-[88px]">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <CreditCard className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Monthly Expenses</p>
-                <h3 className="text-2xl font-bold text-foreground mt-1">${totalMonthlyExpenses.toLocaleString()}</h3>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Monthly Expenses</p>
+                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1 truncate">${totalMonthlyExpenses.toLocaleString()}</h3>
               </div>
             </div>
             <div className="overflow-hidden -mb-1">
@@ -306,14 +306,14 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
         </Card>
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0">
-          <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                <Package className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 md:p-6 pb-0">
+            <div className="flex items-center gap-3 mb-3 min-h-[70px] md:min-h-[88px]">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Package className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Highest Category</p>
-                <h3 className="text-2xl font-bold text-foreground mt-1">{highestCategory?.[0] || "N/A"}</h3>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-muted-foreground">Highest Category</p>
+                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1 truncate">{highestCategory?.[0] || "N/A"}</h3>
               </div>
             </div>
             <div className="overflow-hidden -mb-1">
@@ -323,14 +323,14 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
         </Card>
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0">
-          <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                <TrendingDown className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 md:p-6 pb-0">
+            <div className="flex items-center gap-3 mb-3 min-h-[70px] md:min-h-[88px]">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <TrendingDown className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Avg Daily Spending</p>
-                <h3 className="text-2xl font-bold text-foreground mt-1">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-muted-foreground">Avg Daily Spending</p>
+                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1 truncate">
                   ${avgDailySpending.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h3>
               </div>
@@ -342,14 +342,14 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
         </Card>
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0">
-          <CardContent className="p-6 pb-0">
-            <div className="flex items-center gap-3 mb-3 min-h-[88px]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                <Receipt className="h-5 w-5 text-primary" />
+          <CardContent className="p-4 md:p-6 pb-0">
+            <div className="flex items-center gap-3 mb-3 min-h-[70px] md:min-h-[88px]">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Receipt className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Transactions</p>
-                <h3 className="text-2xl font-bold text-foreground mt-1">{expenseData.length}</h3>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Transactions</p>
+                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1">{expenseData.length}</h3>
               </div>
             </div>
             <div className="overflow-hidden -mb-1">
@@ -360,13 +360,13 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
         {/* Expenses Over Time */}
         <Card className="card-shadow overflow-hidden">
-          <CardHeader>
-            <CardTitle>Monthly Expenses</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Monthly Expenses</CardTitle>
           </CardHeader>
-          <CardContent className="pb-6 pt-6 flex items-center">
+          <CardContent className="p-2 md:p-6 pt-0 md:pt-6">
             <ChartContainer
               config={{
                 amount: {
@@ -374,13 +374,13 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                   color: "hsl(var(--chart-1))",
                 },
               }}
-              className="h-[300px] max-w-full"
+              className="h-[250px] md:h-[300px] w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData} barSize={32}>
+                <BarChart data={monthlyChartData} barSize={24}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={10} tick={{ fontSize: 10 }} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tick={{ fontSize: 10 }} width={50} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "rgba(0, 0, 0, 0.9)",
@@ -402,13 +402,13 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
         {/* Expense Category Breakdown */}
         <Card className="card-shadow overflow-hidden">
-          <CardHeader>
-            <CardTitle>Expenses by Category</CardTitle>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-base md:text-lg">Expenses by Category</CardTitle>
           </CardHeader>
-          <CardContent className="pb-8 pt-4">
+          <CardContent className="p-2 md:p-6 pt-0 md:pt-4">
             <ChartContainer
               config={{}}
-              className="h-[350px] max-w-full"
+              className="h-[250px] md:h-[300px] w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -416,34 +416,12 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                     data={categoryChartData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={70}
-                    outerRadius={120}
+                    innerRadius={50}
+                    outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
                     paddingAngle={2}
-                    label={({ percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
-                      const RADIAN = Math.PI / 180;
-                      const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                      const percentage = (percent * 100).toFixed(0);
-                      
-                      const fontSize = percent < 0.05 ? '10px' : percent < 0.15 ? '12px' : '14px';
-                      
-                      return (
-                        <text 
-                          x={x} 
-                          y={y} 
-                          fill="hsl(var(--foreground))" 
-                          textAnchor="middle" 
-                          dominantBaseline="central"
-                          fontSize={fontSize}
-                          fontWeight="600"
-                        >
-                          {percentage}%
-                        </text>
-                      );
-                    }}
+                    label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                     labelLine={false}
                   >
                     {categoryChartData.map((entry, index) => (
@@ -473,15 +451,15 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
             </ChartContainer>
             
             {/* Legend at bottom */}
-            <div className="mt-6 space-y-2">
+            <div className="mt-4 md:mt-6 space-y-2">
               {categoryChartData.map((entry, index) => (
-                <div key={entry.name} className="flex items-center gap-3">
+                <div key={entry.name} className="flex items-center gap-2 md:gap-3">
                   <div 
                     className="w-3 h-3 rounded-full flex-shrink-0" 
                     style={{ backgroundColor: COLORS[index % COLORS.length] }}
                   />
-                  <span className="text-sm text-foreground">{entry.name}</span>
-                  <span className="text-sm text-muted-foreground ml-auto">
+                  <span className="text-xs md:text-sm text-foreground truncate">{entry.name}</span>
+                  <span className="text-xs md:text-sm text-muted-foreground ml-auto">
                     ${entry.value.toLocaleString()}
                   </span>
                 </div>
@@ -492,69 +470,69 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
       </div>
 
       {/* Expense Table */}
-      <Card className="card-shadow">
-        <CardHeader>
-          <CardTitle>All Expense Entries</CardTitle>
+      <Card className="card-shadow overflow-hidden">
+        <CardHeader className="p-4 md:p-6">
+          <CardTitle className="text-base md:text-lg">All Expenses</CardTitle>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Category</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {expenseData.length === 0 ? (
+        <CardContent className="p-0 md:p-6 md:pt-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-muted-foreground">
-                    No expense entries found. Add your first expense to get started.
-                  </TableCell>
+                  <TableHead className="text-xs md:text-sm">Category</TableHead>
+                  <TableHead className="text-xs md:text-sm">Amount</TableHead>
+                  <TableHead className="text-xs md:text-sm hidden sm:table-cell">Date</TableHead>
+                  <TableHead className="text-xs md:text-sm text-right">Actions</TableHead>
                 </TableRow>
-              ) : (
-                expenseData.map((expense) => (
-                  <TableRow key={expense.id} className="hover:bg-muted/50">
-                    <TableCell className="font-medium">{expense.category}</TableCell>
-                    <TableCell>${expense.amount.toLocaleString()}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {expense.description || "—"}
-                    </TableCell>
-                    <TableCell>{format(new Date(expense.date), "MMM dd, yyyy")}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openEditDialog(expense)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openDeleteDialog(expense)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+              </TableHeader>
+              <TableBody>
+                {expenseData.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center text-muted-foreground text-sm">
+                      No expenses found. Add your first expense to get started.
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  expenseData.map((expense) => (
+                    <TableRow key={expense.id} className="hover:bg-muted/50">
+                      <TableCell className="font-medium text-xs md:text-sm">{expense.category}</TableCell>
+                      <TableCell className="text-xs md:text-sm">${expense.amount.toLocaleString()}</TableCell>
+                      <TableCell className="text-xs md:text-sm hidden sm:table-cell">{format(new Date(expense.date), "MMM dd, yyyy")}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1 md:gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => openEditDialog(expense)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => openDeleteDialog(expense)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
 
       {/* Add Expense Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Add Expense</DialogTitle>
-            <DialogDescription>Add a new expense entry to track your spending.</DialogDescription>
+            <DialogDescription>Add a new expense to track your spending.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -563,13 +541,13 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 value={formData.category}
                 onValueChange={(value) => setFormData({ ...formData, category: value })}
               >
-                <SelectTrigger id="category">
+                <SelectTrigger>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {EXPENSE_CATEGORIES.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
+                  {EXPENSE_CATEGORIES.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -580,7 +558,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               <Input
                 id="amount"
                 type="number"
-                placeholder="0.00"
+                placeholder="e.g., 50"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               />
@@ -595,10 +573,10 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="description">Description (Optional)</Label>
+              <Label htmlFor="description">Description (optional)</Label>
               <Input
                 id="description"
-                placeholder="e.g., Lunch at restaurant"
+                placeholder="e.g., Grocery shopping"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
@@ -615,10 +593,10 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
       {/* Edit Expense Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Expense</DialogTitle>
-            <DialogDescription>Update the expense entry details.</DialogDescription>
+            <DialogDescription>Update this expense entry.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -627,13 +605,13 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 value={formData.category}
                 onValueChange={(value) => setFormData({ ...formData, category: value })}
               >
-                <SelectTrigger id="edit-category">
+                <SelectTrigger>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {EXPENSE_CATEGORIES.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
+                  {EXPENSE_CATEGORIES.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -644,7 +622,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               <Input
                 id="edit-amount"
                 type="number"
-                placeholder="0.00"
+                placeholder="e.g., 50"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               />
@@ -659,10 +637,10 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="edit-description">Description (Optional)</Label>
+              <Label htmlFor="edit-description">Description (optional)</Label>
               <Input
                 id="edit-description"
-                placeholder="e.g., Lunch at restaurant"
+                placeholder="e.g., Grocery shopping"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
@@ -679,11 +657,11 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Delete Expense</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this expense entry? This action cannot be undone.
+              Are you sure you want to delete this expense? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

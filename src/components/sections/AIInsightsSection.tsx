@@ -105,26 +105,26 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
 
   if (error && !analysis) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Sparkles className="h-8 w-8 text-gold" />
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2 md:gap-3">
+            <Sparkles className="h-6 w-6 md:h-8 md:w-8 text-gold" />
             AI Insights
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm md:text-base text-muted-foreground mt-1">
             Personalized financial intelligence powered by Savio
           </p>
         </div>
 
         <Card className="card-shadow overflow-hidden">
           <div className="h-1 bg-gradient-to-r from-destructive via-destructive/80 to-destructive/60" />
-          <CardContent className="p-8">
-            <div className="flex flex-col items-center justify-center gap-4 py-8">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
-                <AlertTriangle className="h-8 w-8 text-destructive" />
+          <CardContent className="p-4 md:p-8">
+            <div className="flex flex-col items-center justify-center gap-4 py-6 md:py-8">
+              <div className="flex h-12 w-12 md:h-16 md:w-16 items-center justify-center rounded-full bg-destructive/10">
+                <AlertTriangle className="h-6 w-6 md:h-8 md:w-8 text-destructive" />
               </div>
               <div className="text-center">
-                <h3 className="text-xl font-semibold text-foreground mb-2">
+                <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2">
                   AI Insights Unavailable
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -143,15 +143,15 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Sparkles className="h-8 w-8 text-gold" />
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2 md:gap-3">
+            <Sparkles className="h-6 w-6 md:h-8 md:w-8 text-gold" />
             AI Insights
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm md:text-base text-muted-foreground mt-1">
             Personalized financial intelligence powered by Savio
           </p>
         </div>
@@ -160,7 +160,7 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
             onClick={generateInsights}
             disabled={loading}
             variant="outline"
-            className="gap-2"
+            className="gap-2 w-full sm:w-auto"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
@@ -172,16 +172,16 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
       {!analysis && !loading && (
         <Card className="card-shadow overflow-hidden">
           <div className="h-1 bg-gradient-to-r from-gold via-gold/80 to-gold/60" />
-          <CardContent className="p-8">
-            <div className="flex flex-col items-center justify-center gap-6 py-12">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gold/10 border-2 border-gold/20">
-                <Sparkles className="h-10 w-10 text-gold" />
+          <CardContent className="p-4 md:p-8">
+            <div className="flex flex-col items-center justify-center gap-4 md:gap-6 py-8 md:py-12">
+              <div className="flex h-16 w-16 md:h-20 md:w-20 items-center justify-center rounded-full bg-gold/10 border-2 border-gold/20">
+                <Sparkles className="h-8 w-8 md:h-10 md:w-10 text-gold" />
               </div>
               <div className="text-center max-w-md">
-                <h3 className="text-2xl font-semibold text-foreground mb-2">
+                <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-2">
                   Generate AI Insights
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-sm md:text-base text-muted-foreground">
                   Analyze your income, expenses, goals, and debts to receive
                   personalized financial recommendations.
                 </p>
@@ -189,7 +189,7 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
               <Button
                 size="lg"
                 onClick={generateInsights}
-                className="gap-2 bg-gold hover:bg-gold/90 text-gold-foreground"
+                className="gap-2 bg-gold hover:bg-gold/90 text-gold-foreground w-full sm:w-auto"
               >
                 <Sparkles className="h-5 w-5" />
                 Generate Insights
@@ -203,11 +203,11 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
       {loading && (
         <Card className="card-shadow overflow-hidden">
           <div className="h-1 bg-gradient-to-r from-gold via-gold/80 to-gold/60 animate-pulse" />
-          <CardContent className="p-8">
-            <div className="flex flex-col items-center justify-center gap-4 py-12">
-              <Loader2 className="h-12 w-12 animate-spin text-gold" />
+          <CardContent className="p-4 md:p-8">
+            <div className="flex flex-col items-center justify-center gap-4 py-8 md:py-12">
+              <Loader2 className="h-10 w-10 md:h-12 md:w-12 animate-spin text-gold" />
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-foreground mb-1">
+                <h3 className="text-base md:text-lg font-semibold text-foreground mb-1">
                   Analyzing Your Finances...
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -221,16 +221,16 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
 
       {/* Analysis Results */}
       {analysis && !loading && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {/* Summary Card */}
           <Card className="card-shadow lg:col-span-2 overflow-hidden">
             <div className="h-1 bg-gradient-to-r from-gold via-gold/80 to-gold/60" />
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+            <CardContent className="p-4 md:p-6">
+              <h3 className="text-base md:text-lg font-semibold mb-3 flex items-center gap-2">
                 <Lightbulb className="h-5 w-5 text-gold" />
                 Summary
               </h3>
-              <p className="text-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-foreground leading-relaxed">
                 {analysis.summary}
               </p>
             </CardContent>
@@ -238,26 +238,26 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
 
           {/* Spending Patterns */}
           <Card className="card-shadow">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <CardContent className="p-4 md:p-6">
+              <h3 className="text-base md:text-lg font-semibold mb-4 flex items-center gap-2">
                 {getTrendIcon(analysis.spendingPatterns.trend)}
                 Spending Patterns
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Top Category</span>
-                  <span className="font-medium text-foreground">
+                  <span className="text-sm text-muted-foreground">Top Category</span>
+                  <span className="font-medium text-sm text-foreground">
                     {analysis.spendingPatterns.topCategory}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Trend</span>
-                  <span className="font-medium text-foreground capitalize">
+                  <span className="text-sm text-muted-foreground">Trend</span>
+                  <span className="font-medium text-sm text-foreground capitalize">
                     {analysis.spendingPatterns.trend}
                   </span>
                 </div>
                 <div className="mt-4 p-3 rounded-lg bg-muted/50 border border-border">
-                  <p className="text-sm text-foreground">
+                  <p className="text-xs md:text-sm text-foreground">
                     {analysis.spendingPatterns.suggestion}
                   </p>
                 </div>
@@ -267,8 +267,8 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
 
           {/* Income Stability */}
           <Card className="card-shadow">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <CardContent className="p-4 md:p-6">
+              <h3 className="text-base md:text-lg font-semibold mb-4 flex items-center gap-2">
                 <Shield className="h-5 w-5 text-primary" />
                 Income Stability
               </h3>
@@ -277,10 +277,10 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
                   analysis.incomeStability.status
                 )}`}
               >
-                <p className="font-medium capitalize mb-2">
+                <p className="font-medium text-sm capitalize mb-2">
                   {analysis.incomeStability.status}
                 </p>
-                <p className="text-sm opacity-90">
+                <p className="text-xs md:text-sm opacity-90">
                   {analysis.incomeStability.description}
                 </p>
               </div>
@@ -289,26 +289,26 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
 
           {/* Savings Analysis */}
           <Card className="card-shadow">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <CardContent className="p-4 md:p-6">
+              <h3 className="text-base md:text-lg font-semibold mb-4 flex items-center gap-2">
                 <Target className="h-5 w-5 text-secondary" />
                 Savings Goal Analysis
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Savings Rate</span>
-                  <span className="font-medium text-foreground">
+                  <span className="text-sm text-muted-foreground">Savings Rate</span>
+                  <span className="font-medium text-sm text-foreground">
                     {analysis.savingsAnalysis.rate}%
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Goal Progress</span>
-                  <span className="font-medium text-foreground">
+                  <span className="text-sm text-muted-foreground">Goal Progress</span>
+                  <span className="font-medium text-sm text-foreground">
                     {analysis.savingsAnalysis.goalProgress}
                   </span>
                 </div>
                 <div className="mt-4 p-3 rounded-lg bg-secondary/10 border border-secondary/20">
-                  <p className="text-sm text-foreground">
+                  <p className="text-xs md:text-sm text-foreground">
                     {analysis.savingsAnalysis.recommendation}
                   </p>
                 </div>
@@ -318,8 +318,8 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
 
           {/* Recommended Actions */}
           <Card className="card-shadow">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <CardContent className="p-4 md:p-6">
+              <h3 className="text-base md:text-lg font-semibold mb-4 flex items-center gap-2">
                 <Lightbulb className="h-5 w-5 text-gold" />
                 Recommended Actions
               </h3>
@@ -332,7 +332,7 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gold/20 text-gold text-xs font-medium flex-shrink-0">
                       {index + 1}
                     </span>
-                    <p className="text-sm text-foreground">{action}</p>
+                    <p className="text-xs md:text-sm text-foreground">{action}</p>
                   </li>
                 ))}
               </ul>
@@ -343,8 +343,8 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
           {analysis.riskFlags.length > 0 && (
             <Card className="card-shadow lg:col-span-2 overflow-hidden">
               <div className="h-1 bg-gradient-to-r from-destructive via-destructive/80 to-destructive/60" />
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <CardContent className="p-4 md:p-6">
+                <h3 className="text-base md:text-lg font-semibold mb-4 flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5 text-destructive" />
                   Risk Flags
                 </h3>
@@ -355,7 +355,7 @@ export const AIInsightsSection = ({ userId }: AIInsightsSectionProps) => {
                       className="flex gap-3 p-3 rounded-lg bg-destructive/5 border border-destructive/20"
                     >
                       <AlertTriangle className="h-5 w-5 text-destructive flex-shrink-0" />
-                      <p className="text-sm text-foreground">{flag}</p>
+                      <p className="text-xs md:text-sm text-foreground">{flag}</p>
                     </div>
                   ))}
                 </div>

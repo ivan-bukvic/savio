@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Moon, Sun, User, LogOut, CreditCard, Loader2, Eye } from "lucide-react";
+import { Moon, Sun, User, LogOut, CreditCard, Loader2, Eye, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,6 +15,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
 
@@ -37,8 +39,10 @@ export const DashboardLayout = ({
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState<string>("");
   const [isBillingLoading, setIsBillingLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const { isPro: isProUser } = useSubscription(userId);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -163,58 +167,92 @@ export const DashboardLayout = ({
     onSectionChange(section as ActiveSection);
   };
 
+  const handleSectionChangeWithClose = (section: ActiveSection) => {
+    onSectionChange(section);
+    setSidebarOpen(false);
+  };
+
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
-      <DashboardSidebar 
-        activeSection={activeSection} 
-        onSectionChange={onSectionChange} 
-        isPro={isPro}
-        isDemoMode={isDemoMode}
-      />
+      {/* Desktop Sidebar */}
+      {!isMobile && (
+        <DashboardSidebar 
+          activeSection={activeSection} 
+          onSectionChange={onSectionChange} 
+          isPro={isPro}
+          isDemoMode={isDemoMode}
+        />
+      )}
+      
+      {/* Mobile Sidebar Sheet */}
+      {isMobile && (
+        <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+          <SheetContent side="left" className="w-[280px] p-0">
+            <DashboardSidebar 
+              activeSection={activeSection} 
+              onSectionChange={handleSectionChangeWithClose} 
+              isPro={isPro}
+              isDemoMode={isDemoMode}
+            />
+          </SheetContent>
+        </Sheet>
+      )}
       
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex h-16 items-center justify-between border-b border-border bg-card px-6 card-shadow">
-          <div className="flex items-center gap-4">
+        <header className="flex h-14 md:h-16 items-center justify-between border-b border-border bg-card px-3 md:px-6 card-shadow">
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Mobile Hamburger Menu */}
+            {isMobile && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSidebarOpen(true)}
+                className="shrink-0"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            )}
+            
             <GlobalSearch userId={userId} onNavigateToSection={handleNavigateToSection} />
             
-            {/* Demo Mode Indicator */}
+            {/* Demo Mode Indicator - Hide on very small screens */}
             {isDemoMode && (
-              <Badge variant="outline" className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 flex items-center gap-1.5">
+              <Badge variant="outline" className="hidden sm:flex bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 items-center gap-1.5 text-xs">
                 <Eye className="h-3 w-3" />
-                Demo Mode
+                <span className="hidden md:inline">Demo Mode</span>
               </Badge>
             )}
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="rounded-full"
+              className="rounded-full h-8 w-8 md:h-10 md:w-10"
             >
               {isDark ? (
-                <Sun className="h-5 w-5" />
+                <Sun className="h-4 w-4 md:h-5 md:w-5" />
               ) : (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-4 w-4 md:h-5 md:w-5" />
               )}
             </Button>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className="flex items-center gap-3 rounded-lg px-3 py-1.5 hover:bg-muted cursor-pointer transition-colors">
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium ${
+                <div className="flex items-center gap-2 md:gap-3 rounded-lg px-2 md:px-3 py-1.5 hover:bg-muted cursor-pointer transition-colors">
+                  <div className={`flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full text-xs md:text-sm font-medium ${
                     isDemoMode 
                       ? 'bg-gradient-to-br from-amber-400 to-orange-500 text-white'
                       : isProUser 
                         ? 'bg-gradient-to-br from-amber-400 to-amber-600 text-white' 
                         : 'bg-primary/10 text-primary'
                   }`}>
-                    {isDemoMode ? <Eye className="h-4 w-4" /> : userName ? getInitials(userName) : <User className="h-4 w-4" />}
+                    {isDemoMode ? <Eye className="h-3 w-3 md:h-4 md:w-4" /> : userName ? getInitials(userName) : <User className="h-3 w-3 md:h-4 md:w-4" />}
                   </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-sm font-medium text-foreground truncate max-w-[120px]">
+                  <div className="hidden sm:flex flex-col min-w-0">
+                    <span className="text-sm font-medium text-foreground truncate max-w-[100px] md:max-w-[120px]">
                       {isDemoMode ? "Demo User" : userName || "Loading..."}
                     </span>
                     <span className="text-xs text-muted-foreground truncate">
@@ -291,7 +329,7 @@ export const DashboardLayout = ({
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 md:p-6">
           <div className="animate-fadeIn">
             {children}
           </div>

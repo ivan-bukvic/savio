@@ -263,22 +263,22 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
-        <p className="text-muted-foreground">Manage your account preferences and profile.</p>
+        <h1 className="text-xl md:text-2xl font-bold text-foreground">Settings</h1>
+        <p className="text-sm md:text-base text-muted-foreground">Manage your account preferences and profile.</p>
       </div>
 
       {/* Demo Mode Alert */}
       {isDemoMode && (
         <Alert className="bg-amber-500/10 border-amber-500/30">
           <Eye className="h-4 w-4 text-amber-500" />
-          <AlertDescription className="text-amber-600 dark:text-amber-400">
-            <strong>Demo Mode:</strong> You're viewing a demo account. Account changes (profile, password, billing, deletion) are disabled. 
+          <AlertDescription className="text-amber-600 dark:text-amber-400 text-sm">
+            <strong>Demo Mode:</strong> You're viewing a demo account. Account changes are disabled. 
             <Button 
               variant="link" 
-              className="h-auto p-0 ml-1 text-amber-600 dark:text-amber-400 underline"
+              className="h-auto p-0 ml-1 text-amber-600 dark:text-amber-400 underline text-sm"
               onClick={() => navigate("/auth")}
             >
               Create a real account
@@ -288,53 +288,55 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
         </Alert>
       )}
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2">
         {/* Profile Information */}
         <Card className={cn(
           "card-shadow border-t-4 border-l-0 border-r-0 border-b-0",
           isDemoMode ? "border-t-amber-500 opacity-75" : "border-t-primary"
         )}>
-          <CardHeader className="pb-4">
+          <CardHeader className="p-4 md:pb-4">
             <div className="flex items-center gap-3">
               <div className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-lg",
+                "flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg",
                 isDemoMode ? "bg-amber-500/10" : "bg-primary/10"
               )}>
-                <User className={cn("h-5 w-5", isDemoMode ? "text-amber-500" : "text-primary")} />
+                <User className={cn("h-4 w-4 md:h-5 md:w-5", isDemoMode ? "text-amber-500" : "text-primary")} />
               </div>
               <div>
-                <CardTitle className="text-lg">Profile Information</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-base md:text-lg">Profile Information</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
                   {isDemoMode ? "View-only in demo mode" : "Update your personal details"}
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+          <CardContent className="p-4 pt-0 space-y-4">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
+                <Label htmlFor="firstName" className="text-sm">First Name</Label>
                 <Input
                   id="firstName"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="John"
                   disabled={isDemoMode}
+                  className="text-sm"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
+                <Label htmlFor="lastName" className="text-sm">Last Name</Label>
                 <Input
                   id="lastName"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Doe"
                   disabled={isDemoMode}
+                  className="text-sm"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email" className="text-sm">Email Address</Label>
               <Input
                 id="email"
                 type="email"
@@ -342,6 +344,7 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="john@example.com"
                 disabled={isDemoMode}
+                className="text-sm"
               />
               {!isDemoMode && email !== userEmail && (
                 <p className="text-xs text-muted-foreground">
@@ -352,7 +355,7 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
             <Button 
               onClick={handleUpdateProfile} 
               disabled={profileSaving || isDemoMode}
-              className="w-full sm:w-auto"
+              className="w-full"
             >
               {profileSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Save Changes
@@ -365,25 +368,25 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
           "card-shadow border-t-4 border-l-0 border-r-0 border-b-0",
           isDemoMode ? "border-t-amber-500 opacity-75" : "border-t-primary"
         )}>
-          <CardHeader className="pb-4">
+          <CardHeader className="p-4 md:pb-4">
             <div className="flex items-center gap-3">
               <div className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-lg",
+                "flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg",
                 isDemoMode ? "bg-amber-500/10" : "bg-primary/10"
               )}>
-                <Lock className={cn("h-5 w-5", isDemoMode ? "text-amber-500" : "text-primary")} />
+                <Lock className={cn("h-4 w-4 md:h-5 md:w-5", isDemoMode ? "text-amber-500" : "text-primary")} />
               </div>
               <div>
-                <CardTitle className="text-lg">Change Password</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-base md:text-lg">Change Password</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
                   {isDemoMode ? "Disabled in demo mode" : "Update your account password"}
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="p-4 pt-0 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="currentPassword">Current Password</Label>
+              <Label htmlFor="currentPassword" className="text-sm">Current Password</Label>
               <Input
                 id="currentPassword"
                 type="password"
@@ -391,10 +394,11 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder="••••••••"
                 disabled={isDemoMode}
+                className="text-sm"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="newPassword">New Password</Label>
+              <Label htmlFor="newPassword" className="text-sm">New Password</Label>
               <Input
                 id="newPassword"
                 type="password"
@@ -402,10 +406,11 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="••••••••"
                 disabled={isDemoMode}
+                className="text-sm"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <Label htmlFor="confirmPassword" className="text-sm">Confirm New Password</Label>
               <Input
                 id="confirmPassword"
                 type="password"
@@ -413,12 +418,13 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
                 disabled={isDemoMode}
+                className="text-sm"
               />
             </div>
             <Button 
               onClick={handleChangePassword} 
               disabled={passwordSaving || isDemoMode}
-              className="w-full sm:w-auto"
+              className="w-full"
             >
               {passwordSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Update Password
@@ -431,23 +437,23 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
           "card-shadow border-t-4 border-l-0 border-r-0 border-b-0",
           isDemoMode ? "border-t-amber-500" : isPro ? "border-t-gold" : "border-t-muted-foreground"
         )}>
-          <CardHeader className="pb-4">
+          <CardHeader className="p-4 md:pb-4">
             <div className="flex items-center gap-3">
               <div className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-lg",
+                "flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg",
                 isDemoMode ? "bg-amber-500/10" : isPro ? "bg-gold/10" : "bg-muted"
               )}>
                 {isDemoMode ? (
-                  <Eye className="h-5 w-5 text-amber-500" />
+                  <Eye className="h-4 w-4 md:h-5 md:w-5 text-amber-500" />
                 ) : isPro ? (
-                  <Crown className="h-5 w-5 text-gold" />
+                  <Crown className="h-4 w-4 md:h-5 md:w-5 text-gold" />
                 ) : (
-                  <CreditCard className="h-5 w-5 text-muted-foreground" />
+                  <CreditCard className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
                 )}
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <CardTitle className="text-lg">Subscription Status</CardTitle>
+                  <CardTitle className="text-base md:text-lg">Subscription Status</CardTitle>
                   {isDemoMode && (
                     <span className="text-xs font-semibold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full">
                       DEMO
@@ -459,34 +465,34 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                     </span>
                   )}
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs md:text-sm">
                   {isDemoMode ? "Demo includes Pro features preview" : "Manage your subscription plan"}
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="p-4 pt-0 space-y-4">
             <div className={cn(
               "rounded-lg p-4",
               isDemoMode ? "bg-amber-500/5 border border-amber-500/20" : isPro ? "bg-gold/5 border border-gold/20" : "bg-muted/50"
             )}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-foreground">
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-medium text-sm md:text-base text-foreground">
                     {isDemoMode ? "Demo Mode" : isPro ? "Pro Plan" : "Free Plan"}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs md:text-sm text-muted-foreground">
                     {isDemoMode 
-                      ? "Preview all Pro features. Create an account to upgrade." 
+                      ? "Preview all Pro features" 
                       : isPro 
-                        ? "Enjoy full access to all features including AI Insights." 
-                        : "Upgrade to unlock AI-powered financial insights."}
+                        ? "Full access to all features" 
+                        : "Upgrade for AI insights"}
                   </p>
                 </div>
                 {isDemoMode ? (
-                  <Eye className="h-8 w-8 text-amber-500" />
+                  <Eye className="h-6 w-6 md:h-8 md:w-8 text-amber-500 shrink-0" />
                 ) : isPro && (
-                  <Crown className="h-8 w-8 text-gold" />
+                  <Crown className="h-6 w-6 md:h-8 md:w-8 text-gold shrink-0" />
                 )}
               </div>
             </div>
@@ -510,46 +516,32 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
           </CardContent>
         </Card>
 
-        {/* Delete Account */}
+        {/* Danger Zone */}
         <Card className={cn(
-          "card-shadow border-t-4 border-l-0 border-r-0 border-b-0",
-          isDemoMode ? "border-t-muted-foreground opacity-50" : "border-t-destructive"
+          "card-shadow border-t-4 border-l-0 border-r-0 border-b-0 border-t-destructive",
+          isDemoMode && "opacity-75"
         )}>
-          <CardHeader className="pb-4">
+          <CardHeader className="p-4 md:pb-4">
             <div className="flex items-center gap-3">
-              <div className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-lg",
-                isDemoMode ? "bg-muted" : "bg-destructive/10"
-              )}>
-                <Trash2 className={cn("h-5 w-5", isDemoMode ? "text-muted-foreground" : "text-destructive")} />
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-destructive/10">
+                <Trash2 className="h-4 w-4 md:h-5 md:w-5 text-destructive" />
               </div>
               <div>
-                <CardTitle className="text-lg">Delete Account</CardTitle>
-                <CardDescription>
-                  {isDemoMode ? "Not available in demo mode" : "Permanently remove your account"}
+                <CardTitle className="text-base md:text-lg text-destructive">Danger Zone</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
+                  {isDemoMode ? "Disabled in demo mode" : "Permanently delete your account"}
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className={cn(
-              "rounded-lg p-4 border",
-              isDemoMode ? "bg-muted/30 border-border" : "bg-destructive/5 border-destructive/20"
-            )}>
-              <div className="flex gap-3">
-                {isDemoMode ? (
-                  <Info className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
-                ) : (
-                  <AlertTriangle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
-                )}
+          <CardContent className="p-4 pt-0 space-y-4">
+            <div className="rounded-lg p-3 md:p-4 bg-destructive/5 border border-destructive/20">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-foreground">
-                    {isDemoMode ? "Demo Restriction" : "Warning"}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {isDemoMode 
-                      ? "Account deletion is disabled in demo mode. This is a shared demo account."
-                      : "This action is permanent and cannot be undone. All your data including income, expenses, goals, and AI reports will be permanently deleted."}
+                  <p className="text-xs md:text-sm text-foreground font-medium">Warning</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Deleting your account is permanent. All your data including income, expenses, goals, and AI reports will be deleted forever.
                   </p>
                 </div>
               </div>
@@ -558,13 +550,14 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
               <AlertDialogTrigger asChild>
                 <Button 
                   variant="destructive" 
-                  className="w-full sm:w-auto"
-                  disabled={isDemoMode}
+                  disabled={deleteLoading || isDemoMode}
+                  className="w-full"
                 >
+                  {deleteLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Delete Account
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent>
+              <AlertDialogContent className="sm:max-w-md">
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
@@ -575,10 +568,8 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleDeleteAccount}
-                    disabled={deleteLoading}
-                    className="bg-destructive hover:bg-destructive/90"
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
-                    {deleteLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Yes, delete my account
                   </AlertDialogAction>
                 </AlertDialogFooter>
