@@ -195,7 +195,7 @@ const Landing = () => {
                 <Button 
                   size="lg" 
                   variant="outline"
-                  className="text-base px-8 py-4 h-auto group w-full sm:w-auto border-primary/30 hover:bg-primary/10"
+                  className="text-base px-8 py-4 h-auto group w-full sm:w-auto border-primary/30 hover:bg-primary/10 hover:text-foreground"
                   onClick={() => navigate("/app?demo=true")}
                 >
                   <Play className="mr-2 h-5 w-5 text-primary" />
