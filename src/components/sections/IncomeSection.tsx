@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, DollarSign, TrendingUp, Wallet, Edit, Trash2 } from "lucide-react";
 import { StatCard } from "@/components/StatCard";
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
 import {
   Dialog,
@@ -35,12 +35,20 @@ interface Income {
   user_id: string;
 }
 
-const COLORS = [
-  'hsl(142, 76%, 45%)', // Green
-  'hsl(173, 70%, 50%)', // Teal
-  'hsl(220, 80%, 55%)', // Blue
-  'hsl(25, 95%, 55%)',  // Orange
-  'hsl(0, 85%, 60%)',   // Red
+// Multi-series chart colors matching the design system
+const CHART_COLORS = {
+  salary: 'hsl(180, 65%, 42%)',      // Primary teal
+  freelance: 'hsl(45, 95%, 60%)',    // Accent yellow
+  investments: 'hsl(195, 70%, 50%)', // Light blue
+  other: 'hsl(150, 55%, 48%)',       // Light green
+};
+
+const HORIZONTAL_BAR_COLORS = [
+  'hsl(180, 65%, 42%)',  // Teal
+  'hsl(45, 95%, 60%)',   // Yellow/Orange
+  'hsl(195, 70%, 50%)',  // Light blue
+  'hsl(150, 55%, 48%)',  // Light green
+  'hsl(0, 85%, 60%)',    // Red
 ];
 
 interface IncomeSectionProps {
@@ -246,21 +254,47 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
 
   const uniqueSources = [...new Set(incomeData.map(item => item.source))].length;
 
-  // Chart data
-  const monthlyChartData = Object.entries(monthlyIncomes)
-    .map(([month, amount]) => ({ month, amount }))
-    .reverse()
-    .slice(-6);
+  // Chart data - Multi-series for Income Over Time
+  const monthlyBySource: { [monthYear: string]: { [source: string]: number } } = {};
+  const allSources = new Set<string>();
+  
+  incomeData.forEach(item => {
+    const monthYear = format(new Date(item.date), "MMM");
+    if (!monthlyBySource[monthYear]) {
+      monthlyBySource[monthYear] = {};
+    }
+    monthlyBySource[monthYear][item.source] = (monthlyBySource[monthYear][item.source] || 0) + item.amount;
+    allSources.add(item.source);
+  });
 
+  const sourcesList = Array.from(allSources).slice(0, 4); // Limit to 4 sources for cleaner display
+  
+  const monthlyChartData = Object.entries(monthlyBySource)
+    .map(([month, sources]) => ({
+      month,
+      ...sourcesList.reduce((acc, source) => ({
+        ...acc,
+        [source]: sources[source] || 0,
+      }), {}),
+    }))
+    .reverse()
+    .slice(-8);
+
+  // Source breakdown for horizontal bar chart
   const sourceBreakdown: { [key: string]: number } = {};
   incomeData.forEach(item => {
     sourceBreakdown[item.source] = (sourceBreakdown[item.source] || 0) + item.amount;
   });
 
-  const sourceChartData = Object.entries(sourceBreakdown).map(([name, value]) => ({
-    name,
-    value,
-  }));
+  const totalIncome = Object.values(sourceBreakdown).reduce((sum, val) => sum + val, 0);
+  
+  const sourceChartData = Object.entries(sourceBreakdown)
+    .map(([name, value]) => ({
+      name,
+      value,
+      percentage: totalIncome > 0 ? Math.round((value / totalIncome) * 100) : 0,
+    }))
+    .sort((a, b) => b.value - a.value);
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -296,107 +330,100 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
-        {/* Income Over Time */}
+        {/* Income Over Time - Multi-series bar chart */}
         <Card className="card-shadow overflow-hidden">
-          <CardHeader className="p-4 md:p-6">
-            <CardTitle className="text-base md:text-lg">Income Over Time</CardTitle>
+          <CardHeader className="p-4 md:p-6 pb-2">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <CardTitle className="text-base md:text-lg">Income Over Time</CardTitle>
+              <div className="flex items-center gap-3 flex-wrap">
+                {sourcesList.map((source, index) => (
+                  <div key={source} className="flex items-center gap-1.5">
+                    <div 
+                      className="w-2.5 h-2.5 rounded-sm" 
+                      style={{ backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length] }}
+                    />
+                    <span className="text-xs text-muted-foreground">{source}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </CardHeader>
-          <CardContent className="p-2 md:p-6 pt-0 md:pt-6">
+          <CardContent className="p-2 md:p-6 pt-0">
             <ChartContainer
-              config={{
-                amount: {
-                  label: "Amount",
-                  color: "hsl(var(--chart-1))",
-                },
-              }}
-              className="h-[250px] md:h-[300px] w-full"
+              config={{}}
+              className="h-[280px] md:h-[320px] w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData} barSize={24}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={10} tick={{ fontSize: 10 }} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tick={{ fontSize: 10 }} width={50} />
+                <BarChart data={monthlyChartData} barGap={2} barCategoryGap="15%">
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="hsl(var(--muted-foreground))" 
+                    fontSize={11} 
+                    tick={{ fontSize: 11 }} 
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis 
+                    stroke="hsl(var(--muted-foreground))" 
+                    fontSize={11} 
+                    tick={{ fontSize: 11 }} 
+                    width={55}
+                    axisLine={false}
+                    tickLine={false}
+                    tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                  />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "rgba(0, 0, 0, 0.9)",
-                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
                       borderRadius: "0.5rem",
-                      color: "#FFFFFF",
-                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
+                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
                     }}
-                    labelStyle={{ color: "#FFFFFF" }}
-                    itemStyle={{ color: "#FFFFFF" }}
-                    cursor={false}
+                    labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
+                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.3 }}
+                    formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
                   />
-                  <Bar dataKey="amount" fill="hsl(var(--chart-1))" radius={0} activeBar={false} />
+                  {sourcesList.map((source, index) => (
+                    <Bar 
+                      key={source}
+                      dataKey={source} 
+                      fill={HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length]} 
+                      radius={0}
+                      maxBarSize={18}
+                    />
+                  ))}
                 </BarChart>
               </ResponsiveContainer>
             </ChartContainer>
           </CardContent>
         </Card>
 
-        {/* Income Source Breakdown */}
+        {/* Income by Source - Horizontal bar chart */}
         <Card className="card-shadow overflow-hidden">
-          <CardHeader className="p-4 md:p-6">
+          <CardHeader className="p-4 md:p-6 pb-2">
             <CardTitle className="text-base md:text-lg">Income by Source</CardTitle>
           </CardHeader>
-          <CardContent className="p-2 md:p-6 pt-0 md:pt-4">
-            <ChartContainer
-              config={{}}
-              className="h-[250px] md:h-[300px] w-full"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={sourceChartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    paddingAngle={2}
-                    label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
-                    labelLine={false}
-                  >
-                    {sourceChartData.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={COLORS[index % COLORS.length]}
-                        stroke="hsl(var(--background))"
-                        strokeWidth={2}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "rgba(0, 0, 0, 0.95)",
-                      border: "1px solid rgba(255, 255, 255, 0.2)",
-                      borderRadius: "0.5rem",
-                      color: "#FFFFFF",
-                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.5)",
-                    }}
-                    labelStyle={{ color: "#FFFFFF", fontWeight: "bold" }}
-                    itemStyle={{ color: "#FFFFFF" }}
-                    cursor={false}
-                    formatter={(value: number) => `$${value.toLocaleString()}`}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-            
-            {/* Legend at bottom */}
-            <div className="mt-4 md:mt-6 space-y-2">
+          <CardContent className="p-4 md:p-6 pt-2">
+            <div className="space-y-4">
               {sourceChartData.map((entry, index) => (
-                <div key={entry.name} className="flex items-center gap-2 md:gap-3">
-                  <div 
-                    className="w-3 h-3 rounded-full flex-shrink-0" 
-                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                  />
-                  <span className="text-xs md:text-sm text-foreground truncate">{entry.name}</span>
-                  <span className="text-xs md:text-sm text-muted-foreground ml-auto">
+                <div key={entry.name} className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-foreground">{entry.name}</span>
+                    <span className="text-sm font-semibold text-foreground">{entry.percentage}%</span>
+                  </div>
+                  <div className="relative h-3 w-full bg-muted rounded-none overflow-hidden">
+                    <div 
+                      className="absolute inset-y-0 left-0 transition-all duration-500"
+                      style={{ 
+                        width: `${entry.percentage}%`,
+                        backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length],
+                      }}
+                    />
+                  </div>
+                  <div className="text-xs text-muted-foreground">
                     ${entry.value.toLocaleString()}
-                  </span>
+                  </div>
                 </div>
               ))}
             </div>
