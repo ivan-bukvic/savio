@@ -11,7 +11,7 @@ import { AIInsightsSection } from "@/components/sections/AIInsightsSection";
 import { SettingsSection } from "@/components/sections/SettingsSection";
 import { LockedFeatureScreen } from "@/components/LockedFeatureScreen";
 import { useSubscription } from "@/hooks/useSubscription";
-import { useDemoMode, DEMO_USER_EMAIL, DEMO_USER_PASSWORD, isDemoUser } from "@/hooks/useDemoMode";
+import { useDemoMode, isDemoUser } from "@/hooks/useDemoMode";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -30,7 +30,7 @@ const Index = () => {
     session?.user?.id || null
   );
 
-  // Handle demo mode login
+  // Handle demo mode login via secure edge function
   useEffect(() => {
     const handleDemoLogin = async () => {
       const isDemo = searchParams.get('demo') === 'true';
@@ -38,11 +38,8 @@ const Index = () => {
       if (isDemo) {
         setLoading(true);
         try {
-          // Sign in with demo credentials
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: DEMO_USER_EMAIL,
-            password: DEMO_USER_PASSWORD,
-          });
+          // Use secure edge function for demo login
+          const { data, error } = await supabase.functions.invoke("demo-login");
 
           if (error) {
             console.error("Demo login error:", error);
@@ -55,7 +52,13 @@ const Index = () => {
             return;
           }
 
-          if (data.session) {
+          if (data?.session) {
+            // Set the session from the edge function response
+            await supabase.auth.setSession({
+              access_token: data.session.access_token,
+              refresh_token: data.session.refresh_token,
+            });
+            
             setDemoMode(true);
             
             // Seed demo data and ensure profile exists
@@ -92,7 +95,7 @@ const Index = () => {
         setSession(session);
         
         // Check if it's demo user
-        if (session?.user?.email === DEMO_USER_EMAIL) {
+        if (isDemoUser(session?.user?.email)) {
           setDemoMode(true);
         }
         
@@ -108,7 +111,7 @@ const Index = () => {
         setSession(session);
         
         // Check if it's demo user
-        if (session?.user?.email === DEMO_USER_EMAIL) {
+        if (isDemoUser(session?.user?.email)) {
           setDemoMode(true);
         }
         
