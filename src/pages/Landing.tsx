@@ -209,7 +209,7 @@ const Landing = () => {
               <div className="mt-12 flex items-center gap-6 justify-center lg:justify-start text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   
-                  <span>Free to start</span>
+                  
                 </div>
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-primary" />
