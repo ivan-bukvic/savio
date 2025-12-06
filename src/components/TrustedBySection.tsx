@@ -12,28 +12,36 @@ import tectonicLogo from "@/assets/logos/tectonic.png";
 
 const logos = [{
   src: bungeLogo,
-  alt: "Bunge"
+  alt: "Bunge",
+  invert: false
 }, {
   src: openRatingsLogo,
-  alt: "Open Ratings"
+  alt: "Open Ratings",
+  invert: false
 }, {
   src: pyramidLogo,
-  alt: "Pyramid Analytics"
+  alt: "Pyramid Analytics",
+  invert: false
 }, {
   src: abstractLogo,
-  alt: "Abstract"
+  alt: "Abstract",
+  invert: false
 }, {
   src: independerLogo,
-  alt: "Independer"
+  alt: "Independer",
+  invert: false
 }, {
   src: shapeLogo,
-  alt: "Shape"
+  alt: "Shape",
+  invert: false
 }, {
   src: predicteasyLogo,
-  alt: "PredictEasy"
+  alt: "PredictEasy",
+  invert: true
 }, {
   src: tectonicLogo,
-  alt: "Tectonic"
+  alt: "Tectonic",
+  invert: true
 }];
 export const TrustedBySection = () => {
   // Duplicate logos for seamless infinite scroll
@@ -67,13 +75,13 @@ export const TrustedBySection = () => {
         <div className="flex overflow-hidden group">
           <div className="flex items-center gap-12 md:gap-16 lg:gap-20 shrink-0 animate-marquee group-hover:[animation-play-state:paused]">
             {duplicatedLogos.map((logo, index) => <div key={`${logo.alt}-${index}`} className="flex items-center justify-center shrink-0 transition-all duration-300 hover:opacity-70">
-                <img src={logo.src} alt={logo.alt} className="h-6 md:h-7 lg:h-8 w-auto object-contain grayscale opacity-70 hover:opacity-80 transition-opacity duration-300" />
+                <img src={logo.src} alt={logo.alt} className={`h-6 md:h-7 lg:h-8 w-auto object-contain grayscale opacity-70 hover:opacity-80 transition-opacity duration-300 ${logo.invert ? 'invert' : ''}`} />
               </div>)}
           </div>
           {/* Duplicate for seamless loop */}
           <div className="flex items-center gap-12 md:gap-16 lg:gap-20 shrink-0 animate-marquee group-hover:[animation-play-state:paused]" aria-hidden="true">
-            {duplicatedLogos.map((logo, index) => <div key={`${logo.alt}-dup-${index}`} className="flex items-center justify-center shrink-0 transition-all duration-300 hover:opacity-70">
-                <img src={logo.src} alt={logo.alt} className="h-6 md:h-7 lg:h-8 w-auto object-contain grayscale opacity-70 hover:opacity-80 transition-opacity duration-300" />
+          {duplicatedLogos.map((logo, index) => <div key={`${logo.alt}-dup-${index}`} className="flex items-center justify-center shrink-0 transition-all duration-300 hover:opacity-70">
+                <img src={logo.src} alt={logo.alt} className={`h-6 md:h-7 lg:h-8 w-auto object-contain grayscale opacity-70 hover:opacity-80 transition-opacity duration-300 ${logo.invert ? 'invert' : ''}`} />
               </div>)}
           </div>
         </div>
