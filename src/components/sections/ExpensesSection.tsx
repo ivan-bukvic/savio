@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, CreditCard, TrendingDown, Receipt, Edit, Trash2, Package } from "lucide-react";
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
 import {
   Dialog,
@@ -43,13 +43,21 @@ interface Expense {
   user_id: string;
 }
 
-const COLORS = [
-  'hsl(142, 76%, 45%)', // Green
-  'hsl(173, 70%, 50%)', // Teal
-  'hsl(220, 80%, 55%)', // Blue
-  'hsl(25, 95%, 55%)',  // Orange
-  'hsl(0, 85%, 60%)',   // Red
-  'hsl(45, 93%, 58%)',  // Yellow
+// Multi-series chart colors matching the design system
+const CHART_COLORS = {
+  housing: 'hsl(180, 65%, 42%)',       // Primary teal
+  food: 'hsl(45, 95%, 60%)',           // Accent yellow
+  transportation: 'hsl(195, 70%, 50%)', // Light blue
+  other: 'hsl(150, 55%, 48%)',         // Light green
+};
+
+const HORIZONTAL_BAR_COLORS = [
+  'hsl(180, 65%, 42%)',  // Teal
+  'hsl(45, 95%, 60%)',   // Yellow/Orange
+  'hsl(195, 70%, 50%)',  // Light blue
+  'hsl(150, 55%, 48%)',  // Light green
+  'hsl(0, 85%, 60%)',    // Red
+  'hsl(280, 60%, 55%)',  // Purple
 ];
 
 const EXPENSE_CATEGORIES = [
@@ -243,16 +251,42 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
   const highestCategory = Object.entries(categoryBreakdown).sort((a, b) => b[1] - a[1])[0];
 
-  // Chart data
-  const monthlyChartData = Object.entries(monthlyExpenses)
-    .map(([month, amount]) => ({ month, amount }))
-    .reverse()
-    .slice(-6);
+  // Chart data - Multi-series for Expenses Over Time
+  const monthlyByCategory: { [monthYear: string]: { [category: string]: number } } = {};
+  const allCategories = new Set<string>();
+  
+  expenseData.forEach(item => {
+    const monthYear = format(new Date(item.date), "MMM");
+    if (!monthlyByCategory[monthYear]) {
+      monthlyByCategory[monthYear] = {};
+    }
+    monthlyByCategory[monthYear][item.category] = (monthlyByCategory[monthYear][item.category] || 0) + item.amount;
+    allCategories.add(item.category);
+  });
 
-  const categoryChartData = Object.entries(categoryBreakdown).map(([name, value]) => ({
-    name,
-    value,
-  }));
+  const categoriesList = Array.from(allCategories).slice(0, 4); // Limit to 4 categories for cleaner display
+  
+  const monthlyChartData = Object.entries(monthlyByCategory)
+    .map(([month, categories]) => ({
+      month,
+      ...categoriesList.reduce((acc, category) => ({
+        ...acc,
+        [category]: categories[category] || 0,
+      }), {}),
+    }))
+    .reverse()
+    .slice(-8);
+
+  // Category breakdown for horizontal bar chart
+  const totalExpenses = Object.values(categoryBreakdown).reduce((sum, val) => sum + val, 0);
+  
+  const categoryChartData = Object.entries(categoryBreakdown)
+    .map(([name, value]) => ({
+      name,
+      value,
+      percentage: totalExpenses > 0 ? Math.round((value / totalExpenses) * 100) : 0,
+    }))
+    .sort((a, b) => b.value - a.value);
 
   // Generate sparkline data for KPI cards (last 7 days)
   const generateSparklineData = () => {
@@ -361,107 +395,100 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
-        {/* Expenses Over Time */}
+        {/* Monthly Expenses - Multi-series bar chart */}
         <Card className="card-shadow overflow-hidden">
-          <CardHeader className="p-4 md:p-6">
-            <CardTitle className="text-base md:text-lg">Monthly Expenses</CardTitle>
+          <CardHeader className="p-4 md:p-6 pb-2">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <CardTitle className="text-base md:text-lg">Monthly Expenses</CardTitle>
+              <div className="flex items-center gap-3 flex-wrap">
+                {categoriesList.map((category, index) => (
+                  <div key={category} className="flex items-center gap-1.5">
+                    <div 
+                      className="w-2.5 h-2.5 rounded-sm" 
+                      style={{ backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length] }}
+                    />
+                    <span className="text-xs text-muted-foreground">{category}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </CardHeader>
-          <CardContent className="p-2 md:p-6 pt-0 md:pt-6">
+          <CardContent className="p-2 md:p-6 pt-0">
             <ChartContainer
-              config={{
-                amount: {
-                  label: "Amount",
-                  color: "hsl(var(--chart-1))",
-                },
-              }}
-              className="h-[250px] md:h-[300px] w-full"
+              config={{}}
+              className="h-[280px] md:h-[320px] w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData} barSize={24}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={10} tick={{ fontSize: 10 }} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tick={{ fontSize: 10 }} width={50} />
+                <BarChart data={monthlyChartData} barGap={2} barCategoryGap="15%">
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="hsl(var(--muted-foreground))" 
+                    fontSize={11} 
+                    tick={{ fontSize: 11 }} 
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis 
+                    stroke="hsl(var(--muted-foreground))" 
+                    fontSize={11} 
+                    tick={{ fontSize: 11 }} 
+                    width={55}
+                    axisLine={false}
+                    tickLine={false}
+                    tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                  />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "rgba(0, 0, 0, 0.9)",
-                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
                       borderRadius: "0.5rem",
-                      color: "#FFFFFF",
-                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
+                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
                     }}
-                    labelStyle={{ color: "#FFFFFF" }}
-                    itemStyle={{ color: "#FFFFFF" }}
-                    cursor={false}
+                    labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
+                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.3 }}
+                    formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
                   />
-                  <Bar dataKey="amount" fill="hsl(var(--chart-1))" radius={0} activeBar={false} />
+                  {categoriesList.map((category, index) => (
+                    <Bar 
+                      key={category}
+                      dataKey={category} 
+                      fill={HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length]} 
+                      radius={0}
+                      maxBarSize={18}
+                    />
+                  ))}
                 </BarChart>
               </ResponsiveContainer>
             </ChartContainer>
           </CardContent>
         </Card>
 
-        {/* Expense Category Breakdown */}
+        {/* Expenses by Category - Horizontal bar chart */}
         <Card className="card-shadow overflow-hidden">
-          <CardHeader className="p-4 md:p-6">
+          <CardHeader className="p-4 md:p-6 pb-2">
             <CardTitle className="text-base md:text-lg">Expenses by Category</CardTitle>
           </CardHeader>
-          <CardContent className="p-2 md:p-6 pt-0 md:pt-4">
-            <ChartContainer
-              config={{}}
-              className="h-[250px] md:h-[300px] w-full"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={categoryChartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    paddingAngle={2}
-                    label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
-                    labelLine={false}
-                  >
-                    {categoryChartData.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={COLORS[index % COLORS.length]}
-                        stroke="hsl(var(--background))"
-                        strokeWidth={2}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "rgba(0, 0, 0, 0.95)",
-                      border: "1px solid rgba(255, 255, 255, 0.2)",
-                      borderRadius: "0.5rem",
-                      color: "#FFFFFF",
-                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.5)",
-                    }}
-                    labelStyle={{ color: "#FFFFFF", fontWeight: "bold" }}
-                    itemStyle={{ color: "#FFFFFF" }}
-                    cursor={false}
-                    formatter={(value: number) => `$${value.toLocaleString()}`}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-            
-            {/* Legend at bottom */}
-            <div className="mt-4 md:mt-6 space-y-2">
+          <CardContent className="p-4 md:p-6 pt-2">
+            <div className="space-y-4">
               {categoryChartData.map((entry, index) => (
-                <div key={entry.name} className="flex items-center gap-2 md:gap-3">
-                  <div 
-                    className="w-3 h-3 rounded-full flex-shrink-0" 
-                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                  />
-                  <span className="text-xs md:text-sm text-foreground truncate">{entry.name}</span>
-                  <span className="text-xs md:text-sm text-muted-foreground ml-auto">
+                <div key={entry.name} className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-foreground">{entry.name}</span>
+                    <span className="text-sm font-semibold text-foreground">{entry.percentage}%</span>
+                  </div>
+                  <div className="relative h-3 w-full bg-muted rounded-none overflow-hidden">
+                    <div 
+                      className="absolute inset-y-0 left-0 transition-all duration-500"
+                      style={{ 
+                        width: `${entry.percentage}%`,
+                        backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length],
+                      }}
+                    />
+                  </div>
+                  <div className="text-xs text-muted-foreground">
                     ${entry.value.toLocaleString()}
-                  </span>
+                  </div>
                 </div>
               ))}
             </div>
