@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { User, Lock, CreditCard, Trash2, Loader2, Crown, AlertTriangle, Eye, Info } from "lucide-react";
+import { User, Lock, CreditCard, Trash2, Loader2, Crown, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -19,17 +19,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface SettingsSectionProps {
   userId: string;
   userEmail: string;
   isPro: boolean;
   onUpgrade: () => void;
-  isDemoMode?: boolean;
 }
 
-export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMode = false }: SettingsSectionProps) => {
+export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade }: SettingsSectionProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -52,14 +50,6 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
   // Fetch profile on mount
   useEffect(() => {
     const fetchProfile = async () => {
-      if (isDemoMode) {
-        setFirstName("Demo");
-        setLastName("User");
-        setEmail("demo@savio.app");
-        setProfileLoading(false);
-        return;
-      }
-      
       const { data, error } = await supabase
         .from("profiles")
         .select("full_name")
@@ -77,19 +67,10 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
     };
 
     fetchProfile();
-  }, [userId, isDemoMode]);
+  }, [userId]);
 
   // Update profile
   const handleUpdateProfile = async () => {
-    if (isDemoMode) {
-      toast({
-        title: "Demo Mode",
-        description: "Profile changes are not available in demo mode.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     if (!firstName.trim()) {
       toast({
         title: "Validation Error",
@@ -150,15 +131,6 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
 
   // Change password
   const handleChangePassword = async () => {
-    if (isDemoMode) {
-      toast({
-        title: "Demo Mode",
-        description: "Password changes are not available in demo mode.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     if (!newPassword || !confirmPassword) {
       toast({
         title: "Validation Error",
@@ -213,15 +185,6 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
 
   // Delete account
   const handleDeleteAccount = async () => {
-    if (isDemoMode) {
-      toast({
-        title: "Demo Mode",
-        description: "Account deletion is not available in demo mode.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     setDeleteLoading(true);
 
     try {
@@ -270,42 +233,18 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
         <p className="text-sm md:text-base text-muted-foreground">Manage your account preferences and profile.</p>
       </div>
 
-      {/* Demo Mode Alert */}
-      {isDemoMode && (
-        <Alert className="bg-amber-500/10 border-amber-500/30">
-          <Eye className="h-4 w-4 text-amber-500" />
-          <AlertDescription className="text-amber-600 dark:text-amber-400 text-sm">
-            <strong>Demo Mode:</strong> You're viewing a demo account. Account changes are disabled. 
-            <Button 
-              variant="link" 
-              className="h-auto p-0 ml-1 text-amber-600 dark:text-amber-400 underline text-sm"
-              onClick={() => navigate("/auth")}
-            >
-              Create a real account
-            </Button>
-            {" "}to unlock all features.
-          </AlertDescription>
-        </Alert>
-      )}
-
       <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2">
         {/* Profile Information */}
-        <Card className={cn(
-          "card-shadow border-t-4 border-l-0 border-r-0 border-b-0",
-          isDemoMode ? "border-t-amber-500 opacity-75" : "border-t-primary"
-        )}>
+        <Card className="card-shadow border-t-4 border-l-0 border-r-0 border-b-0 border-t-primary">
           <CardHeader className="p-4 md:pb-4">
             <div className="flex items-center gap-3">
-              <div className={cn(
-                "flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg",
-                isDemoMode ? "bg-amber-500/10" : "bg-primary/10"
-              )}>
-                <User className={cn("h-4 w-4 md:h-5 md:w-5", isDemoMode ? "text-amber-500" : "text-primary")} />
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <User className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
               <div>
                 <CardTitle className="text-base md:text-lg">Profile Information</CardTitle>
                 <CardDescription className="text-xs md:text-sm">
-                  {isDemoMode ? "View-only in demo mode" : "Update your personal details"}
+                  Update your personal details
                 </CardDescription>
               </div>
             </div>
@@ -319,7 +258,6 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="John"
-                  disabled={isDemoMode}
                   className="text-sm"
                 />
               </div>
@@ -330,7 +268,6 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Doe"
-                  disabled={isDemoMode}
                   className="text-sm"
                 />
               </div>
@@ -343,10 +280,9 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="john@example.com"
-                disabled={isDemoMode}
                 className="text-sm"
               />
-              {!isDemoMode && email !== userEmail && (
+              {email !== userEmail && (
                 <p className="text-xs text-muted-foreground">
                   A verification email will be sent to confirm the change.
                 </p>
@@ -354,7 +290,7 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
             </div>
             <Button 
               onClick={handleUpdateProfile} 
-              disabled={profileSaving || isDemoMode}
+              disabled={profileSaving}
               className="w-full"
             >
               {profileSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -364,22 +300,16 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
         </Card>
 
         {/* Password Change */}
-        <Card className={cn(
-          "card-shadow border-t-4 border-l-0 border-r-0 border-b-0",
-          isDemoMode ? "border-t-amber-500 opacity-75" : "border-t-primary"
-        )}>
+        <Card className="card-shadow border-t-4 border-l-0 border-r-0 border-b-0 border-t-primary">
           <CardHeader className="p-4 md:pb-4">
             <div className="flex items-center gap-3">
-              <div className={cn(
-                "flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg",
-                isDemoMode ? "bg-amber-500/10" : "bg-primary/10"
-              )}>
-                <Lock className={cn("h-4 w-4 md:h-5 md:w-5", isDemoMode ? "text-amber-500" : "text-primary")} />
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Lock className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
               <div>
                 <CardTitle className="text-base md:text-lg">Change Password</CardTitle>
                 <CardDescription className="text-xs md:text-sm">
-                  {isDemoMode ? "Disabled in demo mode" : "Update your account password"}
+                  Update your account password
                 </CardDescription>
               </div>
             </div>
@@ -393,7 +323,6 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder="••••••••"
-                disabled={isDemoMode}
                 className="text-sm"
               />
             </div>
@@ -405,7 +334,6 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="••••••••"
-                disabled={isDemoMode}
                 className="text-sm"
               />
             </div>
@@ -417,13 +345,12 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
-                disabled={isDemoMode}
                 className="text-sm"
               />
             </div>
             <Button 
               onClick={handleChangePassword} 
-              disabled={passwordSaving || isDemoMode}
+              disabled={passwordSaving}
               className="w-full"
             >
               {passwordSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -435,17 +362,15 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
         {/* Subscription Status */}
         <Card className={cn(
           "card-shadow border-t-4 border-l-0 border-r-0 border-b-0",
-          isDemoMode ? "border-t-amber-500" : isPro ? "border-t-gold" : "border-t-muted-foreground"
+          isPro ? "border-t-gold" : "border-t-muted-foreground"
         )}>
           <CardHeader className="p-4 md:pb-4">
             <div className="flex items-center gap-3">
               <div className={cn(
                 "flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg",
-                isDemoMode ? "bg-amber-500/10" : isPro ? "bg-gold/10" : "bg-muted"
+                isPro ? "bg-gold/10" : "bg-muted"
               )}>
-                {isDemoMode ? (
-                  <Eye className="h-4 w-4 md:h-5 md:w-5 text-amber-500" />
-                ) : isPro ? (
+                {isPro ? (
                   <Crown className="h-4 w-4 md:h-5 md:w-5 text-gold" />
                 ) : (
                   <CreditCard className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
@@ -454,19 +379,14 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <CardTitle className="text-base md:text-lg">Subscription Status</CardTitle>
-                  {isDemoMode && (
-                    <span className="text-xs font-semibold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full">
-                      DEMO
-                    </span>
-                  )}
-                  {!isDemoMode && isPro && (
+                  {isPro && (
                     <span className="text-xs font-semibold text-gold bg-gold/10 px-2 py-0.5 rounded-full">
                       PRO
                     </span>
                   )}
                 </div>
                 <CardDescription className="text-xs md:text-sm">
-                  {isDemoMode ? "Demo includes Pro features preview" : "Manage your subscription plan"}
+                  Manage your subscription plan
                 </CardDescription>
               </div>
             </div>
@@ -474,37 +394,25 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
           <CardContent className="p-4 pt-0 space-y-4">
             <div className={cn(
               "rounded-lg p-4",
-              isDemoMode ? "bg-amber-500/5 border border-amber-500/20" : isPro ? "bg-gold/5 border border-gold/20" : "bg-muted/50"
+              isPro ? "bg-gold/5 border border-gold/20" : "bg-muted/50"
             )}>
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <p className="font-medium text-sm md:text-base text-foreground">
-                    {isDemoMode ? "Demo Mode" : isPro ? "Pro Plan" : "Free Plan"}
+                    {isPro ? "Pro Plan" : "Free Plan"}
                   </p>
                   <p className="text-xs md:text-sm text-muted-foreground">
-                    {isDemoMode 
-                      ? "Preview all Pro features" 
-                      : isPro 
-                        ? "Full access to all features" 
-                        : "Upgrade for AI insights"}
+                    {isPro 
+                      ? "Full access to all features" 
+                      : "Upgrade for AI insights"}
                   </p>
                 </div>
-                {isDemoMode ? (
-                  <Eye className="h-6 w-6 md:h-8 md:w-8 text-amber-500 shrink-0" />
-                ) : isPro && (
+                {isPro && (
                   <Crown className="h-6 w-6 md:h-8 md:w-8 text-gold shrink-0" />
                 )}
               </div>
             </div>
-            {isDemoMode ? (
-              <Button 
-                onClick={() => navigate("/auth")}
-                className="w-full bg-primary hover:bg-primary/90"
-              >
-                <User className="mr-2 h-4 w-4" />
-                Create Account to Upgrade
-              </Button>
-            ) : !isPro && (
+            {!isPro && (
               <Button 
                 onClick={onUpgrade}
                 className="w-full bg-gold hover:bg-gold/90 text-gold-foreground"
@@ -517,10 +425,7 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
         </Card>
 
         {/* Danger Zone */}
-        <Card className={cn(
-          "card-shadow border-t-4 border-l-0 border-r-0 border-b-0 border-t-destructive",
-          isDemoMode && "opacity-75"
-        )}>
+        <Card className="card-shadow border-t-4 border-l-0 border-r-0 border-b-0 border-t-destructive">
           <CardHeader className="p-4 md:pb-4">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-destructive/10">
@@ -529,7 +434,7 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
               <div>
                 <CardTitle className="text-base md:text-lg text-destructive">Danger Zone</CardTitle>
                 <CardDescription className="text-xs md:text-sm">
-                  {isDemoMode ? "Disabled in demo mode" : "Permanently delete your account"}
+                  Permanently delete your account
                 </CardDescription>
               </div>
             </div>
@@ -550,7 +455,7 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade, isDemoMod
               <AlertDialogTrigger asChild>
                 <Button 
                   variant="destructive" 
-                  disabled={deleteLoading || isDemoMode}
+                  disabled={deleteLoading}
                   className="w-full"
                 >
                   {deleteLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
