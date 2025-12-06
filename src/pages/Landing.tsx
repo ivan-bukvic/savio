@@ -212,7 +212,7 @@ const Landing = () => {
                   
                 </div>
                 <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-primary" />
+                  
                   <span>Bank-level security</span>
                 </div>
               </div>
