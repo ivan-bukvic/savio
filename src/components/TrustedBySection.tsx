@@ -24,21 +24,18 @@ export const TrustedBySection = () => {
   const duplicatedLogos = [...logos, ...logos];
 
   return (
-    <section className="py-16 md:py-20 relative z-10 overflow-hidden">
+    <section className="py-8 md:py-10 relative z-10 overflow-hidden">
       <div className="container mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-14"
+          className="text-center mb-6 md:mb-8"
         >
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3">
+          <h2 className="text-base md:text-lg font-semibold text-muted-foreground">
             Trusted by Leading Innovators
           </h2>
-          <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto">
-            Creators, founders, and digital professionals who rely on clear financial insights.
-          </p>
         </motion.div>
       </div>
 
