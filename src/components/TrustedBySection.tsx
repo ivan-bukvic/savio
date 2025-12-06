@@ -1,22 +1,20 @@
 import { motion } from "framer-motion";
 
 // Import all logos
-import veroLogo from "@/assets/logos/vero.png";
-import arrowFinanceLogo from "@/assets/logos/arrow-finance.png";
-import wavesLogo from "@/assets/logos/waves.png";
+import bungeLogo from "@/assets/logos/bunge.png";
+import openRatingsLogo from "@/assets/logos/open-ratings.png";
+import pyramidLogo from "@/assets/logos/pyramid-analytics.png";
+import abstractLogo from "@/assets/logos/abstract.png";
 import independerLogo from "@/assets/logos/independer.png";
 import shapeLogo from "@/assets/logos/shape.png";
-import cubeLogo from "@/assets/logos/cube.png";
-import abstractLogo from "@/assets/logos/abstract.png";
 
 const logos = [
-  { src: veroLogo, alt: "Vero" },
-  { src: arrowFinanceLogo, alt: "Arrow Finance" },
-  { src: wavesLogo, alt: "Waves" },
+  { src: bungeLogo, alt: "Bunge" },
+  { src: openRatingsLogo, alt: "Open Ratings" },
+  { src: pyramidLogo, alt: "Pyramid Analytics" },
+  { src: abstractLogo, alt: "Abstract" },
   { src: independerLogo, alt: "Independer" },
   { src: shapeLogo, alt: "Shape" },
-  { src: cubeLogo, alt: "Cube" },
-  { src: abstractLogo, alt: "Abstract" },
 ];
 
 export const TrustedBySection = () => {
@@ -53,15 +51,12 @@ export const TrustedBySection = () => {
             {duplicatedLogos.map((logo, index) => (
               <div
                 key={`${logo.alt}-${index}`}
-                className="flex items-center justify-center shrink-0 transition-transform duration-300 hover:scale-105"
+                className="flex items-center justify-center shrink-0 transition-all duration-300 hover:opacity-70"
               >
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="h-10 md:h-12 lg:h-14 w-auto object-contain drop-shadow-md opacity-90 hover:opacity-100 transition-opacity duration-300 dark:brightness-110 dark:contrast-110"
-                  style={{
-                    filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.1))",
-                  }}
+                  className="h-6 md:h-7 lg:h-8 w-auto object-contain grayscale opacity-50 hover:opacity-60 transition-opacity duration-300"
                 />
               </div>
             ))}
@@ -74,15 +69,12 @@ export const TrustedBySection = () => {
             {duplicatedLogos.map((logo, index) => (
               <div
                 key={`${logo.alt}-dup-${index}`}
-                className="flex items-center justify-center shrink-0 transition-transform duration-300 hover:scale-105"
+                className="flex items-center justify-center shrink-0 transition-all duration-300 hover:opacity-70"
               >
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="h-10 md:h-12 lg:h-14 w-auto object-contain drop-shadow-md opacity-90 hover:opacity-100 transition-opacity duration-300 dark:brightness-110 dark:contrast-110"
-                  style={{
-                    filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.1))",
-                  }}
+                  className="h-6 md:h-7 lg:h-8 w-auto object-contain grayscale opacity-50 hover:opacity-60 transition-opacity duration-300"
                 />
               </div>
             ))}
