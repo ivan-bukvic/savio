@@ -8,6 +8,27 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Allowed origins for redirect URLs
+const ALLOWED_ORIGINS = [
+  "https://xztjwxosevpwciappbyq.lovableproject.com",
+  "https://savio.lovable.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
+function isValidOrigin(origin: string): boolean {
+  if (!origin || typeof origin !== "string") return false;
+  try {
+    const url = new URL(origin);
+    return ALLOWED_ORIGINS.some(allowed => {
+      const allowedUrl = new URL(allowed);
+      return url.origin === allowedUrl.origin;
+    });
+  } catch {
+    return false;
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -27,6 +48,7 @@ serve(async (req) => {
     // Get the authorization header
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
+      console.error("No authorization header provided");
       throw new Error("No authorization header");
     }
 
@@ -44,9 +66,16 @@ serve(async (req) => {
 
     console.log("Creating portal session for user:", user.email);
 
-    // Get return URL from request body
+    // Get and validate return URL from request body
     const { origin } = await req.json();
-    const returnUrl = origin ? `${origin}/app` : "http://localhost:5173/app";
+    
+    let returnUrl: string;
+    if (isValidOrigin(origin)) {
+      returnUrl = `${origin}/app`;
+    } else {
+      console.warn("Invalid origin provided, using fallback:", origin);
+      returnUrl = "http://localhost:5173/app";
+    }
 
     // Initialize Stripe
     const stripe = new Stripe(stripeSecretKey, {
