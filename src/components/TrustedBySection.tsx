@@ -7,6 +7,9 @@ import pyramidLogo from "@/assets/logos/pyramid-analytics.png";
 import abstractLogo from "@/assets/logos/abstract.png";
 import independerLogo from "@/assets/logos/independer.png";
 import shapeLogo from "@/assets/logos/shape.png";
+import predicteasyLogo from "@/assets/logos/predicteasy.png";
+import tectonicLogo from "@/assets/logos/tectonic.png";
+
 const logos = [{
   src: bungeLogo,
   alt: "Bunge"
@@ -25,6 +28,12 @@ const logos = [{
 }, {
   src: shapeLogo,
   alt: "Shape"
+}, {
+  src: predicteasyLogo,
+  alt: "PredictEasy"
+}, {
+  src: tectonicLogo,
+  alt: "Tectonic"
 }];
 export const TrustedBySection = () => {
   // Duplicate logos for seamless infinite scroll
@@ -64,7 +73,7 @@ export const TrustedBySection = () => {
           {/* Duplicate for seamless loop */}
           <div className="flex items-center gap-12 md:gap-16 lg:gap-20 shrink-0 animate-marquee group-hover:[animation-play-state:paused]" aria-hidden="true">
             {duplicatedLogos.map((logo, index) => <div key={`${logo.alt}-dup-${index}`} className="flex items-center justify-center shrink-0 transition-all duration-300 hover:opacity-70">
-                <img src={logo.src} alt={logo.alt} className="h-6 md:h-7 lg:h-8 w-auto object-contain grayscale opacity-50 hover:opacity-60 transition-opacity duration-300" />
+                <img src={logo.src} alt={logo.alt} className="h-6 md:h-7 lg:h-8 w-auto object-contain grayscale opacity-70 hover:opacity-80 transition-opacity duration-300" />
               </div>)}
           </div>
         </div>
