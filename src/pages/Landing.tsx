@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap, Play, PiggyBank, Wallet, Users, Award } from "lucide-react";
 import { FeaturesSectionWithHoverEffects } from "@/components/ui/feature-section-with-hover-effects";
-import { PremiumTestimonials } from "@/components/ui/premium-testimonials";
+import { TestimonialSlider } from "@/components/ui/testimonial-slider";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -580,7 +580,25 @@ const Landing = () => {
       </section>
 
       {/* Testimonials Section */}
-      <PremiumTestimonials />
+      <section id="testimonials" className="py-20 px-6 relative z-10">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              What Our Users Are Saying
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Real stories from people transforming their financial lives with Savio.
+            </p>
+          </motion.div>
+          <TestimonialSlider />
+        </div>
+      </section>
 
       {/* Pricing Section */}
       <section id="pricing" className="py-20 px-6 relative z-10">
