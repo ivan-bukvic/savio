@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import dashboardPreview from "@/assets/dashboard-screenshot.png";
 import heroBgCurves from "@/assets/landing-bg-curves.jpg";
+import { TrustedBySection } from "@/components/TrustedBySection";
 
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -370,6 +371,9 @@ const Landing = () => {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Trusted By Section */}
+      <TrustedBySection />
 
       {/* Features Section */}
       <section id="features" className="py-20 px-6 relative z-10">
