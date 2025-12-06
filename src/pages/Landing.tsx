@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap, Play, PiggyBank, Wallet, Users, Award } from "lucide-react";
 import { FeaturesSectionWithHoverEffects } from "@/components/ui/feature-section-with-hover-effects";
+import { PremiumTestimonials } from "@/components/ui/premium-testimonials";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,14 +12,6 @@ import { toast } from "sonner";
 import { useState } from "react";
 import dashboardPreview from "@/assets/dashboard-screenshot.png";
 import heroBgCurves from "@/assets/landing-bg-curves.jpg";
-import testimonialSarah from "@/assets/testimonial-sarah.jpg";
-import testimonialJames from "@/assets/testimonial-james.jpg";
-import testimonialMaria from "@/assets/testimonial-maria.jpg";
-import testimonialDaniel from "@/assets/testimonial-daniel.jpg";
-import testimonialJessica from "@/assets/testimonial-jessica.jpg";
-import testimonialAlicia from "@/assets/testimonial-alicia.jpg";
-import testimonialMichael from "@/assets/testimonial-michael.jpg";
-import testimonialEmma from "@/assets/testimonial-emma.jpg";
 
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -571,76 +564,7 @@ const Landing = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-6 relative z-10">
-        <div className="container mx-auto max-w-7xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            viewport={{ once: true }} 
-            transition={{ duration: 0.6 }} 
-            className="text-center mb-8"
-          >
-            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              What Our Users Are Saying
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Real stories from people transforming their financial lives with Savio.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <FeaturesSectionWithHoverEffects
-              features={[
-                {
-                  title: "Sarah Mitchell",
-                  description: "Savio helped me finally understand my expenses and start saving for the first time. I can't imagine managing my finances without it.",
-                  avatar: testimonialSarah,
-                },
-                {
-                  title: "James Chen",
-                  description: "The AI insights are spot on — it feels like having a personal financial coach. My savings have doubled in just six months.",
-                  avatar: testimonialJames,
-                },
-                {
-                  title: "Maria Rodriguez",
-                  description: "My debt payoff plan has never been clearer. This app is a game changer. I finally feel in control of my financial future.",
-                  avatar: testimonialMaria,
-                },
-                {
-                  title: "Daniel R.",
-                  description: "The savings goals and AI insights completely changed how I plan my cash flow. It feels like having a personal financial advisor.",
-                  avatar: testimonialDaniel,
-                },
-                {
-                  title: "Jessica M.",
-                  description: "Savio helps me stay on top of my income from multiple clients without the stress. The dashboard feels clean and empowering.",
-                  avatar: testimonialJessica,
-                },
-                {
-                  title: "Alicia K.",
-                  description: "I love how everything is easy to track. My expenses, goals, and monthly summaries all live in one place effortlessly.",
-                  avatar: testimonialAlicia,
-                },
-                {
-                  title: "Michael T.",
-                  description: "Finally a finance app that doesn't overwhelm me. Simple, beautiful, and effective. Exactly what I needed for my financial journey.",
-                  avatar: testimonialMichael,
-                },
-                {
-                  title: "Emma W.",
-                  description: "The visual analytics make budgeting actually enjoyable. I can see my progress at a glance and stay motivated every day.",
-                  avatar: testimonialEmma,
-                },
-              ]}
-            />
-          </motion.div>
-        </div>
-      </section>
+      <PremiumTestimonials />
 
       {/* Pricing Section */}
       <section id="pricing" className="py-20 px-6 relative z-10">
