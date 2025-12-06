@@ -24,7 +24,7 @@ export const TrustedBySection = () => {
   const duplicatedLogos = [...logos, ...logos];
 
   return (
-    <section className="py-8 md:py-10 relative z-10 overflow-hidden">
+    <section className="py-4 md:py-6 -mt-16 md:-mt-24 relative z-10 overflow-hidden">
       <div className="container mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
