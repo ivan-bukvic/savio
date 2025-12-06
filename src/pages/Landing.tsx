@@ -213,7 +213,7 @@ const Landing = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   
-                  <span>Bank-level security</span>
+                  
                 </div>
               </div>
             </motion.div>
