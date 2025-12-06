@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Moon, Sun, User, LogOut, CreditCard, Loader2, Eye, Menu, X } from "lucide-react";
+import { Moon, Sun, User, LogOut, CreditCard, Loader2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,8 +14,7 @@ import { GlobalSearch } from "./GlobalSearch";
 import { supabase } from "@/integrations/supabase/client";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 type ActiveSection = "dashboard" | "income" | "expenses" | "goals" | "insights" | "settings";
@@ -25,7 +24,6 @@ interface DashboardLayoutProps {
   activeSection: ActiveSection;
   onSectionChange: (section: ActiveSection) => void;
   isPro?: boolean;
-  isDemoMode?: boolean;
 }
 
 export const DashboardLayout = ({ 
@@ -33,7 +31,6 @@ export const DashboardLayout = ({
   activeSection, 
   onSectionChange, 
   isPro = false,
-  isDemoMode = false 
 }: DashboardLayoutProps) => {
   const [isDark, setIsDark] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
@@ -49,12 +46,6 @@ export const DashboardLayout = ({
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setUserId(user.id);
-        
-        // For demo mode, use "Demo User" name
-        if (isDemoMode) {
-          setUserName("Demo User");
-          return;
-        }
         
         // Fetch profile for full name
         const { data: profile } = await supabase
@@ -72,7 +63,7 @@ export const DashboardLayout = ({
     };
 
     fetchUserData();
-  }, [isDemoMode]);
+  }, []);
 
   const getInitials = (name: string) => {
     if (!name) return "";
@@ -89,13 +80,6 @@ export const DashboardLayout = ({
   };
 
   const handleLogout = async () => {
-    if (isDemoMode) {
-      // For demo mode, just navigate to landing
-      navigate("/");
-      toast.success("Demo session ended");
-      return;
-    }
-    
     const { error } = await supabase.auth.signOut();
     if (error) {
       toast.error("Error signing out");
@@ -106,11 +90,6 @@ export const DashboardLayout = ({
   };
 
   const handleBilling = async () => {
-    if (isDemoMode) {
-      toast.info("Billing is not available in demo mode. Create an account to upgrade!");
-      return;
-    }
-    
     setIsBillingLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -180,7 +159,6 @@ export const DashboardLayout = ({
           activeSection={activeSection} 
           onSectionChange={onSectionChange} 
           isPro={isPro}
-          isDemoMode={isDemoMode}
         />
       )}
       
@@ -192,7 +170,6 @@ export const DashboardLayout = ({
               activeSection={activeSection} 
               onSectionChange={handleSectionChangeWithClose} 
               isPro={isPro}
-              isDemoMode={isDemoMode}
             />
           </SheetContent>
         </Sheet>
@@ -215,14 +192,6 @@ export const DashboardLayout = ({
             )}
             
             <GlobalSearch userId={userId} onNavigateToSection={handleNavigateToSection} />
-            
-            {/* Demo Mode Indicator - Hide on very small screens */}
-            {isDemoMode && (
-              <Badge variant="outline" className="hidden sm:flex bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 items-center gap-1.5 text-xs">
-                <Eye className="h-3 w-3" />
-                <span className="hidden md:inline">Demo Mode</span>
-              </Badge>
-            )}
           </div>
           
           <div className="flex items-center gap-2 md:gap-3">
@@ -243,22 +212,18 @@ export const DashboardLayout = ({
               <DropdownMenuTrigger asChild>
                 <div className="flex items-center gap-2 md:gap-3 rounded-lg px-2 md:px-3 py-1.5 hover:bg-muted cursor-pointer transition-colors">
                   <div className={`flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full text-xs md:text-sm font-medium ${
-                    isDemoMode 
-                      ? 'bg-gradient-to-br from-amber-400 to-orange-500 text-white'
-                      : isProUser 
-                        ? 'bg-gradient-to-br from-amber-400 to-amber-600 text-white' 
-                        : 'bg-primary/10 text-primary'
+                    isProUser 
+                      ? 'bg-gradient-to-br from-amber-400 to-amber-600 text-white' 
+                      : 'bg-primary/10 text-primary'
                   }`}>
-                    {isDemoMode ? <Eye className="h-3 w-3 md:h-4 md:w-4" /> : userName ? getInitials(userName) : <User className="h-3 w-3 md:h-4 md:w-4" />}
+                    {userName ? getInitials(userName) : <User className="h-3 w-3 md:h-4 md:w-4" />}
                   </div>
                   <div className="hidden sm:flex flex-col min-w-0">
                     <span className="text-sm font-medium text-foreground truncate max-w-[100px] md:max-w-[120px]">
-                      {isDemoMode ? "Demo User" : userName || "Loading..."}
+                      {userName || "Loading..."}
                     </span>
                     <span className="text-xs text-muted-foreground truncate">
-                      {isDemoMode ? (
-                        <span className="text-amber-500">Demo Mode</span>
-                      ) : isProUser ? (
+                      {isProUser ? (
                         <span className="text-amber-500">Pro Member</span>
                       ) : (
                         "Free Plan"
@@ -271,56 +236,39 @@ export const DashboardLayout = ({
                 align="end" 
                 className="w-48 mt-2 bg-card border border-border rounded-lg shadow-lg overflow-hidden"
               >
-                <div className={`h-1 ${isDemoMode ? 'bg-gradient-to-r from-amber-400 to-orange-500' : 'bg-gradient-to-r from-primary to-primary/60'}`} />
+                <div className="h-1 bg-gradient-to-r from-primary to-primary/60" />
                 <div className="py-1">
-                  {!isDemoMode && (
-                    <>
-                      <DropdownMenuItem 
-                        onClick={handleBilling}
-                        disabled={isBillingLoading}
-                        className={`mx-1 my-0.5 rounded-md cursor-pointer transition-colors ${
-                          isProUser 
-                            ? 'hover:bg-amber-500/10 focus:bg-amber-500/10' 
-                            : 'hover:bg-accent focus:bg-accent'
-                        } disabled:opacity-50 disabled:cursor-not-allowed`}
-                      >
-                        {isBillingLoading ? (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        ) : (
-                          <CreditCard className={`mr-2 h-4 w-4 ${isProUser ? 'text-amber-500' : ''}`} />
-                        )}
-                        <span className={isProUser ? 'text-amber-600 dark:text-amber-400 font-medium' : ''}>
-                          {isBillingLoading ? "Loading..." : isProUser ? "Manage Billing" : "Upgrade to Pro"}
-                        </span>
-                        {isProUser && (
-                          <span className="ml-auto text-xs bg-gradient-to-r from-amber-400 to-amber-600 text-white px-1.5 py-0.5 rounded-full">
-                            Pro
-                          </span>
-                        )}
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator className="my-1 bg-border/50" />
-                    </>
-                  )}
-                  
-                  {isDemoMode && (
-                    <>
-                      <DropdownMenuItem 
-                        onClick={() => navigate("/auth")}
-                        className="mx-1 my-0.5 rounded-md cursor-pointer hover:bg-primary/10 focus:bg-primary/10 text-primary"
-                      >
-                        <User className="mr-2 h-4 w-4" />
-                        Create Account
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator className="my-1 bg-border/50" />
-                    </>
-                  )}
+                  <DropdownMenuItem 
+                    onClick={handleBilling}
+                    disabled={isBillingLoading}
+                    className={`mx-1 my-0.5 rounded-md cursor-pointer transition-colors ${
+                      isProUser 
+                        ? 'hover:bg-amber-500/10 focus:bg-amber-500/10' 
+                        : 'hover:bg-accent focus:bg-accent'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {isBillingLoading ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <CreditCard className={`mr-2 h-4 w-4 ${isProUser ? 'text-amber-500' : ''}`} />
+                    )}
+                    <span className={isProUser ? 'text-amber-600 dark:text-amber-400 font-medium' : ''}>
+                      {isBillingLoading ? "Loading..." : isProUser ? "Manage Billing" : "Upgrade to Pro"}
+                    </span>
+                    {isProUser && (
+                      <span className="ml-auto text-xs bg-gradient-to-r from-amber-400 to-amber-600 text-white px-1.5 py-0.5 rounded-full">
+                        Pro
+                      </span>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="my-1 bg-border/50" />
                   
                   <DropdownMenuItem 
                     onClick={handleLogout}
                     className="mx-1 my-0.5 rounded-md cursor-pointer hover:bg-destructive/10 focus:bg-destructive/10 text-destructive"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    {isDemoMode ? "Exit Demo" : "Logout"}
+                    Logout
                   </DropdownMenuItem>
                 </div>
               </DropdownMenuContent>
