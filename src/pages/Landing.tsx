@@ -582,13 +582,17 @@ const Landing = () => {
       {/* Testimonials Section */}
       <section id="testimonials" className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 30
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} transition={{
+          duration: 0.6
+        }} className="text-center mb-12">
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
               What Our Users Are Saying
             </h2>
@@ -739,61 +743,7 @@ const Landing = () => {
           </div>
 
           {/* Comparison Table */}
-          <motion.div initial={{
-          opacity: 0,
-          y: 30
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.6,
-          delay: 0.2
-        }} className="max-w-2xl mx-auto">
-            <div className="bg-card border border-border rounded-2xl overflow-hidden card-shadow">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-border bg-muted/50">
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-foreground">Feature</th>
-                    <th className="text-center py-4 px-4 text-sm font-semibold text-foreground">Free</th>
-                    <th className="text-center py-4 px-4 text-sm font-semibold text-gold">Pro</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[{
-                  feature: "Income & Expense Tracking",
-                  free: true,
-                  pro: true
-                }, {
-                  feature: "Savings Goals",
-                  free: true,
-                  pro: true
-                }, {
-                  feature: "AI Insights",
-                  free: false,
-                  pro: true
-                }, {
-                  feature: "Debt Forecast",
-                  free: false,
-                  pro: true
-                }, {
-                  feature: "Priority Support",
-                  free: false,
-                  pro: true
-                }].map((row, index) => <tr key={index} className={index !== 4 ? "border-b border-border" : ""}>
-                      <td className="py-4 px-6 text-sm text-foreground">{row.feature}</td>
-                      <td className="text-center py-4 px-4">
-                        {row.free ? <Check className="h-5 w-5 text-primary mx-auto" /> : <X className="h-5 w-5 text-muted-foreground/50 mx-auto" />}
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        {row.pro ? <Check className="h-5 w-5 text-gold mx-auto" /> : <X className="h-5 w-5 text-muted-foreground/50 mx-auto" />}
-                      </td>
-                    </tr>)}
-                </tbody>
-              </table>
-            </div>
-          </motion.div>
+          
         </div>
       </section>
 
