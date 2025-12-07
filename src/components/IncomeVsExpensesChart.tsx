@@ -43,22 +43,30 @@ export const IncomeVsExpensesChart = () => {
       const hasAnyData = (incomeData && incomeData.length > 0) || (expensesData && expensesData.length > 0);
       setHasData(hasAnyData);
 
-      // Aggregate by month
+      // Aggregate by month - only show Jan to Sep
       const monthlyData: { [key: string]: { income: number; expenses: number } } = {};
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
       
       months.forEach((month) => {
         monthlyData[month] = { income: 0, expenses: 0 };
       });
 
       incomeData?.forEach((item) => {
-        const month = months[new Date(item.date).getMonth()];
-        monthlyData[month].income += Number(item.amount);
+        const monthIndex = new Date(item.date).getMonth();
+        // Only include Jan-Sep (months 0-8)
+        if (monthIndex <= 8) {
+          const month = months[monthIndex];
+          monthlyData[month].income += Number(item.amount);
+        }
       });
 
       expensesData?.forEach((item) => {
-        const month = months[new Date(item.date).getMonth()];
-        monthlyData[month].expenses += Number(item.amount);
+        const monthIndex = new Date(item.date).getMonth();
+        // Only include Jan-Sep (months 0-8)
+        if (monthIndex <= 8) {
+          const month = months[monthIndex];
+          monthlyData[month].expenses += Number(item.amount);
+        }
       });
 
       const chartData = months.map((month) => ({

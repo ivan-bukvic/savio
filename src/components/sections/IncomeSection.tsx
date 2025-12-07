@@ -214,31 +214,42 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
 
   const uniqueSources = [...new Set(incomeData.map(item => item.source))].length;
 
-  // Chart data - Multi-series for Income Over Time
+  // Chart data - Multi-series for Income Over Time (Jan-Sep only)
+  const validMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
   const monthlyBySource: { [monthYear: string]: { [source: string]: number } } = {};
   const allSources = new Set<string>();
   
+  // Initialize all months
+  validMonths.forEach(month => {
+    monthlyBySource[month] = {};
+  });
+  
   incomeData.forEach(item => {
-    const monthYear = format(new Date(item.date), "MMM");
-    if (!monthlyBySource[monthYear]) {
-      monthlyBySource[monthYear] = {};
+    const itemDate = new Date(item.date);
+    const monthIndex = itemDate.getMonth();
+    // Only include Jan-Sep (months 0-8)
+    if (monthIndex <= 8) {
+      const monthYear = format(itemDate, "MMM");
+      if (!monthlyBySource[monthYear]) {
+        monthlyBySource[monthYear] = {};
+      }
+      monthlyBySource[monthYear][item.source] = (monthlyBySource[monthYear][item.source] || 0) + item.amount;
+      allSources.add(item.source);
     }
-    monthlyBySource[monthYear][item.source] = (monthlyBySource[monthYear][item.source] || 0) + item.amount;
-    allSources.add(item.source);
   });
 
   const sourcesList = Array.from(allSources).slice(0, 4);
   
-  const monthlyChartData = Object.entries(monthlyBySource)
-    .map(([month, sources]) => ({
+  // Build chart data in order Jan-Sep
+  const monthlyChartData = validMonths
+    .filter(month => monthlyBySource[month] && Object.keys(monthlyBySource[month]).length > 0)
+    .map(month => ({
       month,
       ...sourcesList.reduce((acc, source) => ({
         ...acc,
-        [source]: sources[source] || 0,
+        [source]: monthlyBySource[month][source] || 0,
       }), {}),
-    }))
-    .reverse()
-    .slice(-8);
+    }));
 
   // Source breakdown for horizontal bar chart
   const sourceBreakdown: { [key: string]: number } = {};
