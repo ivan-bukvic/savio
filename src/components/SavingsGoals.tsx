@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Target, Loader2 } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -52,7 +53,12 @@ export const SavingsGoals = () => {
       </CardHeader>
       <CardContent className="space-y-6">
         {goals.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">No savings goals yet. Create one to start tracking!</p>
+          <EmptyState
+            icon={Target}
+            title="No goals yet"
+            description="Add your first saving goal to start tracking your progress."
+            className="py-8"
+          />
         ) : (
           goals.map((goal) => {
             const percentage = (Number(goal.current_progress) / Number(goal.target_amount)) * 100;
