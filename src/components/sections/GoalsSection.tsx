@@ -214,17 +214,17 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
   // Sparkline data for KPI cards - show zeros if no data
   const sparklineData = hasData ? [120, 180, 250, 190, 230, 280, 320, 290, 340, 380] : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  // Area chart data - show realistic cumulative savings progress (always increasing)
+  // Area chart data - show realistic savings with natural fluctuations
   const monthlyProgressData = hasData ? [
-    { month: "Jan", total: Math.round(totalSaved * 0.12) },   // Starting savings
-    { month: "Feb", total: Math.round(totalSaved * 0.22) },   // Steady growth
-    { month: "Mar", total: Math.round(totalSaved * 0.32) },   // Continued growth
-    { month: "Apr", total: Math.round(totalSaved * 0.42) },   // Tax refund boost
-    { month: "May", total: Math.round(totalSaved * 0.52) },   // Steady
-    { month: "Jun", total: Math.round(totalSaved * 0.62) },   // Mid-year progress
-    { month: "Jul", total: Math.round(totalSaved * 0.72) },   // Consistent
-    { month: "Aug", total: Math.round(totalSaved * 0.85) },   // Good month
-    { month: "Sep", total: totalSaved },                       // Current total
+    { month: "Jan", total: Math.round(totalSaved * 0.68) },   // $6,460 - Starting point
+    { month: "Feb", total: Math.round(totalSaved * 0.74) },   // $7,030 - Good month
+    { month: "Mar", total: Math.round(totalSaved * 0.71) },   // $6,745 - Car repair
+    { month: "Apr", total: Math.round(totalSaved * 0.82) },   // $7,790 - Tax refund
+    { month: "May", total: Math.round(totalSaved * 0.78) },   // $7,410 - Vacation expense
+    { month: "Jun", total: Math.round(totalSaved * 0.85) },   // $8,075 - Summer bonus
+    { month: "Jul", total: Math.round(totalSaved * 0.79) },   // $7,505 - Medical bill
+    { month: "Aug", total: Math.round(totalSaved * 0.88) },   // $8,360 - Recovery
+    { month: "Sep", total: totalSaved },                       // $9,500 - Current
   ] : [];
 
   // Bar chart data - goal funding distribution
