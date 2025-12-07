@@ -191,16 +191,27 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
     setIsDeleteDialogOpen(true);
   };
 
-  // Calculate statistics
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  
-  const totalMonthlyIncome = incomeData
-    .filter(item => {
-      const itemDate = new Date(item.date);
-      return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
-    })
-    .reduce((sum, item) => sum + Number(item.amount), 0);
+  // Calculate statistics - use latest month with data instead of current month
+  const getLatestMonthIncome = () => {
+    if (incomeData.length === 0) return 0;
+    
+    // Find the latest date in the data
+    const sortedByDate = [...incomeData].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    const latestDate = new Date(sortedByDate[0].date);
+    const latestMonth = latestDate.getMonth();
+    const latestYear = latestDate.getFullYear();
+    
+    return incomeData
+      .filter(item => {
+        const itemDate = new Date(item.date);
+        return itemDate.getMonth() === latestMonth && itemDate.getFullYear() === latestYear;
+      })
+      .reduce((sum, item) => sum + Number(item.amount), 0);
+  };
+
+  const totalMonthlyIncome = getLatestMonthIncome();
 
   const monthlyIncomes: { [key: string]: number } = {};
   incomeData.forEach(item => {
