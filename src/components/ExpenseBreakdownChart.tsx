@@ -2,7 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, PieChart as PieChartIcon } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
+import { useNavigate } from "react-router-dom";
 
 interface CategoryData {
   name: string;
@@ -22,6 +24,7 @@ const categoryColors: { [key: string]: string } = {
 export const ExpenseBreakdownChart = () => {
   const [data, setData] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,63 +73,72 @@ export const ExpenseBreakdownChart = () => {
         <CardTitle className="text-lg font-semibold">Expense Breakdown by Category</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={100}
-              paddingAngle={2}
-              dataKey="value"
-              label={({ percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
-                const RADIAN = Math.PI / 180;
-                const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                const percentage = (percent * 100).toFixed(0);
-                const fontSize = percent < 0.05 ? '10px' : percent < 0.15 ? '12px' : '14px';
-                
-                return (
-                  <text 
-                    x={x} 
-                    y={y} 
-                    fill="hsl(var(--foreground))" 
-                    textAnchor="middle" 
-                    dominantBaseline="central"
-                    fontSize={fontSize}
-                    fontWeight="600"
-                  >
-                    {percentage}%
-                  </text>
-                );
-              }}
-              labelLine={false}
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} stroke="hsl(var(--background))" strokeWidth={2} />
-              ))}
-            </Pie>
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "rgba(0, 0, 0, 0.9)",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                borderRadius: "0.5rem",
-                color: "#FFFFFF",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
-              }}
-              labelStyle={{
-                color: "#FFFFFF",
-              }}
-              itemStyle={{
-                color: "#FFFFFF",
-              }}
-              cursor={false}
-            />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
+        {data.length === 0 ? (
+          <EmptyState
+            icon={PieChartIcon}
+            title="No expense data yet"
+            description="Add your first expense to see category insights."
+            className="h-[300px]"
+          />
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={2}
+                dataKey="value"
+                label={({ percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
+                  const RADIAN = Math.PI / 180;
+                  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+                  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                  const percentage = (percent * 100).toFixed(0);
+                  const fontSize = percent < 0.05 ? '10px' : percent < 0.15 ? '12px' : '14px';
+                  
+                  return (
+                    <text 
+                      x={x} 
+                      y={y} 
+                      fill="hsl(var(--foreground))" 
+                      textAnchor="middle" 
+                      dominantBaseline="central"
+                      fontSize={fontSize}
+                      fontWeight="600"
+                    >
+                      {percentage}%
+                    </text>
+                  );
+                }}
+                labelLine={false}
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} stroke="hsl(var(--background))" strokeWidth={2} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(0, 0, 0, 0.9)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  borderRadius: "0.5rem",
+                  color: "#FFFFFF",
+                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.5)",
+                }}
+                labelStyle={{
+                  color: "#FFFFFF",
+                }}
+                itemStyle={{
+                  color: "#FFFFFF",
+                }}
+                cursor={false}
+              />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        )}
       </CardContent>
     </Card>
   );

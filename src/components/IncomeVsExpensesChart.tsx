@@ -2,7 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, BarChart3 } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface MonthlyData {
   month: string;
@@ -13,6 +14,7 @@ interface MonthlyData {
 export const IncomeVsExpensesChart = () => {
   const [data, setData] = useState<MonthlyData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasData, setHasData] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,11 +39,15 @@ export const IncomeVsExpensesChart = () => {
         .gte('date', `${currentYear}-01-01`)
         .lte('date', `${currentYear}-12-31`);
 
+      // Check if there's any data
+      const hasAnyData = (incomeData && incomeData.length > 0) || (expensesData && expensesData.length > 0);
+      setHasData(hasAnyData);
+
       // Aggregate by month
       const monthlyData: { [key: string]: { income: number; expenses: number } } = {};
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       
-      months.forEach((month, index) => {
+      months.forEach((month) => {
         monthlyData[month] = { income: 0, expenses: 0 };
       });
 
@@ -84,31 +90,40 @@ export const IncomeVsExpensesChart = () => {
         <CardTitle className="text-lg font-semibold">Monthly Income vs. Expenses</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis
-              dataKey="month"
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-              axisLine={{ stroke: "hsl(var(--border))" }}
-            />
-            <YAxis
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-              axisLine={{ stroke: "hsl(var(--border))" }}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "hsl(var(--popover))",
-                border: "1px solid hsl(var(--border))",
-                color: "hsl(var(--popover-foreground))",
-              }}
-              cursor={false}
-            />
-            <Legend />
-            <Bar dataKey="income" fill="hsl(var(--chart-1))" activeBar={false} />
-            <Bar dataKey="expenses" fill="hsl(var(--chart-2))" activeBar={false} />
-          </BarChart>
-        </ResponsiveContainer>
+        {!hasData ? (
+          <EmptyState
+            icon={BarChart3}
+            title="No financial activity yet"
+            description="Once you add income or expenses, your monthly overview will appear here."
+            className="h-[300px]"
+          />
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis
+                dataKey="month"
+                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                axisLine={{ stroke: "hsl(var(--border))" }}
+              />
+              <YAxis
+                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                axisLine={{ stroke: "hsl(var(--border))" }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--popover))",
+                  border: "1px solid hsl(var(--border))",
+                  color: "hsl(var(--popover-foreground))",
+                }}
+                cursor={false}
+              />
+              <Legend />
+              <Bar dataKey="income" fill="hsl(var(--chart-1))" activeBar={false} />
+              <Bar dataKey="expenses" fill="hsl(var(--chart-2))" activeBar={false} />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
       </CardContent>
     </Card>
   );

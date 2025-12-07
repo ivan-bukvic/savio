@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, CreditCard, TrendingDown, Receipt, Edit, Trash2, Package } from "lucide-react";
+import { Plus, CreditCard, TrendingDown, Receipt, Edit, Trash2, Package, BarChart3, PieChart } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   Dialog,
   DialogContent,
@@ -42,14 +43,6 @@ interface Expense {
   date: string;
   user_id: string;
 }
-
-// Multi-series chart colors matching the design system
-const CHART_COLORS = {
-  housing: 'hsl(180, 65%, 42%)',       // Primary teal
-  food: 'hsl(45, 95%, 60%)',           // Accent yellow
-  transportation: 'hsl(195, 70%, 50%)', // Light blue
-  other: 'hsl(150, 55%, 48%)',         // Light green
-};
 
 const HORIZONTAL_BAR_COLORS = [
   'hsl(180, 65%, 42%)',  // Teal
@@ -225,24 +218,14 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   
-  // FIXED: Use September (month 9) explicitly to bypass timezone issues
   const totalMonthlyExpenses = expenseData
     .filter(item => {
-      // Filter for September only: date format is YYYY-MM-DD
-      return item.date.includes('-09-');
+      const itemDate = new Date(item.date);
+      return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
     })
     .reduce((sum, item) => sum + Number(item.amount), 0);
 
-  const monthlyExpenses: { [key: string]: number } = {};
-  expenseData.forEach(item => {
-    const monthYear = format(new Date(item.date), "MMM yyyy");
-    monthlyExpenses[monthYear] = (monthlyExpenses[monthYear] || 0) + item.amount;
-  });
-
-  // FIXED: Calculate average daily spending based on September (30 days)
-  const avgDailySpending = expenseData.length > 0
-    ? totalMonthlyExpenses / 30
-    : 0;
+  const avgDailySpending = expenseData.length > 0 ? totalMonthlyExpenses / 30 : 0;
 
   const categoryBreakdown: { [key: string]: number } = {};
   expenseData.forEach(item => {
@@ -264,7 +247,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
     allCategories.add(item.category);
   });
 
-  const categoriesList = Array.from(allCategories).slice(0, 4); // Limit to 4 categories for cleaner display
+  const categoriesList = Array.from(allCategories).slice(0, 4);
   
   const monthlyChartData = Object.entries(monthlyByCategory)
     .map(([month, categories]) => ({
@@ -288,8 +271,9 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
     }))
     .sort((a, b) => b.value - a.value);
 
-  // Generate sparkline data for KPI cards (last 7 days)
+  // Generate sparkline data for KPI cards (last 7 days) - returns zeros if no data
   const generateSparklineData = () => {
+    if (expenseData.length === 0) return [0, 0, 0, 0, 0, 0, 0];
     const last7Days: number[] = [];
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
@@ -306,6 +290,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
   };
 
   const sparklineData = generateSparklineData();
+  const hasData = expenseData.length > 0;
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -400,67 +385,80 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
           <CardHeader className="p-4 md:p-6 pb-2">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <CardTitle className="text-base md:text-lg">Monthly Expenses</CardTitle>
-              <div className="flex items-center gap-3 flex-wrap">
-                {categoriesList.map((category, index) => (
-                  <div key={category} className="flex items-center gap-1.5">
-                    <div 
-                      className="w-2.5 h-2.5 rounded-sm" 
-                      style={{ backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length] }}
-                    />
-                    <span className="text-xs text-muted-foreground">{category}</span>
-                  </div>
-                ))}
-              </div>
+              {hasData && (
+                <div className="flex items-center gap-3 flex-wrap">
+                  {categoriesList.map((category, index) => (
+                    <div key={category} className="flex items-center gap-1.5">
+                      <div 
+                        className="w-2.5 h-2.5 rounded-sm" 
+                        style={{ backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length] }}
+                      />
+                      <span className="text-xs text-muted-foreground">{category}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </CardHeader>
           <CardContent className="p-2 md:p-6 pt-0">
-            <ChartContainer
-              config={{}}
-              className="h-[280px] md:h-[320px] w-full"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData} barGap={2} barCategoryGap="15%">
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                  <XAxis 
-                    dataKey="month" 
-                    stroke="hsl(var(--muted-foreground))" 
-                    fontSize={11} 
-                    tick={{ fontSize: 11 }} 
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <YAxis 
-                    stroke="hsl(var(--muted-foreground))" 
-                    fontSize={11} 
-                    tick={{ fontSize: 11 }} 
-                    width={55}
-                    axisLine={false}
-                    tickLine={false}
-                    tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "0.5rem",
-                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
-                    }}
-                    labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
-                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.3 }}
-                    formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
-                  />
-                  {categoriesList.map((category, index) => (
-                    <Bar 
-                      key={category}
-                      dataKey={category} 
-                      fill={HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length]} 
-                      radius={0}
-                      maxBarSize={18}
+            {!hasData ? (
+              <EmptyState
+                icon={BarChart3}
+                title="No expenses recorded"
+                description="Track your spending by adding your first expense."
+                actionLabel="Add Expense"
+                onAction={() => setIsAddDialogOpen(true)}
+                className="h-[280px] md:h-[320px]"
+              />
+            ) : (
+              <ChartContainer
+                config={{}}
+                className="h-[280px] md:h-[320px] w-full"
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={monthlyChartData} barGap={2} barCategoryGap="15%">
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                    <XAxis 
+                      dataKey="month" 
+                      stroke="hsl(var(--muted-foreground))" 
+                      fontSize={11} 
+                      tick={{ fontSize: 11 }} 
+                      axisLine={false}
+                      tickLine={false}
                     />
-                  ))}
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
+                    <YAxis 
+                      stroke="hsl(var(--muted-foreground))" 
+                      fontSize={11} 
+                      tick={{ fontSize: 11 }} 
+                      width={55}
+                      axisLine={false}
+                      tickLine={false}
+                      tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "0.5rem",
+                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+                      }}
+                      labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
+                      cursor={{ fill: 'hsl(var(--muted))', opacity: 0.3 }}
+                      formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
+                    />
+                    {categoriesList.map((category, index) => (
+                      <Bar 
+                        key={category}
+                        dataKey={category} 
+                        fill={HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length]} 
+                        radius={0}
+                        maxBarSize={18}
+                      />
+                    ))}
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            )}
           </CardContent>
         </Card>
 
@@ -470,33 +468,42 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
             <CardTitle className="text-base md:text-lg">Expenses by Category</CardTitle>
           </CardHeader>
           <CardContent className="p-4 md:p-6 pt-2">
-            <div className="space-y-4">
-              {categoryChartData.map((entry, index) => (
-                <div key={entry.name} className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">{entry.name}</span>
-                    <span className="text-sm font-semibold text-foreground">{entry.percentage}%</span>
+            {!hasData ? (
+              <EmptyState
+                icon={PieChart}
+                title="No categories to display"
+                description="Your spending distribution will appear once expenses are added."
+                className="h-[280px] md:h-[320px]"
+              />
+            ) : (
+              <div className="space-y-4">
+                {categoryChartData.map((entry, index) => (
+                  <div key={entry.name} className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-foreground">{entry.name}</span>
+                      <span className="text-sm font-semibold text-foreground">{entry.percentage}%</span>
+                    </div>
+                    <div className="relative h-3 w-full bg-muted rounded-none overflow-hidden">
+                      <div 
+                        className="absolute inset-y-0 left-0 transition-all duration-500"
+                        style={{ 
+                          width: `${entry.percentage}%`,
+                          backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length],
+                        }}
+                      />
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      ${entry.value.toLocaleString()}
+                    </div>
                   </div>
-                  <div className="relative h-3 w-full bg-muted rounded-none overflow-hidden">
-                    <div 
-                      className="absolute inset-y-0 left-0 transition-all duration-500"
-                      style={{ 
-                        width: `${entry.percentage}%`,
-                        backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length],
-                      }}
-                    />
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    ${entry.value.toLocaleString()}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
 
-      {/* Expense Table */}
+      {/* Expenses Table */}
       <Card className="card-shadow overflow-hidden">
         <CardHeader className="p-4 md:p-6">
           <CardTitle className="text-base md:text-lg">All Expenses</CardTitle>
@@ -509,13 +516,14 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                   <TableHead className="text-xs md:text-sm">Category</TableHead>
                   <TableHead className="text-xs md:text-sm">Amount</TableHead>
                   <TableHead className="text-xs md:text-sm hidden sm:table-cell">Date</TableHead>
+                  <TableHead className="text-xs md:text-sm hidden md:table-cell">Description</TableHead>
                   <TableHead className="text-xs md:text-sm text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {expenseData.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-muted-foreground text-sm">
+                    <TableCell colSpan={5} className="text-center text-muted-foreground text-sm py-8">
                       No expenses found. Add your first expense to get started.
                     </TableCell>
                   </TableRow>
@@ -525,6 +533,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                       <TableCell className="font-medium text-xs md:text-sm">{expense.category}</TableCell>
                       <TableCell className="text-xs md:text-sm">${expense.amount.toLocaleString()}</TableCell>
                       <TableCell className="text-xs md:text-sm hidden sm:table-cell">{format(new Date(expense.date), "MMM dd, yyyy")}</TableCell>
+                      <TableCell className="text-xs md:text-sm hidden md:table-cell truncate max-w-[150px]">{expense.description || "-"}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1 md:gap-2">
                           <Button
@@ -569,13 +578,11 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 onValueChange={(value) => setFormData({ ...formData, category: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
+                  <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {EXPENSE_CATEGORIES.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
+                  {EXPENSE_CATEGORIES.map((category) => (
+                    <SelectItem key={category} value={category}>{category}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -585,7 +592,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               <Input
                 id="amount"
                 type="number"
-                placeholder="e.g., 50"
+                placeholder="0.00"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               />
@@ -603,16 +610,14 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               <Label htmlFor="description">Description (optional)</Label>
               <Input
                 id="description"
-                placeholder="e.g., Grocery shopping"
+                placeholder="e.g., Groceries at store"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleAddExpense}>Add Expense</Button>
           </DialogFooter>
         </DialogContent>
@@ -623,7 +628,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Expense</DialogTitle>
-            <DialogDescription>Update this expense entry.</DialogDescription>
+            <DialogDescription>Update the details of this expense.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -633,13 +638,11 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
                 onValueChange={(value) => setFormData({ ...formData, category: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
+                  <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {EXPENSE_CATEGORIES.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
+                  {EXPENSE_CATEGORIES.map((category) => (
+                    <SelectItem key={category} value={category}>{category}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -649,7 +652,6 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               <Input
                 id="edit-amount"
                 type="number"
-                placeholder="e.g., 50"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               />
@@ -667,16 +669,13 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
               <Label htmlFor="edit-description">Description (optional)</Label>
               <Input
                 id="edit-description"
-                placeholder="e.g., Grocery shopping"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleEditExpense}>Save Changes</Button>
           </DialogFooter>
         </DialogContent>
@@ -692,12 +691,8 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteExpense}>
-              Delete
-            </Button>
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleDeleteExpense}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
