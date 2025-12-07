@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, DollarSign, TrendingUp, Wallet, Edit, Trash2 } from "lucide-react";
+import { Plus, DollarSign, TrendingUp, Wallet, Edit, Trash2, BarChart3 } from "lucide-react";
 import { StatCard } from "@/components/StatCard";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ChartContainer } from "@/components/ui/chart";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   Dialog,
   DialogContent,
@@ -36,13 +37,6 @@ interface Income {
 }
 
 // Multi-series chart colors matching the design system
-const CHART_COLORS = {
-  salary: 'hsl(180, 65%, 42%)',      // Primary teal
-  freelance: 'hsl(45, 95%, 60%)',    // Accent yellow
-  investments: 'hsl(195, 70%, 50%)', // Light blue
-  other: 'hsl(150, 55%, 48%)',       // Light green
-};
-
 const HORIZONTAL_BAR_COLORS = [
   'hsl(180, 65%, 42%)',  // Teal
   'hsl(45, 95%, 60%)',   // Yellow/Orange
@@ -65,42 +59,8 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
   const [formData, setFormData] = useState({ source: "", amount: "", date: "" });
 
   useEffect(() => {
-    const initializeData = async () => {
-      await fetchIncomeData();
-    };
-    initializeData();
+    fetchIncomeData();
   }, [userId]);
-
-  // Auto-seed December 2025 data if current month has no entries
-  useEffect(() => {
-    const seedIfEmpty = async () => {
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-      
-      const currentMonthData = incomeData.filter(item => {
-        const itemDate = new Date(item.date);
-        return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
-      });
-
-      if (incomeData.length > 0 && currentMonthData.length === 0) {
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session) {
-            const { error } = await supabase.functions.invoke("seed-income-data");
-            if (!error) {
-              fetchIncomeData();
-            }
-          }
-        } catch (e) {
-          console.log("Auto-seed skipped");
-        }
-      }
-    };
-    
-    if (incomeData.length > 0) {
-      seedIfEmpty();
-    }
-  }, [incomeData.length]);
 
   const fetchIncomeData = async () => {
     const { data, error } = await supabase
@@ -267,7 +227,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
     allSources.add(item.source);
   });
 
-  const sourcesList = Array.from(allSources).slice(0, 4); // Limit to 4 sources for cleaner display
+  const sourcesList = Array.from(allSources).slice(0, 4);
   
   const monthlyChartData = Object.entries(monthlyBySource)
     .map(([month, sources]) => ({
@@ -295,6 +255,8 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
       percentage: totalIncome > 0 ? Math.round((value / totalIncome) * 100) : 0,
     }))
     .sort((a, b) => b.value - a.value);
+
+  const hasData = incomeData.length > 0;
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -335,67 +297,80 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
           <CardHeader className="p-4 md:p-6 pb-2">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <CardTitle className="text-base md:text-lg">Income Over Time</CardTitle>
-              <div className="flex items-center gap-3 flex-wrap">
-                {sourcesList.map((source, index) => (
-                  <div key={source} className="flex items-center gap-1.5">
-                    <div 
-                      className="w-2.5 h-2.5 rounded-sm" 
-                      style={{ backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length] }}
-                    />
-                    <span className="text-xs text-muted-foreground">{source}</span>
-                  </div>
-                ))}
-              </div>
+              {hasData && (
+                <div className="flex items-center gap-3 flex-wrap">
+                  {sourcesList.map((source, index) => (
+                    <div key={source} className="flex items-center gap-1.5">
+                      <div 
+                        className="w-2.5 h-2.5 rounded-sm" 
+                        style={{ backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length] }}
+                      />
+                      <span className="text-xs text-muted-foreground">{source}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </CardHeader>
           <CardContent className="p-2 md:p-6 pt-0">
-            <ChartContainer
-              config={{}}
-              className="h-[280px] md:h-[320px] w-full"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData} barGap={2} barCategoryGap="15%">
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                  <XAxis 
-                    dataKey="month" 
-                    stroke="hsl(var(--muted-foreground))" 
-                    fontSize={11} 
-                    tick={{ fontSize: 11 }} 
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <YAxis 
-                    stroke="hsl(var(--muted-foreground))" 
-                    fontSize={11} 
-                    tick={{ fontSize: 11 }} 
-                    width={55}
-                    axisLine={false}
-                    tickLine={false}
-                    tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "0.5rem",
-                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
-                    }}
-                    labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
-                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.3 }}
-                    formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
-                  />
-                  {sourcesList.map((source, index) => (
-                    <Bar 
-                      key={source}
-                      dataKey={source} 
-                      fill={HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length]} 
-                      radius={0}
-                      maxBarSize={18}
+            {!hasData ? (
+              <EmptyState
+                icon={BarChart3}
+                title="No income entries yet"
+                description="Add your first income source to track earnings over time."
+                actionLabel="Add Income"
+                onAction={() => setIsAddDialogOpen(true)}
+                className="h-[280px] md:h-[320px]"
+              />
+            ) : (
+              <ChartContainer
+                config={{}}
+                className="h-[280px] md:h-[320px] w-full"
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={monthlyChartData} barGap={2} barCategoryGap="15%">
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                    <XAxis 
+                      dataKey="month" 
+                      stroke="hsl(var(--muted-foreground))" 
+                      fontSize={11} 
+                      tick={{ fontSize: 11 }} 
+                      axisLine={false}
+                      tickLine={false}
                     />
-                  ))}
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
+                    <YAxis 
+                      stroke="hsl(var(--muted-foreground))" 
+                      fontSize={11} 
+                      tick={{ fontSize: 11 }} 
+                      width={55}
+                      axisLine={false}
+                      tickLine={false}
+                      tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "0.5rem",
+                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+                      }}
+                      labelStyle={{ color: "hsl(var(--foreground))", fontWeight: 600 }}
+                      cursor={{ fill: 'hsl(var(--muted))', opacity: 0.3 }}
+                      formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
+                    />
+                    {sourcesList.map((source, index) => (
+                      <Bar 
+                        key={source}
+                        dataKey={source} 
+                        fill={HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length]} 
+                        radius={0}
+                        maxBarSize={18}
+                      />
+                    ))}
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            )}
           </CardContent>
         </Card>
 
@@ -405,28 +380,37 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
             <CardTitle className="text-base md:text-lg">Income by Source</CardTitle>
           </CardHeader>
           <CardContent className="p-4 md:p-6 pt-2">
-            <div className="space-y-4">
-              {sourceChartData.map((entry, index) => (
-                <div key={entry.name} className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">{entry.name}</span>
-                    <span className="text-sm font-semibold text-foreground">{entry.percentage}%</span>
+            {!hasData ? (
+              <EmptyState
+                icon={Wallet}
+                title="No income sources added"
+                description="Your earnings distribution will appear here once you add income."
+                className="h-[280px] md:h-[320px]"
+              />
+            ) : (
+              <div className="space-y-4">
+                {sourceChartData.map((entry, index) => (
+                  <div key={entry.name} className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-foreground">{entry.name}</span>
+                      <span className="text-sm font-semibold text-foreground">{entry.percentage}%</span>
+                    </div>
+                    <div className="relative h-3 w-full bg-muted rounded-none overflow-hidden">
+                      <div 
+                        className="absolute inset-y-0 left-0 transition-all duration-500"
+                        style={{ 
+                          width: `${entry.percentage}%`,
+                          backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length],
+                        }}
+                      />
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      ${entry.value.toLocaleString()}
+                    </div>
                   </div>
-                  <div className="relative h-3 w-full bg-muted rounded-none overflow-hidden">
-                    <div 
-                      className="absolute inset-y-0 left-0 transition-all duration-500"
-                      style={{ 
-                        width: `${entry.percentage}%`,
-                        backgroundColor: HORIZONTAL_BAR_COLORS[index % HORIZONTAL_BAR_COLORS.length],
-                      }}
-                    />
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    ${entry.value.toLocaleString()}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -450,7 +434,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
               <TableBody>
                 {incomeData.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-muted-foreground text-sm">
+                    <TableCell colSpan={4} className="text-center text-muted-foreground text-sm py-8">
                       No income entries found. Add your first income entry to get started.
                     </TableCell>
                   </TableRow>
@@ -511,7 +495,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
               <Input
                 id="amount"
                 type="number"
-                placeholder="e.g., 5000"
+                placeholder="0.00"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               />
@@ -527,9 +511,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleAddIncome}>Add Income</Button>
           </DialogFooter>
         </DialogContent>
@@ -540,14 +522,13 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Income</DialogTitle>
-            <DialogDescription>Update this income entry.</DialogDescription>
+            <DialogDescription>Update the details of this income entry.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="edit-source">Source</Label>
               <Input
                 id="edit-source"
-                placeholder="e.g., Salary, Freelance"
                 value={formData.source}
                 onChange={(e) => setFormData({ ...formData, source: e.target.value })}
               />
@@ -557,7 +538,6 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
               <Input
                 id="edit-amount"
                 type="number"
-                placeholder="e.g., 5000"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               />
@@ -573,9 +553,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleEditIncome}>Save Changes</Button>
           </DialogFooter>
         </DialogContent>
@@ -591,12 +569,8 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteIncome}>
-              Delete
-            </Button>
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleDeleteIncome}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
