@@ -214,16 +214,16 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
   // Sparkline data for KPI cards - show zeros if no data
   const sparklineData = hasData ? [120, 180, 250, 190, 230, 280, 320, 290, 340, 380] : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  // Area chart data - show realistic monthly progress with ups and downs
+  // Area chart data - show realistic cumulative savings progress (always increasing)
   const monthlyProgressData = hasData ? [
-    { month: "Jan", total: Math.round(totalSaved * 0.08) },   // Slow start
-    { month: "Feb", total: Math.round(totalSaved * 0.18) },   // Pick up
-    { month: "Mar", total: Math.round(totalSaved * 0.32) },   // Good month
-    { month: "Apr", total: Math.round(totalSaved * 0.28) },   // Dip (unexpected expense)
-    { month: "May", total: Math.round(totalSaved * 0.45) },   // Recovery
-    { month: "Jun", total: Math.round(totalSaved * 0.52) },   // Steady
-    { month: "Jul", total: Math.round(totalSaved * 0.48) },   // Summer dip
-    { month: "Aug", total: Math.round(totalSaved * 0.72) },   // Strong recovery
+    { month: "Jan", total: Math.round(totalSaved * 0.12) },   // Starting savings
+    { month: "Feb", total: Math.round(totalSaved * 0.22) },   // Steady growth
+    { month: "Mar", total: Math.round(totalSaved * 0.32) },   // Continued growth
+    { month: "Apr", total: Math.round(totalSaved * 0.42) },   // Tax refund boost
+    { month: "May", total: Math.round(totalSaved * 0.52) },   // Steady
+    { month: "Jun", total: Math.round(totalSaved * 0.62) },   // Mid-year progress
+    { month: "Jul", total: Math.round(totalSaved * 0.72) },   // Consistent
+    { month: "Aug", total: Math.round(totalSaved * 0.85) },   // Good month
     { month: "Sep", total: totalSaved },                       // Current total
   ] : [];
 
