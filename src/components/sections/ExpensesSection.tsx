@@ -234,31 +234,42 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
   const highestCategory = Object.entries(categoryBreakdown).sort((a, b) => b[1] - a[1])[0];
 
-  // Chart data - Multi-series for Expenses Over Time
+  // Chart data - Multi-series for Expenses Over Time (Jan-Sep only)
+  const validMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
   const monthlyByCategory: { [monthYear: string]: { [category: string]: number } } = {};
   const allCategories = new Set<string>();
   
+  // Initialize all months
+  validMonths.forEach(month => {
+    monthlyByCategory[month] = {};
+  });
+  
   expenseData.forEach(item => {
-    const monthYear = format(new Date(item.date), "MMM");
-    if (!monthlyByCategory[monthYear]) {
-      monthlyByCategory[monthYear] = {};
+    const itemDate = new Date(item.date);
+    const monthIndex = itemDate.getMonth();
+    // Only include Jan-Sep (months 0-8)
+    if (monthIndex <= 8) {
+      const monthYear = format(itemDate, "MMM");
+      if (!monthlyByCategory[monthYear]) {
+        monthlyByCategory[monthYear] = {};
+      }
+      monthlyByCategory[monthYear][item.category] = (monthlyByCategory[monthYear][item.category] || 0) + item.amount;
+      allCategories.add(item.category);
     }
-    monthlyByCategory[monthYear][item.category] = (monthlyByCategory[monthYear][item.category] || 0) + item.amount;
-    allCategories.add(item.category);
   });
 
   const categoriesList = Array.from(allCategories).slice(0, 4);
   
-  const monthlyChartData = Object.entries(monthlyByCategory)
-    .map(([month, categories]) => ({
+  // Build chart data in order Jan-Sep
+  const monthlyChartData = validMonths
+    .filter(month => monthlyByCategory[month] && Object.keys(monthlyByCategory[month]).length > 0)
+    .map(month => ({
       month,
       ...categoriesList.reduce((acc, category) => ({
         ...acc,
-        [category]: categories[category] || 0,
+        [category]: monthlyByCategory[month][category] || 0,
       }), {}),
-    }))
-    .reverse()
-    .slice(-8);
+    }));
 
   // Category breakdown for horizontal bar chart
   const totalExpenses = Object.values(categoryBreakdown).reduce((sum, val) => sum + val, 0);

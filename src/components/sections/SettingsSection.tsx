@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { User, Lock, CreditCard, Trash2, Loader2, Crown, AlertTriangle } from "lucide-react";
+import { User, Lock, CreditCard, Trash2, Loader2, Crown, AlertTriangle, Database } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -46,6 +46,9 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade }: Setting
   
   // Delete account state
   const [deleteLoading, setDeleteLoading] = useState(false);
+  
+  // Demo data seeding state
+  const [seedingData, setSeedingData] = useState(false);
 
   // Fetch profile on mount
   useEffect(() => {
@@ -214,6 +217,36 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade }: Setting
         variant: "destructive",
       });
       setDeleteLoading(false);
+    }
+  };
+
+  // Seed demo data
+  const handleSeedDemoData = async () => {
+    setSeedingData(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('seed-demo-data');
+      
+      if (error) {
+        throw error;
+      }
+      
+      toast({
+        title: "Demo Data Loaded",
+        description: `Successfully loaded ${data.counts?.income || 0} income entries, ${data.counts?.expenses || 0} expenses, ${data.counts?.goals || 0} goals, and ${data.counts?.debts || 0} debts.`,
+      });
+      
+      // Reload the page to show new data
+      window.location.reload();
+    } catch (error: any) {
+      console.error("Error seeding demo data:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to load demo data. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSeedingData(false);
     }
   };
 
@@ -476,6 +509,57 @@ export const SettingsSection = ({ userId, userEmail, isPro, onUpgrade }: Setting
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
                     Yes, delete my account
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </CardContent>
+        </Card>
+
+        {/* Demo Data - For Testing */}
+        <Card className="card-shadow border-t-4 border-l-0 border-r-0 border-b-0 border-t-primary">
+          <CardHeader className="p-4 md:pb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Database className="h-4 w-4 md:h-5 md:w-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-base md:text-lg">Demo Data</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
+                  Load sample data for testing
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 pt-0 space-y-4">
+            <div className="rounded-lg p-3 md:p-4 bg-muted/50">
+              <p className="text-xs md:text-sm text-muted-foreground">
+                This will replace your current data with demo data including income, expenses, savings goals, and debts for January through September 2025.
+              </p>
+            </div>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="outline"
+                  disabled={seedingData}
+                  className="w-full"
+                >
+                  {seedingData && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  <Database className="mr-2 h-4 w-4" />
+                  Load Demo Data
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="sm:max-w-md">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Load Demo Data?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will replace all your current financial data with sample data. This is useful for testing and demonstration purposes.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleSeedDemoData}>
+                    Yes, load demo data
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
