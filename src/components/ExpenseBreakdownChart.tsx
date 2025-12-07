@@ -18,6 +18,12 @@ const categoryColors: { [key: string]: string } = {
   "Transportation": "hsl(var(--chart-3))",
   "Entertainment": "hsl(var(--chart-4))",
   "Utilities": "hsl(var(--chart-5))",
+  "Food & Dining": "hsl(var(--chart-2))",
+  "Bills & Utilities": "hsl(var(--chart-5))",
+  "Shopping": "#F97316",
+  "Healthcare": "#8B5CF6",
+  "Travel": "#06B6D4",
+  "Education": "#10B981",
   "Others": "hsl(var(--muted-foreground))",
 };
 
