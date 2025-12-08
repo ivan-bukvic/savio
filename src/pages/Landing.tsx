@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import heroBgCurves from "@/assets/landing-bg-curves.jpg";
 import { TrustedBySection } from "@/components/TrustedBySection";
+import { AnimatedStat } from "@/components/AnimatedStat";
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -304,20 +305,11 @@ const Landing = () => {
               We believe managing your finances should be simple, secure, and empowering. Our platform combines cutting-edge technology with intuitive design to give you complete clarity and control over your financial life.
             </p>
             <div className="flex flex-wrap justify-center gap-8 sm:gap-12 mb-12">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">3,200+</div>
-                <div className="text-muted-foreground">Active Users</div>
-              </div>
+              <AnimatedStat end={3200} suffix="+" label="Active Users" />
               <div className="hidden sm:block h-16 w-px bg-border" />
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">$4.3M+</div>
-                <div className="text-muted-foreground">Tracked</div>
-              </div>
+              <AnimatedStat end={4.3} decimals={1} prefix="$" suffix="M+" label="Tracked" />
               <div className="hidden sm:block h-16 w-px bg-border" />
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">4.7/5</div>
-                <div className="text-muted-foreground">User Rating</div>
-              </div>
+              <AnimatedStat end={4.7} decimals={1} suffix="/5" label="User Rating" />
             </div>
           </motion.div>
         </div>
