@@ -40,41 +40,40 @@ const features: FeatureCard[] = [
 ];
 
 const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }) => {
-  const isLastCard = index === 4;
-  
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={`
+      className="
         relative overflow-hidden rounded-[18px] 
         bg-[rgba(15,25,30,0.55)] backdrop-blur-xl backdrop-saturate-[160%]
         border border-white/[0.08] 
         shadow-[0_4px_15px_rgba(0,0,0,0.25)]
         transition-all duration-[350ms] ease-out
-        hover:scale-[1.03] hover:shadow-[0_8px_25px_rgba(0,255,200,0.12)] hover:border-[rgba(0,255,200,0.25)]
-        ${isLastCard ? 'md:col-span-2 lg:col-span-1 lg:max-w-md lg:mx-auto' : ''}
-      `}
+        hover:scale-[1.02] hover:shadow-[0_8px_25px_rgba(0,255,200,0.12)] hover:border-[rgba(0,255,200,0.25)]
+        flex flex-col md:flex-row
+      "
     >
-      {/* Image - fills top portion with gradient overlay */}
-      <div className="relative w-full h-40 sm:h-48 overflow-hidden">
+      {/* Image - left side on desktop, full width on mobile */}
+      <div className="relative w-full md:w-[55%] h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0">
         <img
           src={feature.image}
           alt={feature.title}
           className="w-full h-full object-cover object-top opacity-[0.92]"
         />
         {/* Gradient overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[rgba(15,25,30,0.4)] hidden md:block" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[rgba(15,25,30,0.4)] md:hidden" />
       </div>
       
-      {/* Content */}
-      <div className="p-5">
-        <h3 className="text-xl font-semibold text-[#d9e6e9] mb-2">
+      {/* Content - right side on desktop, vertically centered */}
+      <div className="flex-1 p-6 md:p-8 flex flex-col justify-center md:text-right">
+        <h3 className="text-xl sm:text-2xl font-semibold text-[#d9e6e9] mb-3">
           {feature.title}
         </h3>
-        <p className="text-sm text-[#a8c0c5] leading-relaxed">
+        <p className="text-sm sm:text-base text-[#a8c0c5] leading-relaxed">
           {feature.subtitle}
         </p>
       </div>
@@ -84,7 +83,7 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
 
 export const FeatureShowcaseCards = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+    <div className="flex flex-col gap-6 lg:gap-8 max-w-4xl mx-auto">
       {features.map((feature, index) => (
         <FeatureCard key={feature.title} feature={feature} index={index} />
       ))}
