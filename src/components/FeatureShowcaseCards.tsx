@@ -49,28 +49,32 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={`
-        relative overflow-hidden rounded-2xl bg-card/80 backdrop-blur-sm border border-border/50 
-        shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 hover:scale-[1.02]
+        relative overflow-hidden rounded-[18px] 
+        bg-[rgba(15,25,30,0.55)] backdrop-blur-xl backdrop-saturate-[160%]
+        border border-white/[0.08] 
+        shadow-[0_4px_15px_rgba(0,0,0,0.25)]
+        transition-all duration-[350ms] ease-out
+        hover:scale-[1.03] hover:shadow-[0_8px_25px_rgba(0,255,200,0.12)] hover:border-[rgba(0,255,200,0.25)]
         ${isLastCard ? 'md:col-span-2 lg:col-span-1 lg:max-w-md lg:mx-auto' : ''}
       `}
     >
-      {/* Image - positioned at top right with fade */}
-      <div className="absolute top-0 right-0 w-[65%] h-32 sm:h-40 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-card/80 z-10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-card/80 z-10" />
+      {/* Image - fills top portion with gradient overlay */}
+      <div className="relative w-full h-40 sm:h-48 overflow-hidden">
         <img
           src={feature.image}
           alt={feature.title}
-          className="w-full h-full object-cover object-top-left opacity-80 rounded-bl-xl"
+          className="w-full h-full object-cover object-top opacity-[0.92]"
         />
+        {/* Gradient overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/35" />
       </div>
       
       {/* Content */}
-      <div className="relative z-20 p-6 pt-36 sm:pt-44">
-        <h3 className="text-xl font-bold text-foreground mb-2">
+      <div className="p-5">
+        <h3 className="text-xl font-semibold text-[#d9e6e9] mb-2">
           {feature.title}
         </h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        <p className="text-sm text-[#a8c0c5] leading-relaxed">
           {feature.subtitle}
         </p>
       </div>
