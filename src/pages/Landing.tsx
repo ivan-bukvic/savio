@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap, Play, PiggyBank, Wallet, Users, Award } from "lucide-react";
 import { FeaturesSectionWithHoverEffects } from "@/components/ui/feature-section-with-hover-effects";
+import { FeatureShowcaseCards } from "@/components/FeatureShowcaseCards";
 import { TestimonialSlider } from "@/components/ui/testimonial-slider";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +11,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState as useReactState } from "react";
 import { toast } from "sonner";
 import { useState } from "react";
-import dashboardPreview from "@/assets/dashboard-screenshot.png";
 import heroBgCurves from "@/assets/landing-bg-curves.jpg";
 import { TrustedBySection } from "@/components/TrustedBySection";
 const Landing = () => {
@@ -482,61 +482,6 @@ const Landing = () => {
 
       {/* How Savio Works Section */}
       <section id="how-it-works" className="py-20 px-6 relative z-10">
-        <div className="container mx-auto max-w-7xl">
-          <motion.div initial={{
-          opacity: 0,
-          y: 30
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.6
-        }} className="text-center mb-8">
-            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              How Savio Works
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Savio guides you step-by-step through understanding, organizing, and improving your financial life.
-            </p>
-          </motion.div>
-
-          <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.6,
-          delay: 0.2
-        }}>
-            <FeaturesSectionWithHoverEffects features={[{
-            title: "Connect Your Accounts",
-            description: "Savio organizes your income, expenses, goals, and debts in one place.",
-            icon: <Link2 className="h-6 w-6" />
-          }, {
-            title: "Visualize Your Finances",
-            description: "Clean charts and dashboards help you understand where your money goes.",
-            icon: <Eye className="h-6 w-6" />
-          }, {
-            title: "Get AI-Powered Insights",
-            description: "Savio identifies patterns and suggests improvements tailored to you.",
-            icon: <Sparkles className="h-6 w-6" />
-          }, {
-            title: "Track Your Progress",
-            description: "See your financial health improve week after week with real-time updates.",
-            icon: <CheckCircle2 className="h-6 w-6" />
-          }]} />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Track Your Finances Easily Section */}
-      <section className="py-20 px-6 relative z-10">
         <div className="container mx-auto max-w-6xl">
           <motion.div initial={{
           opacity: 0,
@@ -550,32 +495,14 @@ const Landing = () => {
           duration: 0.6
         }} className="text-center mb-12">
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              Track Your Finances Easily
+              How Savio Works
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Savio's beautiful dashboard gives you all the essential information for understanding and tracking your finances - all in one place.
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Savio guides you step-by-step through understanding, organizing, and improving your financial life.
             </p>
           </motion.div>
 
-          <motion.div initial={{
-          opacity: 0,
-          scale: 0.95
-        }} whileInView={{
-          opacity: 1,
-          scale: 1
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.6,
-          delay: 0.2
-        }} className="relative group">
-            <div className="relative rounded-xl overflow-hidden border border-border/40 shadow-2xl shadow-primary/10 group-hover:shadow-primary/20 transition-all duration-500 group-hover:scale-[1.02]">
-              <img src={dashboardPreview} alt="Savio Dashboard Preview showing income vs expenses chart, expense breakdown, savings goals, and debt overview" className="w-full h-auto" />
-            </div>
-            <p className="text-center text-muted-foreground text-sm mt-6">
-              A preview of your personalized Savio Dashboard
-            </p>
-          </motion.div>
+          <FeatureShowcaseCards />
         </div>
       </section>
 
