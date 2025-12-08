@@ -166,220 +166,56 @@ const Landing = () => {
       </motion.header>
 
       {/* Hero Section - Full Screen */}
-      <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden z-10">
+      <section className="h-screen flex items-center justify-center px-6 relative overflow-hidden z-10">
         <div className="absolute top-1/4 -right-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
         
-        <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left - Copy */}
-            <motion.div initial={{
-            opacity: 0,
-            y: 30
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.7
-          }} className="text-center lg:text-left">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight">
-                Take Control of Your Money –{" "}
-                <span className="text-primary">Effortlessly.</span>
-              </h1>
-              <p className="text-lg sm:text-xl text-muted-foreground mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Build savings, reduce stress, and finally gain a clear path to financial freedom – all in one simple dashboard.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link to="/auth" state={{
-                mode: "signup"
-              }}>
-                  <Button size="lg" className="text-base px-8 py-4 h-auto group w-full sm:w-auto">
-                    Get Started – It's Free
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <a href="#features">
-                  
-                </a>
-              </div>
-              
-              {/* Trust indicators */}
-              <div className="mt-12 flex items-center gap-6 justify-center lg:justify-start text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  
-                  
-                </div>
-                <div className="flex items-center gap-2">
-                  
-                  
-                </div>
-              </div>
+        <div className="container mx-auto max-w-4xl relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.7 }} 
+            className="text-center"
+          >
+            {/* Two-line title */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-[1.1] tracking-tight">
+              Take Control of Your Money.
+            </h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif-display italic text-primary mt-4 mb-10"
+            >
+              Effortlessly.
+            </motion.p>
+            
+            {/* Subheader */}
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="text-lg sm:text-xl text-muted-foreground/80 mb-12 leading-relaxed max-w-2xl mx-auto"
+            >
+              Build savings, reduce stress, and finally gain a clear path to financial freedom – all in one simple dashboard.
+            </motion.p>
+            
+            {/* CTA */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="flex justify-center"
+            >
+              <Link to="/auth" state={{ mode: "signup" }}>
+                <Button size="lg" className="text-base px-8 py-4 h-auto group">
+                  Get Started – It's Free
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </motion.div>
-
-            {/* Right - Outcome Visual */}
-            <motion.div initial={{
-            opacity: 0,
-            scale: 0.9
-          }} animate={{
-            opacity: 1,
-            scale: 1
-          }} transition={{
-            duration: 0.7,
-            delay: 0.2
-          }} className="relative">
-              <div className="relative">
-                {/* Main visual container */}
-                <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl p-8 shadow-2xl shadow-primary/10">
-                  {/* Progress ring */}
-                  <div className="flex items-center justify-center mb-6">
-                    <div className="relative">
-                      <svg className="w-40 h-40 transform -rotate-90">
-                        <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="8" fill="none" className="text-muted/30" />
-                        <motion.circle cx="80" cy="80" r="70" stroke="url(#progressGradient)" strokeWidth="8" fill="none" strokeLinecap="round" initial={{
-                        strokeDasharray: "0 440"
-                      }} animate={{
-                        strokeDasharray: "330 440"
-                      }} transition={{
-                        duration: 1.5,
-                        delay: 0.5,
-                        ease: "easeOut"
-                      }} />
-                        <defs>
-                          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stopColor="hsl(var(--primary))" />
-                            <stop offset="100%" stopColor="hsl(var(--secondary))" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <motion.span initial={{
-                        opacity: 0
-                      }} animate={{
-                        opacity: 1
-                      }} transition={{
-                        delay: 1
-                      }} className="text-3xl font-bold text-foreground">
-                          75%
-                        </motion.span>
-                        <span className="text-sm text-muted-foreground">Savings Goal</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Stats row */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <motion.div initial={{
-                    opacity: 0,
-                    y: 20
-                  }} animate={{
-                    opacity: 1,
-                    y: 0
-                  }} transition={{
-                    delay: 0.8
-                  }} className="text-center p-3 bg-muted/50 rounded-xl">
-                      <div className="text-lg font-bold text-primary">$2,450</div>
-                      <div className="text-xs text-muted-foreground">Saved</div>
-                    </motion.div>
-                    <motion.div initial={{
-                    opacity: 0,
-                    y: 20
-                  }} animate={{
-                    opacity: 1,
-                    y: 0
-                  }} transition={{
-                    delay: 0.9
-                  }} className="text-center p-3 bg-muted/50 rounded-xl">
-                      <div className="text-lg font-bold text-secondary">+18%</div>
-                      <div className="text-xs text-muted-foreground">This Month</div>
-                    </motion.div>
-                    <motion.div initial={{
-                    opacity: 0,
-                    y: 20
-                  }} animate={{
-                    opacity: 1,
-                    y: 0
-                  }} transition={{
-                    delay: 1
-                  }} className="text-center p-3 bg-muted/50 rounded-xl">
-                      <div className="text-lg font-bold text-accent">12</div>
-                      <div className="text-xs text-muted-foreground">Days Ahead</div>
-                    </motion.div>
-                  </div>
-
-                  {/* Mini chart */}
-                  <motion.div initial={{
-                  opacity: 0
-                }} animate={{
-                  opacity: 1
-                }} transition={{
-                  delay: 1.2
-                }} className="h-16 flex items-end justify-between gap-1 px-2">
-                    {[40, 55, 45, 60, 50, 70, 65, 80, 75, 90, 85, 95].map((height, i) => <motion.div key={i} initial={{
-                    height: 0
-                  }} animate={{
-                    height: `${height}%`
-                  }} transition={{
-                    delay: 1.3 + i * 0.05,
-                    duration: 0.3
-                  }} className="flex-1 bg-gradient-to-t from-primary to-secondary rounded-t" />)}
-                  </motion.div>
-                </div>
-
-                {/* Floating elements */}
-                <motion.div initial={{
-                opacity: 0,
-                x: -20
-              }} animate={{
-                opacity: 1,
-                x: 0
-              }} transition={{
-                delay: 1.5
-              }} className="absolute -left-4 top-1/4 bg-card border border-border rounded-xl p-3 shadow-lg hidden lg:block">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-success/20 rounded-full flex items-center justify-center">
-                      <TrendingUp className="h-4 w-4 text-success" />
-                    </div>
-                    <div>
-                      <div className="text-xs text-muted-foreground">Monthly</div>
-                      <div className="text-sm font-semibold text-foreground">+$340</div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                <motion.div initial={{
-                opacity: 0,
-                x: 20
-              }} animate={{
-                opacity: 1,
-                x: 0
-              }} transition={{
-                delay: 1.7
-              }} className="absolute -right-4 bottom-1/4 bg-card border border-border rounded-xl p-3 shadow-lg hidden lg:block">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                      <Target className="h-4 w-4 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-xs text-muted-foreground">Goal</div>
-                      <div className="text-sm font-semibold text-foreground">On Track</div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
+          </motion.div>
         </div>
-
-        {/* Scroll indicator */}
-        <motion.div initial={{
-        opacity: 0
-      }} animate={{
-        opacity: 1
-      }} transition={{
-        delay: 2
-      }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
-          
-        </motion.div>
       </section>
 
       {/* Trusted By Section */}
