@@ -185,7 +185,8 @@ const Landing = () => {
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif-display italic text-primary mt-4 mb-10"
+              className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-primary mt-4 mb-10"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", fontWeight: 400 }}
             >
               Effortlessly.
             </motion.p>
