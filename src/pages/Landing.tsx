@@ -305,11 +305,11 @@ const Landing = () => {
               We believe managing your finances should be simple, secure, and empowering. Our platform combines cutting-edge technology with intuitive design to give you complete clarity and control over your financial life.
             </p>
             <div className="flex flex-wrap justify-center gap-8 sm:gap-12 mb-12">
-              <AnimatedStat end={3200} suffix="+" label="Active Users" />
+              <AnimatedStat end={3200} suffix="+" label="Active Users" duration={1800} />
               <div className="hidden sm:block h-16 w-px bg-border" />
-              <AnimatedStat end={4.3} decimals={1} prefix="$" suffix="M+" label="Tracked" />
+              <AnimatedStat end={4.3} decimals={1} prefix="$" suffix="M+" label="Tracked" duration={1800} />
               <div className="hidden sm:block h-16 w-px bg-border" />
-              <AnimatedStat end={4.7} decimals={1} suffix="/5" label="User Rating" />
+              <AnimatedStat end={4.7} decimals={1} suffix="/5" label="User Rating" duration={1800} />
             </div>
           </motion.div>
         </div>
