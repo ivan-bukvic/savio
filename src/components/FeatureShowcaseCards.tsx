@@ -51,9 +51,10 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
         bg-[rgba(15,25,30,0.55)] backdrop-blur-xl backdrop-saturate-[160%]
         border border-white/[0.08] 
         shadow-[0_4px_15px_rgba(0,0,0,0.25)]
-        transition-all duration-[350ms] ease-out
-        hover:scale-[1.02] hover:shadow-[0_8px_25px_rgba(0,255,200,0.12)] hover:border-[rgba(0,255,200,0.25)]
+        transition-all duration-300 ease-out
+        hover:scale-[1.03] hover:shadow-[0_12px_35px_rgba(0,255,200,0.15)] hover:border-[rgba(0,255,200,0.30)]
         flex flex-col md:flex-row-reverse
+        overflow-hidden
       "
     >
       {/* Image - right side on desktop, full width on mobile */}
