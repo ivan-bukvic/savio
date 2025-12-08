@@ -57,7 +57,7 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
       "
     >
       {/* Image - right side on desktop, full width on mobile */}
-      <div className="relative w-full md:w-[55%] h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0 rounded-xl">
+      <div className="relative w-full md:w-[70%] h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0 rounded-xl">
         <img
           src={feature.image}
           alt={feature.title}
@@ -69,7 +69,7 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
       </div>
       
       {/* Content - left side on desktop, vertically centered */}
-      <div className="flex-1 p-4 md:p-6 md:pr-8 flex flex-col justify-center md:text-left">
+      <div className="w-full md:w-[30%] p-4 md:p-5 flex flex-col justify-center md:text-left">
         <h3 className="text-xl sm:text-2xl font-semibold text-[#d9e6e9] mb-3">
           {feature.title}
         </h3>
