@@ -47,29 +47,29 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="
-        relative overflow-hidden rounded-[18px] 
+        relative rounded-[18px] p-4 md:p-5
         bg-[rgba(15,25,30,0.55)] backdrop-blur-xl backdrop-saturate-[160%]
         border border-white/[0.08] 
         shadow-[0_4px_15px_rgba(0,0,0,0.25)]
         transition-all duration-[350ms] ease-out
         hover:scale-[1.02] hover:shadow-[0_8px_25px_rgba(0,255,200,0.12)] hover:border-[rgba(0,255,200,0.25)]
-        flex flex-col md:flex-row
+        flex flex-col md:flex-row-reverse
       "
     >
-      {/* Image - left side on desktop, full width on mobile */}
-      <div className="relative w-full md:w-[55%] h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0">
+      {/* Image - right side on desktop, full width on mobile */}
+      <div className="relative w-full md:w-[55%] h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0 rounded-xl">
         <img
           src={feature.image}
           alt={feature.title}
           className="w-full h-full object-cover object-top opacity-[0.92]"
         />
         {/* Gradient overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[rgba(15,25,30,0.4)] hidden md:block" />
+        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[rgba(15,25,30,0.4)] hidden md:block" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[rgba(15,25,30,0.4)] md:hidden" />
       </div>
       
-      {/* Content - right side on desktop, vertically centered */}
-      <div className="flex-1 p-6 md:p-8 flex flex-col justify-center md:text-right">
+      {/* Content - left side on desktop, vertically centered */}
+      <div className="flex-1 p-4 md:p-6 md:pr-8 flex flex-col justify-center md:text-left">
         <h3 className="text-xl sm:text-2xl font-semibold text-[#d9e6e9] mb-3">
           {feature.title}
         </h3>
