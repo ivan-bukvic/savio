@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -57,7 +57,7 @@ const testimonials: Testimonial[] = [
 ];
 
 const StarRating = ({ rating }: { rating: number }) => (
-  <div className="flex items-center gap-0.5">
+  <div className="flex items-center gap-1">
     {[...Array(5)].map((_, i) => (
       <Star
         key={i}
@@ -81,44 +81,56 @@ const TestimonialCard = ({ testimonial, position }: TestimonialCardProps) => {
   return (
     <div
       className={cn(
-        "relative rounded-2xl p-6 transition-all duration-500",
-        "bg-[rgba(15,25,35,0.7)] backdrop-blur-xl border border-white/[0.08]",
+        "relative rounded-2xl transition-all duration-500 w-full",
+        "border border-white/[0.08]",
         isCenter 
-          ? "opacity-100 scale-100 shadow-[0_0_60px_rgba(0,200,180,0.15)]" 
-          : "opacity-40 scale-95 blur-[1px]"
+          ? "p-8 bg-[rgba(15,30,40,0.75)] backdrop-blur-xl shadow-[0_0_60px_rgba(0,200,180,0.12)] transform scale-[1.02] -translate-y-1" 
+          : "p-6 bg-[rgba(10,20,30,0.6)] backdrop-blur-md opacity-40 blur-[1.5px] scale-[0.92]"
       )}
       style={{
-        minHeight: '220px',
+        minHeight: isCenter ? '260px' : '240px',
       }}
     >
-      {/* Glow effect for center card */}
+      {/* Spotlight glow effect for center card */}
       {isCenter && (
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+        <div className="absolute -inset-1 rounded-2xl bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pointer-events-none -z-10 blur-xl" />
       )}
       
       {/* Quote */}
       <p className={cn(
-        "text-sm md:text-base leading-relaxed mb-6",
-        isCenter ? "text-foreground/90" : "text-foreground/60"
+        "leading-relaxed mb-8",
+        isCenter 
+          ? "text-base md:text-lg text-foreground/95" 
+          : "text-sm text-foreground/50"
       )}>
         "{testimonial.quote}"
       </p>
       
       {/* Author info */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         <img
           src={testimonial.image}
           alt={testimonial.name}
-          className="w-12 h-12 rounded-full object-cover border-2 border-primary/30"
+          className={cn(
+            "rounded-full object-cover",
+            isCenter 
+              ? "w-14 h-14 border-2 border-primary/40" 
+              : "w-10 h-10 border border-white/10"
+          )}
         />
         <div className="flex-1">
           <p className={cn(
-            "font-semibold text-sm",
-            isCenter ? "text-foreground" : "text-foreground/70"
+            "font-semibold",
+            isCenter ? "text-foreground text-base" : "text-foreground/60 text-sm"
           )}>
             {testimonial.name}
           </p>
-          <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+          <p className={cn(
+            "text-muted-foreground",
+            isCenter ? "text-sm" : "text-xs"
+          )}>
+            {testimonial.role}
+          </p>
         </div>
         <StarRating rating={testimonial.rating} />
       </div>
@@ -129,19 +141,16 @@ const TestimonialCard = ({ testimonial, position }: TestimonialCardProps) => {
 export const TestimonialsCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [direction, setDirection] = useState(0);
 
   const getIndex = (offset: number) => {
     return (currentIndex + offset + testimonials.length) % testimonials.length;
   };
 
   const handleNext = useCallback(() => {
-    setDirection(1);
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
   }, []);
 
   const handlePrev = useCallback(() => {
-    setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   }, []);
 
@@ -151,21 +160,6 @@ export const TestimonialsCarousel = () => {
     const interval = setInterval(handleNext, 6000);
     return () => clearInterval(interval);
   }, [isPaused, handleNext]);
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 100 : -100,
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction < 0 ? 100 : -100,
-      opacity: 0,
-    }),
-  };
 
   return (
     <div 
@@ -190,90 +184,85 @@ export const TestimonialsCarousel = () => {
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-2">
           Don't take our word for it.
         </h2>
-        <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground/80">
+        <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground/70">
           Over 100+ people trust us.
         </p>
       </motion.div>
 
       {/* Carousel Container */}
-      <div className="relative max-w-6xl mx-auto overflow-hidden px-4">
-        {/* Cards Container */}
-        <div className="relative flex items-center justify-center gap-4 md:gap-6">
-          {/* Left Card - Faded */}
-          <div className="hidden md:block w-[320px] flex-shrink-0 transform -translate-x-8 opacity-50">
-            <motion.div
-              key={`left-${getIndex(-1)}`}
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 0.4, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <TestimonialCard
-                testimonial={testimonials[getIndex(-1)]}
-                position="left"
-              />
-            </motion.div>
-            {/* Left fade gradient */}
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none" />
-          </div>
+      <div className="relative max-w-7xl mx-auto px-4 overflow-hidden">
+        {/* Cards Container - Always show 3 cards */}
+        <div className="relative flex items-center justify-center gap-6 lg:gap-8 py-4">
+          {/* Left Card */}
+          <motion.div 
+            key={`left-${getIndex(-1)}`}
+            className="hidden md:block w-full max-w-[400px] lg:max-w-[480px] flex-shrink-0"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <TestimonialCard
+              testimonial={testimonials[getIndex(-1)]}
+              position="left"
+            />
+          </motion.div>
 
           {/* Center Card - Main Focus */}
-          <div className="w-full md:w-[400px] flex-shrink-0 z-10">
-            <AnimatePresence initial={false} custom={direction} mode="wait">
-              <motion.div
-                key={currentIndex}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.3 }
-                }}
-              >
-                <TestimonialCard
-                  testimonial={testimonials[currentIndex]}
-                  position="center"
-                />
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <motion.div 
+            key={`center-${currentIndex}`}
+            className="w-full max-w-[480px] lg:max-w-[560px] flex-shrink-0 z-10"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+          >
+            <TestimonialCard
+              testimonial={testimonials[currentIndex]}
+              position="center"
+            />
+          </motion.div>
 
-          {/* Right Card - Faded */}
-          <div className="hidden md:block w-[320px] flex-shrink-0 transform translate-x-8 opacity-50">
-            <motion.div
-              key={`right-${getIndex(1)}`}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 0.4, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <TestimonialCard
-                testimonial={testimonials[getIndex(1)]}
-                position="right"
-              />
-            </motion.div>
-            {/* Right fade gradient */}
-            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none" />
-          </div>
+          {/* Right Card */}
+          <motion.div 
+            key={`right-${getIndex(1)}`}
+            className="hidden md:block w-full max-w-[400px] lg:max-w-[480px] flex-shrink-0"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <TestimonialCard
+              testimonial={testimonials[getIndex(1)]}
+              position="right"
+            />
+          </motion.div>
         </div>
 
-        {/* Edge fade overlays */}
-        <div className="absolute inset-y-0 left-0 w-20 md:w-40 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-20" />
-        <div className="absolute inset-y-0 right-0 w-20 md:w-40 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none z-20" />
+        {/* Edge fade overlays - cinematic gradient fades */}
+        <div 
+          className="absolute inset-y-0 left-0 w-[15%] md:w-[20%] pointer-events-none z-20"
+          style={{
+            background: 'linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background) / 0.9) 30%, transparent 100%)'
+          }}
+        />
+        <div 
+          className="absolute inset-y-0 right-0 w-[15%] md:w-[20%] pointer-events-none z-20"
+          style={{
+            background: 'linear-gradient(to left, hsl(var(--background)) 0%, hsl(var(--background) / 0.9) 30%, transparent 100%)'
+          }}
+        />
       </div>
 
       {/* Navigation Arrows */}
-      <div className="flex items-center justify-center gap-4 mt-10">
+      <div className="flex items-center justify-center gap-4 mt-12">
         <button
           onClick={handlePrev}
-          className="group inline-flex items-center justify-center w-12 h-12 rounded-full bg-[rgba(15,25,35,0.6)] border border-white/[0.1] backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(0,200,180,0.2)]"
+          className="group inline-flex items-center justify-center w-12 h-12 rounded-full bg-[rgba(15,25,35,0.6)] border border-white/[0.1] backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_25px_rgba(0,200,180,0.25)] hover:bg-[rgba(15,35,40,0.8)]"
           aria-label="Previous testimonial"
         >
           <ChevronLeft className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
         </button>
         <button
           onClick={handleNext}
-          className="group inline-flex items-center justify-center w-12 h-12 rounded-full bg-[rgba(15,25,35,0.6)] border border-white/[0.1] backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(0,200,180,0.2)]"
+          className="group inline-flex items-center justify-center w-12 h-12 rounded-full bg-[rgba(15,25,35,0.6)] border border-white/[0.1] backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_25px_rgba(0,200,180,0.25)] hover:bg-[rgba(15,35,40,0.8)]"
           aria-label="Next testimonial"
         >
           <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -285,10 +274,7 @@ export const TestimonialsCarousel = () => {
         {testimonials.map((_, index) => (
           <button
             key={index}
-            onClick={() => {
-              setDirection(index > currentIndex ? 1 : -1);
-              setCurrentIndex(index);
-            }}
+            onClick={() => setCurrentIndex(index)}
             className={cn(
               "h-2 rounded-full transition-all duration-300",
               currentIndex === index 
