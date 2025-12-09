@@ -63,31 +63,84 @@ const TestimonialCard = ({
   position
 }: TestimonialCardProps) => {
   const isCenter = position === 'center';
-  return <div className={cn("relative rounded-2xl transition-all duration-500 w-full", "border border-white/[0.08]", isCenter ? "p-8 bg-[rgba(15,30,40,0.75)] backdrop-blur-xl shadow-[0_0_60px_rgba(0,200,180,0.12)] transform scale-[1.02] -translate-y-1" : "p-6 bg-[rgba(10,20,30,0.6)] backdrop-blur-md opacity-40 blur-[1.5px] scale-[0.92]")} style={{
-    minHeight: isCenter ? '260px' : '240px'
-  }}>
+  const isLeft = position === 'left';
+  
+  return (
+    <div 
+      className={cn(
+        "relative rounded-2xl transition-all duration-500 w-full",
+        "border border-white/[0.08]",
+        isCenter 
+          ? "p-8 bg-[rgba(28,32,36,0.85)] backdrop-blur-xl shadow-[0_0_40px_rgba(0,255,200,0.20)] transform scale-100" 
+          : "p-6 bg-[rgba(20,24,27,0.55)] backdrop-blur-lg"
+      )} 
+      style={{
+        minHeight: isCenter ? '260px' : '240px',
+        transform: isCenter ? 'scale(1)' : 'scale(0.93)',
+        opacity: isCenter ? 1 : 0.65,
+        filter: isCenter ? 'none' : 'brightness(0.85)',
+      }}
+    >
       {/* Spotlight glow effect for center card */}
-      {isCenter && <div className="absolute -inset-1 rounded-2xl bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pointer-events-none -z-10 blur-xl" />}
+      {isCenter && (
+        <div className="absolute -inset-1 rounded-2xl bg-gradient-to-b from-primary/15 via-primary/5 to-transparent pointer-events-none -z-10 blur-xl" />
+      )}
+      
+      {/* Directional fade overlay for side cards */}
+      {!isCenter && (
+        <div 
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          style={{
+            background: isLeft 
+              ? 'linear-gradient(to right, rgba(0,0,0,0.35), rgba(0,0,0,0))'
+              : 'linear-gradient(to left, rgba(0,0,0,0.35), rgba(0,0,0,0))',
+          }}
+        />
+      )}
       
       {/* Quote */}
-      <p className={cn("leading-relaxed mb-8", isCenter ? "text-base md:text-lg text-foreground/95" : "text-sm text-foreground/50")}>
+      <p className={cn(
+        "leading-relaxed mb-8 relative z-10",
+        isCenter 
+          ? "text-base md:text-lg text-foreground/95" 
+          : "text-sm text-foreground/80"
+      )}>
         "{testimonial.quote}"
       </p>
       
       {/* Author info */}
-      <div className="flex items-center gap-4">
-        <img src={testimonial.image} alt={testimonial.name} className={cn("rounded-full object-cover", isCenter ? "w-14 h-14 border-2 border-primary/40" : "w-10 h-10 border border-white/10")} />
+      <div className="flex items-center gap-4 relative z-10">
+        <img 
+          src={testimonial.image} 
+          alt={testimonial.name} 
+          className={cn(
+            "rounded-full object-cover",
+            isCenter 
+              ? "w-14 h-14 border-2 border-primary/40" 
+              : "w-10 h-10 border border-white/20"
+          )} 
+        />
         <div className="flex-1">
-          <p className={cn("font-semibold", isCenter ? "text-foreground text-base" : "text-foreground/60 text-sm")}>
+          <p className={cn(
+            "font-semibold",
+            isCenter 
+              ? "text-foreground text-base" 
+              : "text-foreground/80 text-sm"
+          )}>
             {testimonial.name}
           </p>
-          <p className={cn("text-muted-foreground", isCenter ? "text-sm" : "text-xs")}>
+          <p className={cn(
+            isCenter 
+              ? "text-muted-foreground text-sm" 
+              : "text-muted-foreground/70 text-xs"
+          )}>
             {testimonial.role}
           </p>
         </div>
         <StarRating rating={testimonial.rating} />
       </div>
-    </div>;
+    </div>
+  );
 };
 export const TestimonialsCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -108,7 +161,15 @@ export const TestimonialsCarousel = () => {
     const interval = setInterval(handleNext, 6000);
     return () => clearInterval(interval);
   }, [isPaused, handleNext]);
-  return <div className="relative w-full" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+  return (
+    <div 
+      className="relative w-full py-8" 
+      onMouseEnter={() => setIsPaused(true)} 
+      onMouseLeave={() => setIsPaused(false)}
+      style={{
+        background: 'radial-gradient(circle at center, rgba(0, 255, 200, 0.08), transparent 60%)',
+      }}
+    >
       {/* Section Header */}
       <motion.div initial={{
       opacity: 0,
@@ -180,13 +241,19 @@ export const TestimonialsCarousel = () => {
           </motion.div>
         </div>
 
-        {/* Edge fade overlays - cinematic gradient fades */}
-        <div className="absolute inset-y-0 left-0 w-[15%] md:w-[20%] pointer-events-none z-20" style={{
-        background: 'linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background) / 0.9) 30%, transparent 100%)'
-      }} />
-        <div className="absolute inset-y-0 right-0 w-[15%] md:w-[20%] pointer-events-none z-20" style={{
-        background: 'linear-gradient(to left, hsl(var(--background)) 0%, hsl(var(--background) / 0.9) 30%, transparent 100%)'
-      }} />
+        {/* Edge fade overlays - cinematic gradient fades with dark neutral */}
+        <div 
+          className="absolute inset-y-0 left-0 w-[12%] md:w-[18%] pointer-events-none z-20" 
+          style={{
+            background: 'linear-gradient(to right, rgba(15,17,19,0.95) 0%, rgba(15,17,19,0.7) 40%, transparent 100%)'
+          }} 
+        />
+        <div 
+          className="absolute inset-y-0 right-0 w-[12%] md:w-[18%] pointer-events-none z-20" 
+          style={{
+            background: 'linear-gradient(to left, rgba(15,17,19,0.95) 0%, rgba(15,17,19,0.7) 40%, transparent 100%)'
+          }} 
+        />
       </div>
 
       {/* Navigation Arrows */}
@@ -203,5 +270,6 @@ export const TestimonialsCarousel = () => {
       <div className="flex justify-center gap-2 mt-6">
         {testimonials.map((_, index) => <button key={index} onClick={() => setCurrentIndex(index)} className={cn("h-2 rounded-full transition-all duration-300", currentIndex === index ? "w-6 bg-primary" : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50")} aria-label={`Go to testimonial ${index + 1}`} />)}
       </div>
-    </div>;
+    </div>
+  );
 };
