@@ -32,16 +32,22 @@ const features: FeatureCard[] = [
     title: "Stay on Top of Expenses",
     subtitle: "Categorized expense tracking helps you identify overspending and optimize your budget",
     image: featureExpenses,
+    wideImage: true,
+    imagePosition: 'right',
   },
   {
     title: "Set and Reach Your Savings Goals",
     subtitle: "Create goals, track progress visually, and stay motivated with clear milestone insights",
     image: featureGoals,
+    wideImage: true,
+    imagePosition: 'center',
   },
   {
     title: "Smart AI Insights Tailored to You",
     subtitle: "Personalized suggestions help you save more, reduce debt, and improve financial habits",
     image: featureAI,
+    wideImage: true,
+    imagePosition: 'center',
   },
 ];
 
