@@ -10,7 +10,7 @@ interface FeatureCard {
   subtitle: string;
   image: string;
   wideImage?: boolean;
-  imagePosition?: 'center' | 'top' | 'right';
+  imagePosition?: 'center' | 'top' | 'right' | 'left';
 }
 
 const features: FeatureCard[] = [
@@ -40,14 +40,14 @@ const features: FeatureCard[] = [
     subtitle: "Create goals, track progress visually, and stay motivated with clear milestone insights",
     image: featureGoals,
     wideImage: true,
-    imagePosition: 'center',
+    imagePosition: 'left',
   },
   {
     title: "Smart AI Insights Tailored to You",
     subtitle: "Personalized suggestions help you save more, reduce debt, and improve financial habits",
     image: featureAI,
     wideImage: true,
-    imagePosition: 'center',
+    imagePosition: 'left',
   },
 ];
 
@@ -55,9 +55,9 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
   const isWideImage = feature.wideImage;
   const imagePositionClass = feature.imagePosition === 'right' 
     ? 'object-right' 
-    : feature.imagePosition === 'center' 
-      ? 'object-center' 
-      : 'object-top';
+    : feature.imagePosition === 'left'
+      ? 'object-left'
+      : 'object-center';
   
   return (
     <motion.div
