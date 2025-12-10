@@ -9,7 +9,8 @@ interface FeatureCard {
   title: string;
   subtitle: string;
   image: string;
-  isFirstCard?: boolean;
+  wideImage?: boolean;
+  imagePosition?: 'center' | 'top' | 'right';
 }
 
 const features: FeatureCard[] = [
@@ -17,12 +18,15 @@ const features: FeatureCard[] = [
     title: "Visualize Your Finances",
     subtitle: "Clean charts and dashboards help you understand where your money goes",
     image: featureExpensesDonut,
-    isFirstCard: true,
+    wideImage: true,
+    imagePosition: 'center',
   },
   {
     title: "Track Income With Clarity",
     subtitle: "Monitor income sources month-to-month and see which streams drive your financial growth",
     image: featureIncome,
+    wideImage: true,
+    imagePosition: 'right',
   },
   {
     title: "Stay on Top of Expenses",
@@ -42,7 +46,12 @@ const features: FeatureCard[] = [
 ];
 
 const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }) => {
-  const isFirstCard = feature.isFirstCard;
+  const isWideImage = feature.wideImage;
+  const imagePositionClass = feature.imagePosition === 'right' 
+    ? 'object-right' 
+    : feature.imagePosition === 'center' 
+      ? 'object-center' 
+      : 'object-top';
   
   return (
     <motion.div
@@ -66,11 +75,11 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
       "
     >
       {/* Image - right side on desktop, full width on mobile */}
-      <div className={`relative w-full ${isFirstCard ? 'md:w-[60%]' : 'md:w-[70%]'} h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0 rounded-xl`}>
+      <div className={`relative w-full ${isWideImage ? 'md:w-[60%]' : 'md:w-[70%]'} h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0 rounded-xl`}>
         <img
           src={feature.image}
           alt={feature.title}
-          className={`w-full h-full object-cover ${isFirstCard ? 'object-center' : 'object-top'} opacity-[0.92]`}
+          className={`w-full h-full object-cover ${imagePositionClass} opacity-[0.92]`}
         />
         {/* Gradient overlay for readability */}
         <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[rgba(15,25,30,0.4)] hidden md:block" />
@@ -78,7 +87,7 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
       </div>
       
       {/* Content - left side on desktop, vertically centered */}
-      <div className={`w-full ${isFirstCard ? 'md:w-[40%]' : 'md:w-[30%]'} p-4 md:p-5 flex flex-col justify-center md:text-left`}>
+      <div className={`w-full ${isWideImage ? 'md:w-[40%]' : 'md:w-[30%]'} p-4 md:p-5 flex flex-col justify-center md:text-left`}>
         <h3 className="text-xl sm:text-2xl font-semibold text-[#d9e6e9] mb-3">
           {feature.title}
         </h3>
