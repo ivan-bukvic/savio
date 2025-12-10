@@ -429,7 +429,7 @@ const Landing = () => {
           }}>
               <div className="group relative bg-card border-2 border-gold rounded-2xl p-8 h-full card-shadow hover:card-shadow-hover transition-all duration-500 hover:scale-[1.02] flex flex-col overflow-hidden">
                 {/* Gold gradient accent */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-accent to-gold" />
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gold via-accent to-gold" />
                 
                 <div className="mb-6">
                   <Badge className="mb-4 bg-gold text-gold-foreground hover:bg-gold/90">
