@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap, Play, PiggyBank, Wallet, Users, Award } from "lucide-react";
+import { TrendingUp, Shield, Sparkles, BarChart3, ArrowRight, Target, LineChart, Link2, Eye, CheckCircle2, Menu, X, Check, Crown, Zap, Play, PiggyBank, Wallet, Users, Award, Calculator, Lock } from "lucide-react";
 import { FeaturesSectionWithHoverEffects } from "@/components/ui/feature-section-with-hover-effects";
 import { FeatureShowcaseCards } from "@/components/FeatureShowcaseCards";
 import { TestimonialsCarousel } from "@/components/ui/testimonials-carousel";
@@ -266,19 +266,27 @@ const Landing = () => {
             <FeaturesSectionWithHoverEffects features={[{
             title: "Smart Tracking",
             description: "Automatically categorize and analyze your spending patterns with AI-powered insights.",
-            icon: <TrendingUp className="h-6 w-6" />
+            icon: <TrendingUp className="h-7 w-7" />
           }, {
             title: "Secure & Private",
             description: "Bank-level encryption ensures your financial data remains protected and confidential.",
-            icon: <Shield className="h-6 w-6" />
+            icon: <Shield className="h-7 w-7" />
           }, {
             title: "AI-Powered Insights",
             description: "Get personalized recommendations to optimize your finances and reach your goals faster.",
-            icon: <Sparkles className="h-6 w-6" />
+            icon: <Sparkles className="h-7 w-7" />
           }, {
             title: "Visual Analytics",
             description: "Beautiful charts and graphs make understanding your finances simple and intuitive.",
-            icon: <BarChart3 className="h-6 w-6" />
+            icon: <BarChart3 className="h-7 w-7" />
+          }, {
+            title: "Financial Planning Tools",
+            description: "Access intuitive planning features that help you forecast spending, prepare for future goals, and stay financially confident.",
+            icon: <Calculator className="h-7 w-7" />
+          }, {
+            title: "Secure & Private by Design",
+            description: "Your data is always encrypted, protected, and handled with the highest security standards to safeguard your financial life.",
+            icon: <Lock className="h-7 w-7" />
           }]} />
           </motion.div>
         </div>
