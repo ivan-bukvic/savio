@@ -47,7 +47,7 @@ const features: FeatureCard[] = [
     subtitle: "Personalized suggestions help you save more, reduce debt, and improve financial habits",
     image: featureAI,
     wideImage: true,
-    imagePosition: 'left',
+    imagePosition: 'center',
   },
 ];
 
