@@ -102,7 +102,7 @@ const Landing = () => {
     }} className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-xl border-b border-border/40">
         <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <div className="flex-1 flex items-center gap-2">
             <span className="text-xl font-bold text-foreground">Savio</span>
           </div>
 
@@ -114,7 +114,7 @@ const Landing = () => {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex flex-1 items-center justify-end gap-4">
             <Link to="/auth" state={{
             mode: "signin"
           }}>
