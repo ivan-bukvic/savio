@@ -11,6 +11,7 @@ interface FeatureCard {
   image: string;
   wideImage?: boolean;
   imagePosition?: 'center' | 'top' | 'right' | 'left';
+  containImage?: boolean;
 }
 
 const features: FeatureCard[] = [
@@ -48,11 +49,13 @@ const features: FeatureCard[] = [
     image: featureAI,
     wideImage: true,
     imagePosition: 'center',
+    containImage: true,
   },
 ];
 
 const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }) => {
   const isWideImage = feature.wideImage;
+  const isContained = feature.containImage;
   const imagePositionClass = feature.imagePosition === 'right' 
     ? 'object-right' 
     : feature.imagePosition === 'left'
@@ -81,15 +84,15 @@ const FeatureCard = ({ feature, index }: { feature: FeatureCard; index: number }
       "
     >
       {/* Image - right side on desktop, full width on mobile */}
-      <div className={`relative w-full ${isWideImage ? 'md:w-[60%]' : 'md:w-[70%]'} h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0 rounded-xl`}>
+      <div className={`relative w-full ${isWideImage ? 'md:w-[60%]' : 'md:w-[70%]'} h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0 rounded-xl ${isContained ? 'bg-[rgba(10,18,22,0.8)] p-3' : ''}`}>
         <img
           src={feature.image}
           alt={feature.title}
-          className={`w-full h-full object-cover ${imagePositionClass} opacity-[0.92]`}
+          className={`w-full h-full ${isContained ? 'object-contain' : 'object-cover'} ${imagePositionClass} opacity-[0.92]`}
         />
         {/* Gradient overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[rgba(15,25,30,0.4)] hidden md:block" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[rgba(15,25,30,0.4)] md:hidden" />
+        {!isContained && <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[rgba(15,25,30,0.4)] hidden md:block" />}
+        {!isContained && <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[rgba(15,25,30,0.4)] md:hidden" />}
       </div>
       
       {/* Content - left side on desktop, vertically centered */}
