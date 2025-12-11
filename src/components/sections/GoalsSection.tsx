@@ -250,60 +250,52 @@ export const GoalsSection = ({ userId }: GoalsSectionProps) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
-          <CardContent className="p-4 md:p-6 relative">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+          <CardContent className="p-4 md:p-6 relative h-full">
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10 mb-3">
                 <Target className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Active Goals</p>
-                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1">{activeGoals}</h3>
-              </div>
+              <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Active Goals</p>
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1">{activeGoals}</h3>
             </div>
           </CardContent>
         </Card>
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-[hsl(173,70%,50%)]/5 via-transparent to-transparent pointer-events-none" />
-          <CardContent className="p-4 md:p-6 relative">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+          <CardContent className="p-4 md:p-6 relative h-full">
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10 mb-3">
                 <DollarSign className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Saved So Far</p>
-                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1 truncate">${totalSaved.toLocaleString()}</h3>
-              </div>
+              <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Saved So Far</p>
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1">${totalSaved.toLocaleString()}</h3>
             </div>
           </CardContent>
         </Card>
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-[hsl(220,80%,55%)]/5 via-transparent to-transparent pointer-events-none" />
-          <CardContent className="p-4 md:p-6 relative">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+          <CardContent className="p-4 md:p-6 relative h-full">
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10 mb-3">
                 <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Target Amount</p>
-                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1 truncate">${totalTarget.toLocaleString()}</h3>
-              </div>
+              <p className="text-xs md:text-sm font-medium text-muted-foreground">Total Target Amount</p>
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1">${totalTarget.toLocaleString()}</h3>
             </div>
           </CardContent>
         </Card>
 
         <Card className="card-shadow hover:card-shadow-hover transition-all duration-200 overflow-hidden border-0 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-[hsl(25,95%,55%)]/5 via-transparent to-transparent pointer-events-none" />
-          <CardContent className="p-4 md:p-6 relative">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10">
+          <CardContent className="p-4 md:p-6 relative h-full">
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-lg bg-primary/10 mb-3">
                 <Percent className="h-4 w-4 md:h-5 md:w-5 text-primary" />
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs md:text-sm font-medium text-muted-foreground">Avg Completion Rate</p>
-                <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1">{avgCompletion.toFixed(1)}%</h3>
-              </div>
+              <p className="text-xs md:text-sm font-medium text-muted-foreground">Avg Completion Rate</p>
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mt-1">{avgCompletion.toFixed(1)}%</h3>
             </div>
           </CardContent>
         </Card>
