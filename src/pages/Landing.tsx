@@ -374,12 +374,12 @@ const Landing = () => {
               Choose the Plan That Fits Your Financial Journey
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              A clear comparison of what's included in Savio's Free and Pro plans.
+              A clear comparison of what's included in Savio's Free, Starter, and Pro plans.
             </p>
           </motion.div>
 
           {/* Pricing Cards */}
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
             {/* Free Plan */}
             <motion.div initial={{
             opacity: 0,
@@ -404,7 +404,7 @@ const Landing = () => {
                 
                 <div className="border-t border-border pt-6 mb-8 flex-grow">
                   <ul className="space-y-4">
-                    {["Track income", "Track expenses", "Set savings goals", "Basic dashboard overview", "Light mode + dark mode", "Manual data entry", "Expense categories", "Financial summaries", "Monthly charts for income & spending"].map((feature, index) => <li key={index} className="flex items-start gap-3">
+                    {["Track income & expenses", "Set savings goals", "Basic dashboard", "Light & dark mode", "Manual data entry", "Expense categories", "Monthly summaries"].map((feature, index) => <li key={index} className="flex items-start gap-3">
                         <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                         <span className="text-foreground">{feature}</span>
                       </li>)}
@@ -422,7 +422,7 @@ const Landing = () => {
               </div>
             </motion.div>
 
-            {/* Pro Plan */}
+            {/* Starter Plan */}
             <motion.div initial={{
             opacity: 0,
             y: 30
@@ -434,6 +434,65 @@ const Landing = () => {
           }} transition={{
             duration: 0.5,
             delay: 0.1
+          }}>
+              <div className="group bg-card border border-border rounded-2xl p-8 h-full card-shadow hover:card-shadow-hover transition-all duration-500 hover:scale-[1.02] flex flex-col">
+                <div className="mb-6">
+                  <Badge variant="secondary" className="mb-4">Starter</Badge>
+                  <div className="flex items-baseline gap-1 mb-2">
+                    <span className="text-4xl font-bold text-foreground">$5</span>
+                    <span className="text-muted-foreground">/ month</span>
+                  </div>
+                  <p className="text-muted-foreground">For growing your finances</p>
+                </div>
+                
+                <div className="border-t border-border pt-6 mb-8 flex-grow">
+                  <ul className="space-y-4">
+                    {[{
+                    text: "Everything in Free",
+                    highlight: true
+                  }, {
+                    text: "Expanded tracking tools",
+                    highlight: false
+                  }, {
+                    text: "Basic charts & analytics",
+                    highlight: false
+                  }, {
+                    text: "Limited AI insights",
+                    highlight: false
+                  }, {
+                    text: "Email support",
+                    highlight: false
+                  }, {
+                    text: "Data export",
+                    highlight: false
+                  }].map((feature, index) => <li key={index} className="flex items-start gap-3">
+                        {feature.highlight ? <Zap className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" /> : <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />}
+                        <span className={feature.highlight ? "text-foreground font-medium" : "text-foreground"}>
+                          {feature.text}
+                        </span>
+                      </li>)}
+                  </ul>
+                </div>
+
+                <Button variant="outline" size="lg" className="w-full mt-auto group">
+                  Get Starter
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* Pro Plan */}
+            <motion.div initial={{
+            opacity: 0,
+            y: 30
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.2
           }}>
               <div className="group relative bg-card border-2 border-gold rounded-2xl p-8 h-full card-shadow hover:card-shadow-hover transition-all duration-500 hover:scale-[1.02] flex flex-col overflow-hidden">
                 {/* Gold gradient accent */}
@@ -454,28 +513,25 @@ const Landing = () => {
                 <div className="border-t border-border pt-6 mb-8 flex-grow">
                   <ul className="space-y-4">
                     {[{
-                    text: "Everything in Free",
+                    text: "Everything in Starter",
                     highlight: true
                   }, {
-                    text: "AI Insights (personalized financial analysis)",
+                    text: "Full AI Insights",
                     highlight: false
                   }, {
                     text: "AI spending recommendations",
                     highlight: false
                   }, {
-                    text: "Automatic income/expense detection",
-                    highlight: false
-                  }, {
                     text: "Debt payoff forecasting",
                     highlight: false
                   }, {
-                    text: "Pro-level graphs & analytics",
+                    text: "Pro-level analytics",
                     highlight: false
                   }, {
                     text: "Priority support",
                     highlight: false
                   }, {
-                    text: "Access to upcoming premium automations",
+                    text: "Premium automations",
                     highlight: false
                   }].map((feature, index) => <li key={index} className="flex items-start gap-3">
                         {feature.highlight ? <Zap className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" /> : <Check className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />}
