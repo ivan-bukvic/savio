@@ -744,6 +744,23 @@ const Landing = () => {
           </div>
         </div>
       </footer>
+
+      {/* Subtle Brand Wordmark */}
+      <div className="relative z-10 w-full overflow-hidden pointer-events-none select-none">
+        <div className="flex justify-center pb-8 md:pb-12">
+          <span 
+            className="text-[20vw] md:text-[18vw] lg:text-[15vw] font-bold leading-none"
+            style={{
+              background: 'linear-gradient(135deg, hsl(var(--primary) / 0.08), hsl(var(--primary) / 0.03))',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            Savio
+          </span>
+        </div>
+      </div>
     </div>;
 };
 export default Landing;
