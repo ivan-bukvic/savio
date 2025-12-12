@@ -630,7 +630,7 @@ const Landing = () => {
               Join thousands of users who have taken control of their financial future. Start your journey today with clarity, control, and confidence.
             </p>
             <Link to="/auth">
-              <Button size="lg" className="text-lg px-12 py-6 h-auto group">
+              <Button size="lg" className="text-base px-8 py-4 h-auto group">
                 Start Your Journey
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
