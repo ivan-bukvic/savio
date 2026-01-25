@@ -21,26 +21,36 @@ export const IncomeVsExpensesChart = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const currentYear = new Date().getFullYear();
-      
-      // Fetch income
+      // Fetch all income (no year filter)
       const { data: incomeData } = await supabase
         .from('income')
         .select('amount, date')
-        .eq('user_id', user.id)
-        .gte('date', `${currentYear}-01-01`)
-        .lte('date', `${currentYear}-12-31`);
+        .eq('user_id', user.id);
 
-      // Fetch expenses
+      // Fetch all expenses (no year filter)
       const { data: expensesData } = await supabase
         .from('expenses')
         .select('amount, date')
-        .eq('user_id', user.id)
-        .gte('date', `${currentYear}-01-01`)
-        .lte('date', `${currentYear}-12-31`);
+        .eq('user_id', user.id);
+
+      // Determine the latest year from the data
+      const allDates = [
+        ...(incomeData || []).map(item => new Date(item.date).getFullYear()),
+        ...(expensesData || []).map(item => new Date(item.date).getFullYear()),
+      ];
+      const latestYear = allDates.length > 0 ? Math.max(...allDates) : new Date().getFullYear();
+
+      // Filter data to only include the latest year
+      const filteredIncome = incomeData?.filter(item => 
+        new Date(item.date).getFullYear() === latestYear
+      ) || [];
+
+      const filteredExpenses = expensesData?.filter(item => 
+        new Date(item.date).getFullYear() === latestYear
+      ) || [];
 
       // Check if there's any data
-      const hasAnyData = (incomeData && incomeData.length > 0) || (expensesData && expensesData.length > 0);
+      const hasAnyData = filteredIncome.length > 0 || filteredExpenses.length > 0;
       setHasData(hasAnyData);
 
       // Aggregate by month - only show Jan to Sep
@@ -51,7 +61,7 @@ export const IncomeVsExpensesChart = () => {
         monthlyData[month] = { income: 0, expenses: 0 };
       });
 
-      incomeData?.forEach((item) => {
+      filteredIncome.forEach((item) => {
         const monthIndex = new Date(item.date).getMonth();
         // Only include Jan-Sep (months 0-8)
         if (monthIndex <= 8) {
@@ -60,7 +70,7 @@ export const IncomeVsExpensesChart = () => {
         }
       });
 
-      expensesData?.forEach((item) => {
+      filteredExpenses.forEach((item) => {
         const monthIndex = new Date(item.date).getMonth();
         // Only include Jan-Sep (months 0-8)
         if (monthIndex <= 8) {
