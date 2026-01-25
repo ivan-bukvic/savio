@@ -11,6 +11,3 @@ verify_jwt = true
 
 [functions.seed-income-data]
 verify_jwt = true
-
-[functions.seed-demo-data]
-verify_jwt = true
