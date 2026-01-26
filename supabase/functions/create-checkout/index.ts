@@ -11,6 +11,7 @@ const corsHeaders = {
 const ALLOWED_ORIGINS = [
   "https://xztjwxosevpwciappbyq.lovableproject.com",
   "https://savio.lovable.app",
+  "https://savio-ai.lovable.app",
   "http://localhost:5173",
   "http://localhost:3000",
 ];
