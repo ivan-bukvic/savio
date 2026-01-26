@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { SectionLoadingSkeleton } from "./SectionLoadingSkeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, CreditCard, TrendingDown, Receipt, Edit, Trash2, Package, BarChart3, PieChart } from "lucide-react";
@@ -72,6 +73,7 @@ interface ExpensesSectionProps {
 export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
   const { toast } = useToast();
   const [expenseData, setExpenseData] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -98,6 +100,7 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
     } else {
       setExpenseData(data || []);
     }
+    setLoading(false);
   };
 
   const handleAddExpense = async () => {
@@ -312,6 +315,10 @@ export const ExpensesSection = ({ userId }: ExpensesSectionProps) => {
 
   const sparklineData = generateSparklineData();
   const hasData = expenseData.length > 0;
+
+  if (loading) {
+    return <SectionLoadingSkeleton statCardsCount={4} showFourStatCards />;
+  }
 
   return (
     <div className="space-y-4 md:space-y-6">

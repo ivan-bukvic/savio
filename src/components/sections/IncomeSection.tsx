@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { SectionLoadingSkeleton } from "./SectionLoadingSkeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, DollarSign, TrendingUp, Wallet, Edit, Trash2, BarChart3 } from "lucide-react";
@@ -52,6 +53,7 @@ interface IncomeSectionProps {
 export const IncomeSection = ({ userId }: IncomeSectionProps) => {
   const { toast } = useToast();
   const [incomeData, setIncomeData] = useState<Income[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -78,6 +80,7 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
     } else {
       setIncomeData(data || []);
     }
+    setLoading(false);
   };
 
   const handleAddIncome = async () => {
@@ -279,6 +282,10 @@ export const IncomeSection = ({ userId }: IncomeSectionProps) => {
     .sort((a, b) => b.value - a.value);
 
   const hasData = incomeData.length > 0;
+
+  if (loading) {
+    return <SectionLoadingSkeleton statCardsCount={3} />;
+  }
 
   return (
     <div className="space-y-4 md:space-y-6">
