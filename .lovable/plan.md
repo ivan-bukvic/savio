@@ -2,109 +2,63 @@
 
 ## Summary
 
-The "Monthly Income vs. Expenses" chart on the Dashboard is empty because it filters data for the **current calendar year (2026)**, but the demo data for `savio@test.com` is dated in **2025**.
-
-The fix will modify the chart to automatically detect the **most recent year** with available data and display that instead of hardcoding the current year.
+The "Upgrade to Pro" button fails with "Failed to start checkout" because the Stripe checkout edge function rejects the request origin `https://savio-ai.lovable.app` - it's not in the allowed origins list.
 
 ---
 
 ## Root Cause
 
-In `src/components/IncomeVsExpensesChart.tsx`, line 24:
+In `supabase/functions/create-checkout/index.ts`, line 11-16:
+
 ```typescript
-const currentYear = new Date().getFullYear();
+const ALLOWED_ORIGINS = [
+  "https://xztjwxosevpwciappbyq.lovableproject.com",
+  "https://savio.lovable.app",     // ← Missing the "-ai" version
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
 ```
-This returns `2026`, but all seeded demo data uses dates from `2025`. The subsequent queries filter by `2026-01-01` to `2026-12-31`, returning zero results.
+
+The published app URL is `https://savio-ai.lovable.app`, but only `https://savio.lovable.app` is whitelisted.
 
 ---
 
 ## Solution
 
-Modify the data-fetching logic in `IncomeVsExpensesChart.tsx` to:
-
-1. First, fetch all income and expenses for the user (without a year filter)
-2. Determine the most recent year that has data
-3. Filter and aggregate by that year for the chart display
-
-This ensures the chart always shows meaningful data regardless of when the demo data was seeded.
+Add the correct published URL to the allowed origins list.
 
 ---
 
 ## Implementation Steps
 
-### Step 1: Update IncomeVsExpensesChart.tsx
+### Step 1: Update the ALLOWED_ORIGINS array
 
-Modify the `fetchData` function to:
+Modify lines 11-16 in `supabase/functions/create-checkout/index.ts`:
 
-1. Fetch all income and expense records (remove the year-based date filters)
-2. Find the latest year present in the combined data
-3. Filter the results to only include entries from that latest year
-4. Aggregate and display as before
-
-```text
-Changes in src/components/IncomeVsExpensesChart.tsx:
-
-- Remove .gte('date', `${currentYear}-01-01`) and .lte('date', `${currentYear}-12-31`)
-- Fetch all income/expenses for the user
-- Determine latestYear from the fetched data
-- Filter locally by that year before aggregating
-```
-
----
-
-## Technical Details
-
-### Current Code (lines 24-40)
+**Before:**
 ```typescript
-const currentYear = new Date().getFullYear();
-
-const { data: incomeData } = await supabase
-  .from('income')
-  .select('amount, date')
-  .eq('user_id', user.id)
-  .gte('date', `${currentYear}-01-01`)
-  .lte('date', `${currentYear}-12-31`);
-
-const { data: expensesData } = await supabase
-  .from('expenses')
-  .select('amount, date')
-  .eq('user_id', user.id)
-  .gte('date', `${currentYear}-01-01`)
-  .lte('date', `${currentYear}-12-31`);
-```
-
-### Updated Code
-```typescript
-// Fetch all income (no year filter)
-const { data: incomeData } = await supabase
-  .from('income')
-  .select('amount, date')
-  .eq('user_id', user.id);
-
-// Fetch all expenses (no year filter)
-const { data: expensesData } = await supabase
-  .from('expenses')
-  .select('amount, date')
-  .eq('user_id', user.id);
-
-// Determine the latest year from the data
-const allDates = [
-  ...(incomeData || []).map(item => new Date(item.date).getFullYear()),
-  ...(expensesData || []).map(item => new Date(item.date).getFullYear()),
+const ALLOWED_ORIGINS = [
+  "https://xztjwxosevpwciappbyq.lovableproject.com",
+  "https://savio.lovable.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
 ];
-const latestYear = allDates.length > 0 ? Math.max(...allDates) : new Date().getFullYear();
-
-// Filter data to only include the latest year
-const filteredIncome = incomeData?.filter(item => 
-  new Date(item.date).getFullYear() === latestYear
-) || [];
-
-const filteredExpenses = expensesData?.filter(item => 
-  new Date(item.date).getFullYear() === latestYear
-) || [];
 ```
 
-Then use `filteredIncome` and `filteredExpenses` in the aggregation logic instead of `incomeData` and `expensesData`.
+**After:**
+```typescript
+const ALLOWED_ORIGINS = [
+  "https://xztjwxosevpwciappbyq.lovableproject.com",
+  "https://savio.lovable.app",
+  "https://savio-ai.lovable.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+```
+
+### Step 2: Deploy the edge function
+
+The function will be automatically redeployed when the code changes are saved.
 
 ---
 
@@ -112,14 +66,13 @@ Then use `filteredIncome` and `filteredExpenses` in the aggregation logic instea
 
 | File | Change |
 |------|--------|
-| `src/components/IncomeVsExpensesChart.tsx` | Update data fetching to auto-detect latest year with data |
+| `supabase/functions/create-checkout/index.ts` | Add `https://savio-ai.lovable.app` to `ALLOWED_ORIGINS` |
 
 ---
 
 ## Expected Outcome
 
 After this change:
-- Logging in as `savio@test.com` will show the seeded 2025 data in the "Monthly Income vs. Expenses" chart
-- For users with current-year data, the chart will display their latest year automatically
-- No empty chart states for users who have historical data
+- Clicking "Upgrade to Pro" from the published app will successfully redirect to the Stripe checkout page
+- Both `savio.lovable.app` and `savio-ai.lovable.app` domains will work correctly
 
