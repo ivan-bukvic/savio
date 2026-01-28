@@ -117,6 +117,18 @@ const Auth = () => {
           console.error("Profile creation error:", profileError);
         }
 
+        // Clone demo data for the new user
+        try {
+          const { error: cloneError } = await supabase.functions.invoke("clone-demo-data");
+          if (cloneError) {
+            console.error("Demo data cloning error:", cloneError);
+          } else {
+            console.log("Demo data cloned successfully");
+          }
+        } catch (cloneErr) {
+          console.error("Failed to clone demo data:", cloneErr);
+        }
+
         // Sign in the user immediately
         const {
           data: signInData,
