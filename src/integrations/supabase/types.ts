@@ -46,6 +46,7 @@ export type Database = {
           due_date: string | null
           id: string
           interest_rate: number
+          is_template: boolean
           minimum_payment: number
           updated_at: string
           user_id: string
@@ -57,6 +58,7 @@ export type Database = {
           due_date?: string | null
           id?: string
           interest_rate: number
+          is_template?: boolean
           minimum_payment: number
           updated_at?: string
           user_id: string
@@ -68,6 +70,7 @@ export type Database = {
           due_date?: string | null
           id?: string
           interest_rate?: number
+          is_template?: boolean
           minimum_payment?: number
           updated_at?: string
           user_id?: string
@@ -82,6 +85,7 @@ export type Database = {
           date: string
           description: string | null
           id: string
+          is_template: boolean
           user_id: string
         }
         Insert: {
@@ -91,6 +95,7 @@ export type Database = {
           date: string
           description?: string | null
           id?: string
+          is_template?: boolean
           user_id: string
         }
         Update: {
@@ -100,6 +105,7 @@ export type Database = {
           date?: string
           description?: string | null
           id?: string
+          is_template?: boolean
           user_id?: string
         }
         Relationships: []
@@ -110,6 +116,7 @@ export type Database = {
           created_at: string
           date: string
           id: string
+          is_template: boolean
           source: string
           user_id: string
         }
@@ -118,6 +125,7 @@ export type Database = {
           created_at?: string
           date: string
           id?: string
+          is_template?: boolean
           source: string
           user_id: string
         }
@@ -126,6 +134,7 @@ export type Database = {
           created_at?: string
           date?: string
           id?: string
+          is_template?: boolean
           source?: string
           user_id?: string
         }
@@ -162,6 +171,7 @@ export type Database = {
           due_date: string | null
           goal_name: string
           id: string
+          is_template: boolean
           target_amount: number
           updated_at: string
           user_id: string
@@ -172,6 +182,7 @@ export type Database = {
           due_date?: string | null
           goal_name: string
           id?: string
+          is_template?: boolean
           target_amount: number
           updated_at?: string
           user_id: string
@@ -182,6 +193,7 @@ export type Database = {
           due_date?: string | null
           goal_name?: string
           id?: string
+          is_template?: boolean
           target_amount?: number
           updated_at?: string
           user_id?: string
