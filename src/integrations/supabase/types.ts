@@ -200,6 +200,24 @@ export type Database = {
         }
         Relationships: []
       }
+      system_heartbeat: {
+        Row: {
+          id: string
+          last_ping: string
+          note: string
+        }
+        Insert: {
+          id?: string
+          last_ping?: string
+          note?: string
+        }
+        Update: {
+          id?: string
+          last_ping?: string
+          note?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
