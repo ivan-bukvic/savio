@@ -1,0 +1,1 @@
+UPDATE public.profiles SET subscription_tier = 'pro', updated_at = now() WHERE user_id = (SELECT id FROM auth.users WHERE email = 'savio@test.com');
