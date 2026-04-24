@@ -184,7 +184,7 @@ const Auth = () => {
           </div>
 
           {/* Card */}
-          <div className="bg-card border border-border rounded-2xl p-8 shadow-2xl backdrop-blur-xl">
+          <div className="bg-card/30 border border-white/10 rounded-2xl p-8 shadow-2xl backdrop-blur-2xl ring-1 ring-white/5">
             <div className="mb-6">
               <h1 className="text-3xl font-bold text-foreground mb-2">
                 {isSignUp ? "Create Account" : "Welcome Back"}
