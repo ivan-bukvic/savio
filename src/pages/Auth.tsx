@@ -197,7 +197,7 @@ const Auth = () => {
             <form onSubmit={isSignUp ? handleSignUp : handleSignIn} className="space-y-4" autoComplete="off">
               {isSignUp && <div className="space-y-2">
                   <Label htmlFor="fullName">Full Name</Label>
-                  <Input id="fullName" type="text" placeholder="John Doe" value={formData.fullName} onChange={e => setFormData({
+                  <Input id="fullName" type="text" value={formData.fullName} onChange={e => setFormData({
                 ...formData,
                 fullName: e.target.value
               })} disabled={loading} required autoComplete="off" />
@@ -205,7 +205,7 @@ const Auth = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" value={formData.email} onChange={e => setFormData({
+                <Input id="email" type="email" value={formData.email} onChange={e => setFormData({
                 ...formData,
                 email: e.target.value
               })} disabled={loading} required autoComplete="new-email" />
@@ -213,7 +213,7 @@ const Auth = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" placeholder="••••••••" value={formData.password} onChange={e => setFormData({
+                <Input id="password" type="password" value={formData.password} onChange={e => setFormData({
                 ...formData,
                 password: e.target.value
               })} disabled={loading} required autoComplete="new-password" />
