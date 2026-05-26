@@ -1,73 +1,65 @@
-# Welcome to your Lovable project
+# Savio
 
-## Project info
+AI-powered personal finance SaaS platform designed to help users track, analyze, and optimize their financial behavior through structured analytics and intelligent insights.
 
-**URL**: https://lovable.dev/projects/8d772749-3570-400f-8e89-b53907fe4a35
+## Overview
 
-## How can I edit this code?
+Savio combines financial tracking, analytics dashboards, subscription-based access, and AI-powered analysis into a modern SaaS product focused on actionable financial insights.
 
-There are several ways of editing your application.
+The platform supports income tracking, expense categorization, savings goals, debt management, and AI-generated financial recommendations based on structured user data.
 
-**Use Lovable**
+## Core Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8d772749-3570-400f-8e89-b53907fe4a35) and start prompting.
+- Financial tracking system
+- Income & expense management
+- Savings goals & debt tracking
+- Analytics dashboards
+- Stripe subscription billing
+- Role-based feature access
+- AI-powered financial analysis
+- Responsive SaaS dashboard UI
 
-Changes made via Lovable will be committed automatically to this repo.
+## AI Functionality
 
-**Use your preferred IDE**
+Savio uses AI to analyze structured financial data and generate:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Spending pattern detection
+- Savings analysis
+- Risk identification
+- Personalized recommendations
+- Natural-language financial summaries
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+AI access is restricted to Pro subscribers through subscription-based feature gating.
 
-Follow these steps:
+## Tech Stack
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
 - React
-- shadcn-ui
+- TypeScript
+- Supabase
+- PostgreSQL
+- Stripe API
+- OpenAI API
 - Tailwind CSS
 
-## How can I deploy this project?
+## Architecture Highlights
 
-Simply open [Lovable](https://lovable.dev/projects/8d772749-3570-400f-8e89-b53907fe4a35) and click on Share -> Publish.
+- Full-stack SaaS architecture
+- Subscription monetization system
+- User-scoped financial data
+- Role-based access control
+- Analytics dashboard systems
+- AI integration with structured datasets
+- Feature gating logic
 
-## Can I connect a custom domain to my Lovable project?
+## Live Demo
 
-Yes, you can!
+https://savio.synidox.com/
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Focus Areas
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- AI SaaS development
+- Fintech applications
+- Analytics dashboards
+- Subscription systems
+- Product-focused architecture
+- Financial data systems
