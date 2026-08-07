@@ -20,7 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const supabase = createClient(supabaseUrl, serviceRoleKey);
     const { data, error } = await supabase
-      .from("profiles")
+      .from("system_heartbeat")
       .select("id")
       .limit(1);
 
